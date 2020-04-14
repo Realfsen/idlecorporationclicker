@@ -8,10 +8,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 
 
 
-public class libGDXDemo : ApplicationAdapter() {
+public class IdleCorporationClicker : ApplicationAdapter() {
     private lateinit var batch: SpriteBatch
     private lateinit var img: Texture
     private lateinit var font: BitmapFont
+
+    // Static variables / classes
+    companion object{
+        var WIDTH : Int = 480
+        var HEIGHT : Int = 800
+        var TITLE : String = "Idle Corporation Clicker"
+    }
 
     override fun create() {
         batch = SpriteBatch()
