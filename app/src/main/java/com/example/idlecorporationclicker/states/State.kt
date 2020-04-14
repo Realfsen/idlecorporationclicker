@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector3
 
 abstract class State (gsm : GameStateManager) {
-    abstract var cam : OrthographicCamera
-    abstract var mouse : Vector3
+    private var cam : OrthographicCamera
+    private var mouse : Vector3
     abstract var gsm : GameStateManager
 
     init {
