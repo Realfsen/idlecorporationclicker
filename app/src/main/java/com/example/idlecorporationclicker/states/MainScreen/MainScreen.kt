@@ -91,7 +91,6 @@ class MainScreen(override var gsm: GameStateManager) : State(gsm) {
         stage.addActor(clickerTable)
         stage.addActor(statsTable)
         Gdx.input.setInputProcessor(stage)
-
     }
 
 
