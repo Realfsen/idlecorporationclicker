@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.example.idlecorporationclicker.states.BuildingScreen.BuildingScreen
 import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.states.State
+import com.example.idlecorporationclicker.states.attackscreen.AttackScreen
 
 class MainScreen(override var gsm: GameStateManager) : State(gsm) {
 
@@ -44,7 +45,7 @@ class MainScreen(override var gsm: GameStateManager) : State(gsm) {
 
         attackBuilding.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
-                println("Hit attack!")
+                gsm.set(AttackScreen(gsm))
             }
             override fun touchDown(e : InputEvent, x : Float, y : Float, Point : Int, button : Int): Boolean {
                 return true
