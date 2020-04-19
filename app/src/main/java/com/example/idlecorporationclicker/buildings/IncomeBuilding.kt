@@ -3,14 +3,25 @@ package com.example.idlecorporationclicker.buildings
 import com.example.idlecorporationclicker.model.BuildingType
 import com.example.idlecorporationclicker.model.IBuilding
 
-class IncomeBuilding(
-    override val type: BuildingType,
-    override val name: String,
-    override var value: Int,
-    override var level: Int,
-    override var upgradeCost: Int
-) : IBuilding{
+class IncomeBuilding(override var level : Int) : IBuilding{
+    override val type: BuildingType
+    override val name: String
+    override var value: Int = calculateValue()
+    override var upgradeCost: Int = calculateUpgradeCost()
+
+    init {
+        type = BuildingType.INCOME;
+        name = "Income Building"
+    }
+
+    override fun calculateValue() : Int {
+        return 10
+    }
+    override  fun calculateUpgradeCost() : Int {
+        return 10
+    }
+
     override fun upgrade() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        level++
     }
 }

@@ -8,6 +8,8 @@ interface IBuilding {
     var level: Int
     var upgradeCost: Int
     fun upgrade()
+    fun calculateValue() : Int
+    fun calculateUpgradeCost() : Int
 }
 
 enum class BuildingType {
