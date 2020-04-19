@@ -2,16 +2,16 @@ package com.example.idlecorporationclicker.model
 
 /* Creates the Building interface */
 interface IBuilding {
-    val type: BuildingType
-    val name: String
-    var value: Int
-    var level: Int
-    var upgradeCost: Int
-    fun upgrade()
-    fun calculateValue() : Int
-    fun calculateUpgradeCost() : Int
+    abstract val type: BuildingType
+    abstract val name: String
+    abstract var value: Int
+    abstract var level: Int
+    abstract var upgradeCost: Int
+    abstract fun upgrade()
+    abstract fun calculateValue() : Int
+    abstract fun calculateUpgradeCost() : Int
 }
 
 enum class BuildingType {
-    ATTACK, DEFENSE, INCOME
+    NONE, ATTACK, DEFENSE, INCOME
 }
