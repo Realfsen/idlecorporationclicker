@@ -16,20 +16,29 @@ public class GameStateManager {
         states.push(state)
     }
 
-    public fun pop(state: State) {
-        states.pop()
+    public fun pop() : State{
+        return states.pop()
     }
 
     public fun set(state: State) {
         states.pop()
         states.push(state)
+
+    }
+
+    public fun peek() : State {
+        return states.peek()
     }
 
     public fun update(dt : Float) {
         states.peek().update(dt);
     }
 
-    public fun render(sb : SpriteBatch) {
-        states.peek().render(sb)
+    public fun render(dt : Float) {
+        states.peek().render(dt)
+    }
+
+    public fun dispose() {
+        states.peek().dispose()
     }
 }

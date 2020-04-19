@@ -1,5 +1,6 @@
 package com.example.idlecorporationclicker.states.MainScreen
 
+import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -13,7 +14,8 @@ import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.states.State
 import com.example.idlecorporationclicker.states.attackscreen.AttackScreen
 
-class MainScreen(override var gsm: GameStateManager) : State(gsm) {
+class MainScreen(override var game: Game, override var gsm: GameStateManager) : State(gsm, game) {
+
 
 
     private var background : Texture
@@ -24,8 +26,9 @@ class MainScreen(override var gsm: GameStateManager) : State(gsm) {
     private var clickerTable : Table
     private var statsTable : Table
     private var money: Int;
+    private var batch : SpriteBatch
+    private var stage: Stage
 
-    private var stage : Stage
 
     init {
         background = Texture(Gdx.files.internal("backgrounds/1x/background-basemdpi.png"))
@@ -43,9 +46,11 @@ class MainScreen(override var gsm: GameStateManager) : State(gsm) {
         var attackStr: Label = Label("Attack", uiSkin)
         var moneyStr: Label = Label("Money: "+money, uiSkin)
 
+        stage = Stage()
+        batch = SpriteBatch()
         attackBuilding.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
-                gsm.set(AttackScreen(gsm))
+                game.setScreen(AttackScreen(game, gsm))
             }
             override fun touchDown(e : InputEvent, x : Float, y : Float, Point : Int, button : Int): Boolean {
                 return true
@@ -54,7 +59,7 @@ class MainScreen(override var gsm: GameStateManager) : State(gsm) {
 
         incomeBuilding.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
-                gsm.set(BuildingScreen(gsm))
+                game.setScreen(BuildingScreen(game, gsm))
             }
             override fun touchDown(e : InputEvent, x : Float, y : Float, Point : Int, button : Int): Boolean {
                 return true
@@ -87,11 +92,9 @@ class MainScreen(override var gsm: GameStateManager) : State(gsm) {
         statsTable.setFillParent(true)
         statsTable.top()
 
-        stage = Stage(ScreenViewport(cam))
         stage.addActor(buildingTable)
         stage.addActor(clickerTable)
         stage.addActor(statsTable)
-        Gdx.input.setInputProcessor(stage)
     }
 
 
@@ -101,11 +104,32 @@ class MainScreen(override var gsm: GameStateManager) : State(gsm) {
     override fun update(dt: Float) {
     }
 
-    override fun render(sb: SpriteBatch) {
-        sb.begin()
-        sb.draw(background, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
-        sb.end()
+    override fun render(dt : Float) {
+        batch.begin()
+        batch.draw(background, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
+        batch.end()
         stage.act(Gdx.graphics.deltaTime)
         stage.draw()
+    }
+
+    override fun hide() {
+    }
+
+    override fun show() {
+        Gdx.input.setInputProcessor(stage)
+    }
+
+    override fun pause() {
+    }
+
+    override fun resume() {
+    }
+
+    override fun resize(width: Int, height: Int) {
+    }
+
+    override fun dispose() {
+        batch.dispose()
+        stage.dispose()
     }
 }

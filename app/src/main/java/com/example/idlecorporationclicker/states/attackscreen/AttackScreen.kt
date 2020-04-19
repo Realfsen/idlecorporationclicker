@@ -1,6 +1,8 @@
 package com.example.idlecorporationclicker.states.attackscreen
 
+import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.InputEvent
@@ -13,11 +15,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.example.idlecorporationclicker.states.BuildingScreen.BuildingScreen
 import com.example.idlecorporationclicker.states.GameStateManager
+import com.example.idlecorporationclicker.states.MainScreen.MainScreen
 import com.example.idlecorporationclicker.states.State
+import com.example.idlecorporationclicker.states.playerlist.PlayerList
 
-class AttackScreen(override var gsm: GameStateManager) : State(gsm) {
+class AttackScreen(override var game: Game, override var gsm: GameStateManager) : State(gsm, game) {
 
-    enum class attackType {
+
+    public enum class attackType {
         NONE,
         SABOTAGE,
         STEAL
@@ -35,9 +40,10 @@ class AttackScreen(override var gsm: GameStateManager) : State(gsm) {
     private var findPlayerTable : Table
     private var statsTable : Table
     private var chosenAttack: attackType
+    private var batch : SpriteBatch
+    private var stage: Stage
 
 
-    private var stage : Stage
 
     init {
         background = Texture(Gdx.files.internal("backgrounds/1x/background-attackmdpi.png"))
@@ -51,6 +57,8 @@ class AttackScreen(override var gsm: GameStateManager) : State(gsm) {
         var uiSkin = Skin(Gdx.files.internal("ui/uiskin.json"))
         uiSkin.getFont("default-font").getData().setScale(5f)
 
+        stage = Stage()
+        batch = SpriteBatch()
         sabotageStr = Label("Sabotage", uiSkin)
         attackStr = Label("Steal", uiSkin)
         findPlayerStr = Label("Find player", uiSkin)
@@ -78,7 +86,7 @@ class AttackScreen(override var gsm: GameStateManager) : State(gsm) {
 
         player.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
-                //TODO go to player list
+                game.setScreen(PlayerList(chosenAttack, game, gsm))
             }
             override fun touchDown(e : InputEvent, x : Float, y : Float, Point : Int, button : Int): Boolean {
                 return true
@@ -88,11 +96,6 @@ class AttackScreen(override var gsm: GameStateManager) : State(gsm) {
 
 
         buildTablesAndAddActors();
-        stage = Stage(ScreenViewport(cam))
-        stage.addActor(attackTable)
-        stage.addActor(findPlayerTable)
-        stage.addActor(statsTable)
-        Gdx.input.setInputProcessor(stage)
     }
 
     fun buildTablesAndAddActors() {
@@ -113,19 +116,47 @@ class AttackScreen(override var gsm: GameStateManager) : State(gsm) {
         statsTable.add(chosenAttackStr)
         statsTable.setFillParent(true)
         statsTable.top()
+        stage.addActor(attackTable)
+        stage.addActor(findPlayerTable)
+        stage.addActor(statsTable)
     }
 
     override fun handleInput() {
+
     }
 
     override fun update(dt: Float) {
+        handleInput()
     }
 
-    override fun render(sb: SpriteBatch) {
-        sb.begin()
-        sb.draw(background, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
-        sb.end()
+    override fun render(delta: Float) {
+        update(delta)
+        batch.begin()
+        batch.draw(background, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
+        batch.end()
         stage.act(Gdx.graphics.deltaTime)
         stage.draw()
+    }
+
+
+    override fun hide() {
+    }
+
+    override fun show() {
+        Gdx.input.setInputProcessor(stage)
+    }
+
+    override fun pause() {
+    }
+
+    override fun resume() {
+    }
+
+    override fun resize(width: Int, height: Int) {
+    }
+
+    override fun dispose() {
+        batch.dispose()
+        stage.dispose()
     }
 }

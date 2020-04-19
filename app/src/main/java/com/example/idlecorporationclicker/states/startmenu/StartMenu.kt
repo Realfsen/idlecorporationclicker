@@ -1,7 +1,9 @@
 package com.example.idlecorporationclicker.states.startmenu
 
 import android.graphics.fonts.Font
+import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
@@ -19,17 +21,19 @@ import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.states.MainScreen.MainScreen
 import com.example.idlecorporationclicker.states.State
 
-public class StartMenu(override var gsm: GameStateManager) : State(gsm) {
+public class StartMenu(override var game: Game, override var gsm: GameStateManager) : State(gsm, game) {
+
+    private var stage: Stage
     private var background : Texture
     private var logo : Texture
     private var logoOffset : Float
     private var logoWidth: Float
     private var logoHeight: Float
-    private var stage : Stage
     private var textField : TextField
     private var uiSkin : Skin
     private var loginBtn : TextButton
     private var loginTable : Table
+    private var batch : SpriteBatch
 
     init {
         background = Texture(Gdx.files.internal("backgrounds/1x/background-basemdpi.png"))
@@ -50,7 +54,7 @@ public class StartMenu(override var gsm: GameStateManager) : State(gsm) {
         loginBtn.setSize(tableWidth, 180f)
         loginBtn.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
-                gsm.set(MainScreen(gsm))
+                game.setScreen(MainScreen(game, gsm))
             }
         })
 
@@ -59,13 +63,9 @@ public class StartMenu(override var gsm: GameStateManager) : State(gsm) {
         loginTable.row()
         loginTable.add(loginBtn).width(Gdx.graphics.width.toFloat()/2).height(tableHeight)
         loginTable.setFillParent(true);
-
-
-
         stage = Stage(ScreenViewport(cam))
+        batch = SpriteBatch()
         stage.addActor(loginTable)
-        stage.setKeyboardFocus(textField)
-        Gdx.input.setInputProcessor(stage)
     }
 
     override fun handleInput() {
@@ -74,12 +74,36 @@ public class StartMenu(override var gsm: GameStateManager) : State(gsm) {
     override fun update(dt: Float) {
     }
 
-    override fun render(sb: SpriteBatch) {
-        sb.begin()
-        sb.draw(background, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
-        sb.draw(logo, (Gdx.graphics.width.toFloat()/2) - (logoWidth/2), Gdx.graphics.height.toFloat()/1.8f,logoWidth, logoHeight)
-        sb.end()
-        stage.act(Gdx.graphics.deltaTime)
-        stage.draw()
+    override fun render(delta: Float) {
+            batch.begin()
+            batch.draw(background, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
+            batch.draw(logo, (Gdx.graphics.width.toFloat()/2) - (logoWidth/2), Gdx.graphics.height.toFloat()/1.8f,logoWidth, logoHeight)
+            batch.end()
+            stage.act(Gdx.graphics.deltaTime)
+            stage.draw()
+    }
+
+
+    override fun dispose() {
+        batch.dispose()
+        stage.dispose()
+    }
+
+    override fun hide() {
+    }
+
+    override fun show() {
+        Gdx.input.setInputProcessor(stage)
+        stage.setKeyboardFocus(textField)
+        gsm.push(this)
+    }
+
+    override fun pause() {
+    }
+
+    override fun resume() {
+    }
+
+    override fun resize(width: Int, height: Int) {
     }
 }
