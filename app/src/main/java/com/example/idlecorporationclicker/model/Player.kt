@@ -14,29 +14,30 @@ class Player {
     var attackBuildings : MutableList<AttackBuilding>
     var defenseBuilding : MutableList<DefenseBuilding>
     var passiveIncomeBuildings: MutableList<IncomeBuilding>
+    var buildingFactory : BuildingFactory
     var income : Int
 
     init {
         name = "Kent"
         lastSynched = Date()
         var factory = FactoryProvider()
-        var buildingFactory : BuildingFactory =  factory.getFactory(FACTORY_TYPE.BUILDING) as BuildingFactory
+        buildingFactory =  factory.getFactory(FACTORY_TYPE.BUILDING) as BuildingFactory
 
         passiveIncomeBuildings = mutableListOf<IncomeBuilding>()
         for (i in 1..3) {
-            buildingFactory.setBuildingLevel(i)
+            buildingFactory.setBuildingLevel(i.toDouble())
             passiveIncomeBuildings.add(buildingFactory.create<IncomeBuilding, BuildingType>(BuildingType.INCOME))
 
         }
         attackBuildings = mutableListOf<AttackBuilding>()
         for (i in 1..3) {
-            buildingFactory.setBuildingLevel(i)
+            buildingFactory.setBuildingLevel(i.toDouble())
             attackBuildings.add(buildingFactory.create<AttackBuilding, BuildingType>(BuildingType.ATTACK))
 
         }
         defenseBuilding = mutableListOf<DefenseBuilding>()
         for (i in 1..3) {
-            buildingFactory.setBuildingLevel(i)
+            buildingFactory.setBuildingLevel(i.toDouble())
             defenseBuilding.add(buildingFactory.create<DefenseBuilding, BuildingType>(BuildingType.DEFENSE))
 
         }
@@ -44,5 +45,12 @@ class Player {
     }
 
 
+    fun buyBuilding(type: BuildingType) {
+        when(type) {
+            BuildingType.ATTACK-> attackBuildings.add(buildingFactory.create<AttackBuilding, BuildingType>(BuildingType.ATTACK))
+            BuildingType.DEFENSE-> defenseBuilding.add(buildingFactory.create<DefenseBuilding, BuildingType>(BuildingType.DEFENSE))
+            BuildingType.INCOME-> passiveIncomeBuildings.add(buildingFactory.create<IncomeBuilding, BuildingType>(BuildingType.INCOME))
+        }
+    }
 
 }

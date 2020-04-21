@@ -12,7 +12,7 @@ public class GameStateManager {
 
     private var states : Stack<State>
     private var screenHistory : Stack<SCREEN>
-    private var player : Player
+    public var player : Player
 
 
     constructor() {
