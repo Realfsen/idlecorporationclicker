@@ -1,9 +1,13 @@
 package com.example.idlecorporationclicker.buildings
 
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.example.idlecorporationclicker.model.BuildingType
 import com.example.idlecorporationclicker.model.IBuilding
 
 class IncomeBuilding(override var level : Int) : IBuilding{
+    override val image: Image
     override val type: BuildingType
     override val name: String
     override var value: Int = calculateValue()
@@ -12,6 +16,7 @@ class IncomeBuilding(override var level : Int) : IBuilding{
     init {
         type = BuildingType.INCOME;
         name = "Income Building"
+        image = Image(Texture(Gdx.files.internal("buildings/income/base/1x/basemdpi.png")))
     }
 
     override fun calculateValue() : Int {
