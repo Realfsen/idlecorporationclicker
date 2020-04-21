@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.viewport.ScreenViewport
+import com.badlogic.gdx.utils.viewport.StretchViewport
 import com.example.idlecorporationclicker.buildings.AttackBuilding
 import com.example.idlecorporationclicker.buildings.DefenseBuilding
 import com.example.idlecorporationclicker.buildings.IncomeBuilding
@@ -34,19 +35,17 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
     init {
         background = Texture(Gdx.files.internal("backgrounds/1x/background-basemdpi.png"))
 
-        wholeGroup = Table()
-
-        stage = Stage(ScreenViewport())
+        stage = Stage(ScreenViewport(cam))
         batch = SpriteBatch()
-
+        wholeGroup = Table()
         uiSkin = Skin(Gdx.files.internal("ui/uiskin.json"))
         uiSkin.getFont("default-font").getData().setScale(3f)
-        IncomeBuyButton = TextButton("Buy", uiSkin)
+        IncomeBuyButton = TextButton("Buy\n100", uiSkin)
 
         IncomeBuyButton.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
-                wholeGroup.clear()
                 gsm.player.buyBuilding(BuildingType.INCOME)
+                wholeGroup.clear()
                 buildAllTowers()
             }
 
@@ -55,26 +54,25 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
             }
         })
 
-        AttackBuyButton = TextButton("Buy", uiSkin)
+        AttackBuyButton = TextButton("Buy\n300", uiSkin)
 
         AttackBuyButton.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
-                wholeGroup.clear()
                 gsm.player.buyBuilding(BuildingType.ATTACK)
+                wholeGroup.clear()
                 buildAllTowers()
             }
-
             override fun touchDown(e : InputEvent, x : Float, y : Float, Point : Int, button : Int): Boolean {
                 return true
             }
         })
 
-        DefenseBuyButton = TextButton("Buy", uiSkin)
+        DefenseBuyButton = TextButton("Buy\n500", uiSkin)
 
         DefenseBuyButton.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
-                wholeGroup.clear()
                 gsm.player.buyBuilding(BuildingType.DEFENSE)
+                wholeGroup.clear()
                 buildAllTowers()
             }
 
@@ -82,26 +80,34 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
                 return true
             }
         })
-
+        wholeGroup.setDebug(true)
         buildAllTowers()
-        wholeGroup.top()
         wholeGroup.setFillParent(true)
+        wholeGroup.top()
         stage.addActor(wholeGroup)
+        stage.getViewport().apply()
     }
 
 
-    fun <T>buildBuildings(building : List<IBuilding>, buttonText : String, btn : TextButton, showBuyButton : Boolean) {
-        var horizontalGroup = HorizontalGroup()
+    fun <T>buildBuildings(building : List<IBuilding>, buttonText : String, btn : TextButton, showBuyButton : Boolean, headerText : String) {
+        var buildBuildings : MutableList<buildBuildingClass> = mutableListOf()
+        wholeGroup.add(Label(headerText, uiSkin))
+        wholeGroup.row()
         building.forEach {
-            var verticalGroup = VerticalGroup().padLeft(5f)
-            verticalGroup.addActor(buildBuildingClass(it, buttonText).getBuilding())
-            horizontalGroup.addActor(verticalGroup)
+            buildBuildings.add(buildBuildingClass(it, buttonText))
+        }
+        buildBuildings.forEach {
+            wholeGroup.add(it.buildingImage).padLeft(15f).prefWidth(80f).expandX()
+        }
+
+        wholeGroup.row().padTop(5f)
+        buildBuildings.forEach {
+            wholeGroup.add(it.btn)
         }
         if(showBuyButton) {
-            horizontalGroup.addActor(btn)
+            wholeGroup.add(btn)
         }
-        wholeGroup.add(horizontalGroup).expandX()
-        wholeGroup.row().padTop(15f).fill()
+        wholeGroup.row().padTop(15f)
     }
 
 
@@ -121,9 +127,9 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
         if(attackBuildings.size == 4) {
             showAttackButton = false
         }
-        buildBuildings<DefenseBuilding>(defenseBuildings, "Defense", DefenseBuyButton, showDefenseButton)
-        buildBuildings<IncomeBuilding>(incomeBuildings, "Income", IncomeBuyButton, showIncomeButton)
-        buildBuildings<AttackBuilding>(attackBuildings, "Attack", AttackBuyButton, showAttackButton)
+        buildBuildings<DefenseBuilding>(defenseBuildings, "Defense", DefenseBuyButton, showDefenseButton, "Defense Buildings")
+        buildBuildings<IncomeBuilding>(incomeBuildings, "Income", IncomeBuyButton, showIncomeButton, "Income Buildings")
+        buildBuildings<AttackBuilding>(attackBuildings, "Attack", AttackBuyButton, showAttackButton, "Attack Buildings")
     }
 
     override fun handleInput() {
@@ -163,8 +169,8 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
 }
 
 class buildBuildingClass(building : IBuilding, buttonText : String) {
-    private var buildingImage : Image
-    private var btn : TextButton
+    public var buildingImage : Image
+    public var btn : TextButton
     private var uiSkin : Skin
 
     init {
@@ -172,11 +178,11 @@ class buildBuildingClass(building : IBuilding, buttonText : String) {
         uiSkin.getFont("default-font").getData().setScale(2f)
 
         buildingImage = building.image
-        btn = TextButton(buttonText+": "+building.value+"\nLevel: "+building.level+"\nUpgrade Cost: "+building.upgradeCost, uiSkin)
+        btn = TextButton(buttonText+":\n"+building.value+"\nLevel:\n"+building.level+"\nUpgrade:\n"+building.upgradeCost, uiSkin)
         btn.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
                 building.upgrade()
-                btn.setText(buttonText+": "+building.value+"\nLevel: "+building.level+"\nUpgrade Cost: "+building.upgradeCost)
+                btn.setText(buttonText+":\n"+building.value+"\nLevel:\n"+building.level+"\nUpgrade:\n"+building.upgradeCost)
             }
 
             override fun touchDown(e : InputEvent, x : Float, y : Float, Point : Int, button : Int): Boolean {
@@ -185,12 +191,5 @@ class buildBuildingClass(building : IBuilding, buttonText : String) {
         })
     }
 
-    fun getBuilding(): Table {
-        var table = Table()
-        table.add(buildingImage).padLeft(15f).fill()
-            table.row()
-        table.add(btn).padLeft(15f).fill()
-        return table
-    }
 
 }

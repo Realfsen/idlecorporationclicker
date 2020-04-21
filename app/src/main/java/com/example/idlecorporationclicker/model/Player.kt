@@ -7,6 +7,7 @@ import com.example.idlecorporationclicker.factory.BuildingFactory
 import com.example.idlecorporationclicker.factory.FACTORY_TYPE
 import com.example.idlecorporationclicker.factory.FactoryProvider
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class Player {
     var name : String
@@ -24,13 +25,13 @@ class Player {
         buildingFactory =  factory.getFactory(FACTORY_TYPE.BUILDING) as BuildingFactory
 
         passiveIncomeBuildings = mutableListOf<IncomeBuilding>()
-        for (i in 1..3) {
+        for (i in 1..1) {
             buildingFactory.setBuildingLevel(i.toDouble())
             passiveIncomeBuildings.add(buildingFactory.create<IncomeBuilding, BuildingType>(BuildingType.INCOME))
 
         }
         attackBuildings = mutableListOf<AttackBuilding>()
-        for (i in 1..3) {
+        for (i in 1..2) {
             buildingFactory.setBuildingLevel(i.toDouble())
             attackBuildings.add(buildingFactory.create<AttackBuilding, BuildingType>(BuildingType.ATTACK))
 
@@ -42,6 +43,27 @@ class Player {
 
         }
         income = 0
+    }
+
+    fun moneyPerSecond() : Double {
+       var monPrSec : Double = 0.0
+       passiveIncomeBuildings.forEach() {
+          monPrSec += it.value
+       }
+        return monPrSec
+    }
+
+    fun addClickMoney() {
+       income += moneyPerSecond().toInt()
+    }
+
+    fun addMoneySinceLastSynched() {
+        var synchedNow = Date()
+        var timeDifference = synchedNow.getTime() - lastSynched.getTime()
+        lastSynched = synchedNow
+
+        var difinSec = TimeUnit.MILLISECONDS.toSeconds(timeDifference)
+        income += difinSec.times(moneyPerSecond()).toInt()
     }
 
 

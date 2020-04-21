@@ -8,12 +8,14 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.utils.TimeUtils
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.example.idlecorporationclicker.states.BuildingScreen.BuildingScreen
 import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.states.SCREEN
 import com.example.idlecorporationclicker.states.State
 import com.example.idlecorporationclicker.states.attackscreen.AttackScreen
+import java.util.*
 
 class MainScreen(override var game: Game, override var gsm: GameStateManager) : State(gsm, game) {
 
@@ -26,9 +28,10 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
     private var buildingTable : Table
     private var clickerTable : Table
     private var statsTable : Table
-    private var money: Int;
     private var batch : SpriteBatch
     private var stage: Stage
+    private var startTime : Long
+    private var moneyStr : Label
 
 
     init {
@@ -39,13 +42,15 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         buildingTable = Table()
         clickerTable = Table()
         statsTable = Table()
-        money = 0;
+        startTime = TimeUtils.nanoTime()
+
         var uiSkin = Skin(Gdx.files.internal("ui/uiskin.json"))
         uiSkin.getFont("default-font").getData().setScale(5f)
 
         var incomeStr: Label = Label("Income", uiSkin)
         var attackStr: Label = Label("Attack", uiSkin)
-        var moneyStr: Label = Label("Money: "+money, uiSkin)
+        moneyStr = Label("Income: "+gsm.player.income, uiSkin)
+        var moneyPerSecStr: Label = Label("Income per second: "+gsm.player.moneyPerSecond(), uiSkin)
 
         stage = Stage()
         batch = SpriteBatch()
@@ -71,8 +76,8 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
 
         cookie.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
-                money++
-                moneyStr.setText("Money: "+ money)
+                gsm.player.addClickMoney()
+                moneyStr.setText("Income: "+ gsm.player.income)
             }
             override fun touchDown(e : InputEvent, x : Float, y : Float, Point : Int, button : Int): Boolean {
                 return true
@@ -92,12 +97,20 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         clickerTable.setFillParent(true)
 
         statsTable.add(moneyStr)
+        statsTable.row()
+        statsTable.add(moneyPerSecStr)
         statsTable.setFillParent(true)
         statsTable.top()
 
         stage.addActor(buildingTable)
         stage.addActor(clickerTable)
         stage.addActor(statsTable)
+
+
+    }
+
+    fun updateMoney() {
+        gsm.player.addMoneySinceLastSynched()
     }
 
 
@@ -108,6 +121,12 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
     }
 
     override fun render(dt : Float) {
+        if (TimeUtils.timeSinceNanos(startTime) > 1000000000) {
+            updateMoney()
+            startTime = TimeUtils.nanoTime();
+            moneyStr.setText("Income: "+ gsm.player.income)
+        }
+
         batch.begin()
         batch.draw(background, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
         batch.end()
