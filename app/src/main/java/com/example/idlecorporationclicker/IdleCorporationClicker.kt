@@ -38,9 +38,8 @@ public class IdleCorporationClicker : Game() {
     override fun render() {
         // Wipes the screen and redraw
         Gdx.input.setCatchKey(Input.Keys.BACK, true)
-        if (Gdx.input.isKeyPressed(Input.Keys.BACK)){
-            game.setScreen(gsm.pop())
-            dispose()
+        if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)){
+            gsm.setNewScreenFromStack(gsm, game)
         }
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
         super.render()

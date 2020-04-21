@@ -95,7 +95,6 @@ public class StartMenu(override var game: Game, override var gsm: GameStateManag
     override fun show() {
         Gdx.input.setInputProcessor(stage)
         stage.setKeyboardFocus(textField)
-        gsm.push(this)
     }
 
     override fun pause() {

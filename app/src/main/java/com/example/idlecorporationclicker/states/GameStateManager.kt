@@ -1,15 +1,39 @@
 package com.example.idlecorporationclicker.states
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.Game
+import com.example.idlecorporationclicker.states.BuildingScreen.BuildingScreen
+import com.example.idlecorporationclicker.states.MainScreen.MainScreen
+import com.example.idlecorporationclicker.states.attackscreen.AttackScreen
+import com.example.idlecorporationclicker.states.playerlist.PlayerList
 import java.util.*
 
 public class GameStateManager {
 
     private var states : Stack<State>
+    private var screenHistory : Stack<SCREEN>
+
 
     constructor() {
         states = Stack<State>()
+        screenHistory = Stack<SCREEN>()
+    }
+
+    public fun pushHistory(hist : SCREEN) {
+        screenHistory.push(hist)
+    }
+
+    fun popHistory() : SCREEN {
+       return screenHistory.pop()
+    }
+
+    fun setNewScreenFromStack(gsm : GameStateManager, game: Game){
+        if(!screenHistory.isEmpty()) {
+            var scrn = popHistory()
+            when(scrn) {
+                SCREEN.AttackScreen -> game.setScreen(AttackScreen(game, gsm))
+                SCREEN.MainScreen -> game.setScreen(MainScreen(game, gsm))
+            }
+        }
     }
 
     public fun push(state: State) {
@@ -41,4 +65,13 @@ public class GameStateManager {
     public fun dispose() {
         states.peek().dispose()
     }
+}
+
+enum class SCREEN {
+    None,
+    StartMenu,
+    MainScreen,
+    AttackScreen,
+    BuildingScreen,
+    PlayerList
 }

@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.example.idlecorporationclicker.states.BuildingScreen.BuildingScreen
 import com.example.idlecorporationclicker.states.GameStateManager
+import com.example.idlecorporationclicker.states.SCREEN
 import com.example.idlecorporationclicker.states.State
 import com.example.idlecorporationclicker.states.attackscreen.AttackScreen
 
@@ -51,6 +52,7 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         attackBuilding.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
                 game.setScreen(AttackScreen(game, gsm))
+                gsm.pushHistory(SCREEN.MainScreen)
             }
             override fun touchDown(e : InputEvent, x : Float, y : Float, Point : Int, button : Int): Boolean {
                 return true
@@ -60,6 +62,7 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         incomeBuilding.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
                 game.setScreen(BuildingScreen(game, gsm))
+                gsm.pushHistory(SCREEN.MainScreen)
             }
             override fun touchDown(e : InputEvent, x : Float, y : Float, Point : Int, button : Int): Boolean {
                 return true

@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.example.idlecorporationclicker.states.BuildingScreen.BuildingScreen
 import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.states.MainScreen.MainScreen
+import com.example.idlecorporationclicker.states.SCREEN
 import com.example.idlecorporationclicker.states.State
 import com.example.idlecorporationclicker.states.playerlist.PlayerList
 
@@ -87,6 +88,7 @@ class AttackScreen(override var game: Game, override var gsm: GameStateManager) 
         player.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
                 game.setScreen(PlayerList(chosenAttack, game, gsm))
+                gsm.pushHistory(SCREEN.AttackScreen)
             }
             override fun touchDown(e : InputEvent, x : Float, y : Float, Point : Int, button : Int): Boolean {
                 return true
