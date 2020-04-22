@@ -6,8 +6,8 @@ interface IAttack {
     val type: ATTACK_TYPE
     val name: String
     var value: Int
-    var attackBuildings: List<AttackBuilding>
     fun calculateAttackValue() : Int
+    fun doAttack() : Boolean
 }
 
 enum class ATTACK_TYPE {
