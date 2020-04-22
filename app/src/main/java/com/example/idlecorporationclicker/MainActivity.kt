@@ -1,8 +1,10 @@
 package com.example.idlecorporationclicker
 
-import android.app.Activity
 import android.content.Intent
+import android.app.Activity
 import android.os.Bundle
+import android.widget.Button
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +15,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.idlecorporationclicker.firebase.FirebaseHandler
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
@@ -92,6 +93,7 @@ class MainActivity : AppCompatActivity() {
 	private fun setupHomeScreen() {
 		setContentView(R.layout.activity_main)
 		val navView: BottomNavigationView = findViewById(R.id.nav_view)
+
 		val navController = findNavController(R.id.nav_host_fragment)
 
 		//		 Passing each menu ID as a set of Ids because each
@@ -103,7 +105,18 @@ class MainActivity : AppCompatActivity() {
 		)
 		setupActionBarWithNavController(navController, appBarConfiguration)
 		navView.setupWithNavController(navController)
+
+		val libGDXLauncherBtn : Button = findViewById(R.id.launch_libgdx) as Button
+
+		libGDXLauncherBtn.setOnClickListener {
+			launchlibGDX()
+		}
 	}
+	fun launchlibGDX() {
+		val intent = Intent(this, Launcher::class.java)
+		startActivity(intent)
+	}
+
 
 
 }
