@@ -5,6 +5,7 @@ import com.example.idlecorporationclicker.model.IAttack
 import com.example.idlecorporationclicker.model.Player
 
 class SabotageAttack : IAttack{
+
     override val type: ATTACK_TYPE = ATTACK_TYPE.STEAL
     override val name: String = "Steal"
 

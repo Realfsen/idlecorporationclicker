@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "35173463061",
+    "firebase_url": "https://idlecorporationclicker.firebaseio.com",
+    "project_id": "idlecorporationclicker",
+    "storage_bucket": "idlecorporationclicker.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:35173463061:android:4fb38ac037ffa629f54a1c",
+        "android_client_info": {
+          "package_name": "com.example.idlecorporationclicker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "35173463061-c5legtf29mva404jf8pbghgo6phf38jh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.idlecorporationclicker",
+            "certificate_hash": "ce1355f254d10fb6cf1eec0a89c10b71f724f7e2"
+          }
+        },
+        {
+          "client_id": "35173463061-c7kablrjmv9o3hnpl1gi02vdfj56cvf5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHSoafswBMgQwWoO61N0zp62hscQ4vP2A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "35173463061-c7kablrjmv9o3hnpl1gi02vdfj56cvf5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

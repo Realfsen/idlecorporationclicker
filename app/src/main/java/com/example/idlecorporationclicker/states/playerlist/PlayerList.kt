@@ -11,11 +11,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.badlogic.gdx.utils.viewport.Viewport
+import com.example.idlecorporationclicker.model.IAttack
+import com.example.idlecorporationclicker.model.Player
 import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.states.State
 import com.example.idlecorporationclicker.states.attackscreen.AttackScreen
 
-class PlayerList(var attackType: AttackScreen.attackType,
+class PlayerList(var attack: IAttack,
                  override var game: Game, override var gsm: GameStateManager
 ) : State(gsm, game) {
 
@@ -27,7 +29,7 @@ class PlayerList(var attackType: AttackScreen.attackType,
     private var findPlayerStr: Label
     private var background : Texture
     private var playerTable : Table
-    private var chosenAttack: AttackScreen.attackType
+    //private var chosenAttack: AttackScreen.attackType
     private var batch : SpriteBatch
     private var stage: Stage
 
@@ -36,14 +38,14 @@ class PlayerList(var attackType: AttackScreen.attackType,
         background = Texture(Gdx.files.internal("backgrounds/1x/background-attackmdpi.png"))
         playerTable = Table()
 
-        chosenAttack = attackType
+        //chosenAttack = attackType
         var uiSkin = Skin(Gdx.files.internal("ui/uiskin.json"))
         uiSkin.getFont("default-font").getData().setScale(3.5f)
 
         sabotageStr = Label("Sabotage", uiSkin)
         attackStr = Label("Steal", uiSkin)
         findPlayerStr = Label("Find player", uiSkin)
-        chosenAttackStr = Label("Chosen attack: "+chosenAttack, uiSkin)
+        chosenAttackStr = Label("Chosen attack: "+attack.type, uiSkin)
         stage = Stage()
         batch = SpriteBatch()
 
@@ -51,15 +53,32 @@ class PlayerList(var attackType: AttackScreen.attackType,
         var nameLabel = Label("Name", uiSkin)
         var defenseLabel = Label("Defense", uiSkin)
         var moneyLabel = Label("Money", uiSkin)
+        var successLabel = Label("Success", uiSkin)
+        var emptyLabel= Label("", uiSkin)
+
+
         playerTable.add(nameLabel);
         playerTable.add(defenseLabel);
         playerTable.add(moneyLabel);
-        createNewPlayerRow()
-        createNewPlayerRow()
-        createNewPlayerRow()
-        createNewPlayerRow()
-        createNewPlayerRow()
-        createNewPlayerRow()
+        playerTable.add(successLabel);
+        var player1 = Player()
+        player1.income = 300
+        player1.name = "Andreas"
+        player1.defenseBuildings[0].level = 50.0
+        player1.defenseBuildings[0].value = player1.defenseBuildings[0].calculateValue()
+        var player2 = Player()
+        player2.income = 5030
+        player2.name = "Simon"
+        player2.defenseBuildings[0].level = 10.0
+        player2.defenseBuildings[0].value = player1.defenseBuildings[0].calculateValue()
+        var player3 = Player()
+        player3.income = 30
+        player3.name = "Dag"
+        player3.defenseBuildings[0].level = 5.0
+        player3.defenseBuildings[0].value = player1.defenseBuildings[0].calculateValue()
+        createNewPlayerRow(gsm.player, player1)
+        createNewPlayerRow(gsm.player,player2)
+        createNewPlayerRow(gsm.player,player3)
         playerTable.top().padTop(100f)
         playerTable.setFillParent(true)
 
@@ -72,18 +91,20 @@ class PlayerList(var attackType: AttackScreen.attackType,
     }
 
 
-    fun createNewPlayerRow() {
+    fun createNewPlayerRow(attacker: Player, defender: Player) {
         var uiSkin = Skin(Gdx.files.internal("ui/uiskin.json"))
         uiSkin.getFont("default-font").getData().setScale(3f)
         var btn = TextButton("Attack!", uiSkin)
-        var name = Label("Player", uiSkin)
-        var defense = Label("300", uiSkin)
-        var money = Label("999", uiSkin)
+        var name = Label(defender.name, uiSkin)
+        var defense = Label(defender.defense().toInt().toString(), uiSkin)
+        var successChance = Label("99%", uiSkin)
+        var money = Label(defender.income.toInt().toString(), uiSkin)
 
         playerTable.row().pad(10f)
         playerTable.add(name)
         playerTable.add(defense)
         playerTable.add(money)
+        playerTable.add(successChance)
         playerTable.add(btn)
 
 
