@@ -8,6 +8,7 @@ interface IAttack {
     var value: Int
     var attackBuildings: List<AttackBuilding>
     fun calculateAttackValue() : Int
+
 }
 
 enum class ATTACK_TYPE {
