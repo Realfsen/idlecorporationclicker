@@ -5,7 +5,7 @@ import com.example.idlecorporationclicker.model.ATTACK_TYPE
 import com.example.idlecorporationclicker.model.IAttack
 
 class SabotageAttack(override var attackBuildings : List<AttackBuilding>) : IAttack{
-    override val type: ATTACK_TYPE = ATTACK_TYPE.STEAL
+    override val type: ATTACK_TYPE = ATTACK_TYPE.SABOTAGE
     override val name: String = "Steal"
     override var value: Int = calculateAttackValue()
 

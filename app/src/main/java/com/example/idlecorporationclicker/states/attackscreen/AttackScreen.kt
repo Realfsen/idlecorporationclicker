@@ -13,6 +13,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.viewport.ScreenViewport
+import com.example.idlecorporationclicker.factory.AttackFactory
+import com.example.idlecorporationclicker.factory.FACTORY_TYPE
+import com.example.idlecorporationclicker.factory.FactoryProvider
+import com.example.idlecorporationclicker.model.ATTACK_TYPE
+import com.example.idlecorporationclicker.model.IAttack
 import com.example.idlecorporationclicker.states.BuildingScreen.BuildingScreen
 import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.states.MainScreen.MainScreen
@@ -43,6 +48,7 @@ class AttackScreen(override var game: Game, override var gsm: GameStateManager) 
     private var chosenAttack: attackType
     private var batch : SpriteBatch
     private var stage: Stage
+    private var attackFactory : AttackFactory
 
 
 
@@ -54,6 +60,8 @@ class AttackScreen(override var game: Game, override var gsm: GameStateManager) 
         attackTable = Table()
         findPlayerTable = Table()
         statsTable = Table()
+        var provider = FactoryProvider()
+        attackFactory = provider.getFactory(FACTORY_TYPE.ATTACK) as AttackFactory
         chosenAttack = attackType.NONE;
         var uiSkin = Skin(Gdx.files.internal("ui/uiskin.json"))
         uiSkin.getFont("default-font").getData().setScale(5f)
@@ -87,8 +95,10 @@ class AttackScreen(override var game: Game, override var gsm: GameStateManager) 
 
         player.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
-                game.setScreen(PlayerList(chosenAttack, game, gsm))
-                gsm.pushHistory(SCREEN.AttackScreen)
+                if(chosenAttack != attackType.NONE) {
+                    game.setScreen(PlayerList(createAttack(), game, gsm))
+                    gsm.pushHistory(SCREEN.AttackScreen)
+                }
             }
             override fun touchDown(e : InputEvent, x : Float, y : Float, Point : Int, button : Int): Boolean {
                 return true
@@ -98,6 +108,14 @@ class AttackScreen(override var game: Game, override var gsm: GameStateManager) 
 
 
         buildTablesAndAddActors();
+    }
+
+    fun createAttack() : IAttack {
+        when(chosenAttack) {
+            attackType.STEAL -> return  attackFactory.create(ATTACK_TYPE.STEAL)
+            attackType.SABOTAGE-> return  attackFactory.create(ATTACK_TYPE.SABOTAGE)
+        }
+        return null as IAttack
     }
 
     fun buildTablesAndAddActors() {
