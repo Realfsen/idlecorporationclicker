@@ -45,6 +45,7 @@ class Player {
         }
         return defense
     }
+
     fun attack() : Double {
         var attack: Double = 0.0
         attackBuildings.forEach() {

@@ -51,8 +51,8 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
 
         var incomeStr: Label = Label("Income", uiSkin)
         var attackStr: Label = Label("Attack", uiSkin)
-        moneyStr = Label("Income: "+gsm.player.income, uiSkin)
         var moneyPerSecStr: Label = Label("Income per second: "+gsm.player.moneyPerSecond(), uiSkin)
+        moneyStr = Label("Income: "+gsm.player.income, uiSkin)
         attack = Label("Attack: "+gsm.player.attack(), uiSkin)
         defense = Label("Defense: "+gsm.player.defense(), uiSkin)
 
