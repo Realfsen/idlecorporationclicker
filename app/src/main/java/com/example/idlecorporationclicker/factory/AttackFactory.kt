@@ -4,6 +4,7 @@ import com.example.idlecorporationclicker.attacks.SabotageAttack
 import com.example.idlecorporationclicker.attacks.StealAttack
 import com.example.idlecorporationclicker.buildings.AttackBuilding
 import com.example.idlecorporationclicker.model.ATTACK_TYPE
+import com.example.idlecorporationclicker.model.Player
 
 class AttackFactory : AbstractFactory {
 
