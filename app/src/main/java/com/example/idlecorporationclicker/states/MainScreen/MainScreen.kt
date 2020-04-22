@@ -9,13 +9,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.TimeUtils
-import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.example.idlecorporationclicker.states.BuildingScreen.BuildingScreen
 import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.states.SCREEN
 import com.example.idlecorporationclicker.states.State
 import com.example.idlecorporationclicker.states.attackscreen.AttackScreen
-import java.util.*
 
 class MainScreen(override var game: Game, override var gsm: GameStateManager) : State(gsm, game) {
 
@@ -52,7 +50,7 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         var incomeStr: Label = Label("Income", uiSkin)
         var attackStr: Label = Label("Attack", uiSkin)
         var moneyPerSecStr: Label = Label("Income per second: "+gsm.player.moneyPerSecond(), uiSkin)
-        moneyStr = Label("Income: "+gsm.player.income, uiSkin)
+        moneyStr = Label("Income: "+gsm.player.money, uiSkin)
         attack = Label("Attack: "+gsm.player.attack(), uiSkin)
         defense = Label("Defense: "+gsm.player.defense(), uiSkin)
 
@@ -81,7 +79,7 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         cookie.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
                 gsm.player.addClickMoney()
-                moneyStr.setText("Income: "+ gsm.player.income)
+                moneyStr.setText("Income: "+ gsm.player.money)
             }
             override fun touchDown(e : InputEvent, x : Float, y : Float, Point : Int, button : Int): Boolean {
                 return true
@@ -132,7 +130,7 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         if (TimeUtils.timeSinceNanos(startTime) > 1000000000) {
             updateMoney()
             startTime = TimeUtils.nanoTime();
-            moneyStr.setText("Income: "+ gsm.player.income)
+            moneyStr.setText("Income: "+ gsm.player.money)
         }
 
         batch.begin()

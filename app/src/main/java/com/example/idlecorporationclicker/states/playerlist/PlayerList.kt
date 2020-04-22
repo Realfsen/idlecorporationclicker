@@ -2,20 +2,16 @@ package com.example.idlecorporationclicker.states.playerlist
 
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
-import com.badlogic.gdx.utils.viewport.ScreenViewport
-import com.badlogic.gdx.utils.viewport.Viewport
 import com.example.idlecorporationclicker.model.IAttack
 import com.example.idlecorporationclicker.model.Player
 import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.states.State
-import com.example.idlecorporationclicker.states.attackscreen.AttackScreen
 
 class PlayerList(var attack: IAttack,
                  override var game: Game, override var gsm: GameStateManager
@@ -54,7 +50,6 @@ class PlayerList(var attack: IAttack,
         var defenseLabel = Label("Defense", uiSkin)
         var moneyLabel = Label("Money", uiSkin)
         var successLabel = Label("Success", uiSkin)
-        var emptyLabel= Label("", uiSkin)
 
 
         playerTable.add(nameLabel);
@@ -62,17 +57,17 @@ class PlayerList(var attack: IAttack,
         playerTable.add(moneyLabel);
         playerTable.add(successLabel);
         var player1 = Player()
-        player1.income = 300
+        player1.money = 300
         player1.name = "Andreas"
         player1.defenseBuildings[0].level = 50.0
         player1.defenseBuildings[0].value = player1.defenseBuildings[0].calculateValue()
         var player2 = Player()
-        player2.income = 5030
+        player2.money = 5030
         player2.name = "Simon"
         player2.defenseBuildings[0].level = 10.0
         player2.defenseBuildings[0].value = player1.defenseBuildings[0].calculateValue()
         var player3 = Player()
-        player3.income = 30
+        player3.money = 30
         player3.name = "Dag"
         player3.defenseBuildings[0].level = 5.0
         player3.defenseBuildings[0].value = player1.defenseBuildings[0].calculateValue()
@@ -98,7 +93,7 @@ class PlayerList(var attack: IAttack,
         var name = Label(defender.name, uiSkin)
         var defense = Label(defender.defense().toInt().toString(), uiSkin)
         var successChance = Label("99%", uiSkin)
-        var money = Label(defender.income.toInt().toString(), uiSkin)
+        var money = Label(defender.money.toInt().toString(), uiSkin)
 
         playerTable.row().pad(10f)
         playerTable.add(name)
