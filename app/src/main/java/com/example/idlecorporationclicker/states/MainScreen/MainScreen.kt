@@ -32,6 +32,8 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
     private var stage: Stage
     private var startTime : Long
     private var moneyStr : Label
+    private var attack : Label
+    private var defense: Label
 
 
     init {
@@ -51,6 +53,8 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         var attackStr: Label = Label("Attack", uiSkin)
         moneyStr = Label("Income: "+gsm.player.income, uiSkin)
         var moneyPerSecStr: Label = Label("Income per second: "+gsm.player.moneyPerSecond(), uiSkin)
+        attack = Label("Attack: "+gsm.player.attack(), uiSkin)
+        defense = Label("Defense: "+gsm.player.defense(), uiSkin)
 
         stage = Stage()
         batch = SpriteBatch()
@@ -99,6 +103,10 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         statsTable.add(moneyStr)
         statsTable.row()
         statsTable.add(moneyPerSecStr)
+        statsTable.row()
+        statsTable.add(attack)
+        statsTable.row()
+        statsTable.add(defense)
         statsTable.setFillParent(true)
         statsTable.top()
 

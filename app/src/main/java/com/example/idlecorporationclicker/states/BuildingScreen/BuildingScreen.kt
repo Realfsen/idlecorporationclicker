@@ -1,5 +1,6 @@
 package com.example.idlecorporationclicker.states.BuildingScreen
 
+import android.widget.TextView
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
@@ -18,6 +19,7 @@ import com.example.idlecorporationclicker.model.BuildingType
 import com.example.idlecorporationclicker.model.IBuilding
 import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.states.State
+import org.w3c.dom.Text
 
 class BuildingScreen(override var game: Game, override var gsm: GameStateManager) : State(gsm, game) {
 
@@ -34,7 +36,6 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
 
     init {
         background = Texture(Gdx.files.internal("backgrounds/1x/background-basemdpi.png"))
-
         stage = Stage(ScreenViewport(cam))
         batch = SpriteBatch()
         wholeGroup = Table()
@@ -80,12 +81,10 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
                 return true
             }
         })
-        wholeGroup.setDebug(true)
         buildAllTowers()
         wholeGroup.setFillParent(true)
         wholeGroup.top()
         stage.addActor(wholeGroup)
-        stage.getViewport().apply()
     }
 
 

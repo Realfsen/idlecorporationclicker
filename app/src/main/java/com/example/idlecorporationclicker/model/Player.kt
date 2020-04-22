@@ -53,6 +53,21 @@ class Player {
         return monPrSec
     }
 
+    fun defense() : Double {
+        var defense : Double = 0.0
+        defenseBuilding.forEach() {
+            defense += it.value
+        }
+        return defense
+    }
+    fun attack() : Double {
+        var attack: Double = 0.0
+        attackBuildings.forEach() {
+            attack += it.value
+        }
+        return attack
+    }
+
     fun addClickMoney() {
        income += moneyPerSecond().toInt()
     }
@@ -61,7 +76,6 @@ class Player {
         var synchedNow = Date()
         var timeDifference = synchedNow.getTime() - lastSynched.getTime()
         lastSynched = synchedNow
-
         var difinSec = TimeUnit.MILLISECONDS.toSeconds(timeDifference)
         income += difinSec.times(moneyPerSecond()).toInt()
     }
