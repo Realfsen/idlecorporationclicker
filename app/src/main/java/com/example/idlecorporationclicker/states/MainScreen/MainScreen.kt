@@ -22,7 +22,6 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
     private val screenHeight = Gdx.graphics.height.toFloat()
     private val screenWidth = Gdx.graphics.width.toFloat()
     private var background : Texture
-    private var musicBtn : Image
     private var cookie: Image
     private var attackBuilding: Image
     private var incomeBuilding: Image
@@ -111,20 +110,11 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         statsTable.setFillParent(true)
         statsTable.top()
 
-        musicBtn = Image(Texture("buttons/toggleMusicButtonOn.png"))
-        musicBtn.setSize(120f, 120f)
-        musicBtn.setPosition(screenWidth-(screenWidth/10f)-60, screenHeight-screenHeight/10f)
-        musicBtn.addListener(object : ClickListener() {
-            override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                MusicManager.togglePlayState()
-                musicBtn = Image(Texture("buttons/toggleMusicButtonOn.png"))
-            }
-        })
 
+        stage.addActor(MusicManager.getMusicButtonTable())
         stage.addActor(buildingTable)
         stage.addActor(clickerTable)
         stage.addActor(statsTable)
-        stage.addActor(musicBtn)
     }
 
     fun updateMoney() {
