@@ -1,26 +1,19 @@
 package com.example.idlecorporationclicker.states.BuildingScreen
 
-import android.widget.TextView
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.TimeUtils
 import com.badlogic.gdx.utils.viewport.ScreenViewport
-import com.badlogic.gdx.utils.viewport.StretchViewport
-import com.example.idlecorporationclicker.buildings.AttackBuilding
-import com.example.idlecorporationclicker.buildings.DefenseBuilding
-import com.example.idlecorporationclicker.buildings.IncomeBuilding
 import com.example.idlecorporationclicker.model.BuildingType
 import com.example.idlecorporationclicker.model.IBuilding
 import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.states.State
-import org.w3c.dom.Text
 
 class BuildingScreen(override var game: Game, override var gsm: GameStateManager) : State(gsm, game) {
 
@@ -41,7 +34,7 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
         wholeGroup = Table()
         uiSkin = Skin(Gdx.files.internal("ui/uiskin.json"))
         uiSkin.getFont("default-font").getData().setScale(3f)
-        moneyStr = Label("Income: "+gsm.player.income, uiSkin)
+        moneyStr = Label("Income: "+gsm.player.money, uiSkin)
         startTime = TimeUtils.nanoTime()
 
 
@@ -70,7 +63,7 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
 
         BuyButton.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
-                gsm.player.buyBuilding(type, building)
+                gsm.player.upgradeBuilding(building)
                 wholeGroup.clear()
                 buildStatsTable()
                 buildAllBuildings()
@@ -116,9 +109,6 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
         wholeGroup.row().padTop(40f)
     }
 
-
-
-
     override fun handleInput() {
     }
 
@@ -133,7 +123,7 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
         if (TimeUtils.timeSinceNanos(startTime) > 1000000000) {
             updateMoney()
             startTime = TimeUtils.nanoTime();
-            moneyStr.setText("Income: "+ gsm.player.income)
+            moneyStr.setText("Income: "+ gsm.player.money)
         }
         batch.begin()
         batch.draw(background, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())

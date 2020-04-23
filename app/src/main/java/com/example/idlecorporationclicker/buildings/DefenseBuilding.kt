@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.example.idlecorporationclicker.model.BuildingType
 import com.example.idlecorporationclicker.model.IBuilding
+import com.example.idlecorporationclicker.model.IBuildingUtils
 import java.lang.Math.pow
 import kotlin.math.pow
 
@@ -14,6 +15,8 @@ class DefenseBuilding (override var level : Double) : IBuilding {
     override var value: Double = calculateValue()
     override var upgradeCost: Double = calculateUpgradeCost()
     override val image : Image
+    override var baseCost: Double = 50.0
+    override var baseValue: Double = 17.0
 
     init {
         type = BuildingType.DEFENSE;
@@ -22,10 +25,10 @@ class DefenseBuilding (override var level : Double) : IBuilding {
     }
 
     override fun calculateValue() : Double{
-        return level*level
+        return IBuildingUtils.calculateValue(baseValue, level)
     }
-    override  fun calculateUpgradeCost() : Double{
-        return 2.0.pow(level)
+    override fun calculateUpgradeCost() : Double{
+        return IBuildingUtils.calculateUpgradeCost(baseCost, level)
     }
 
     override fun upgrade() {
