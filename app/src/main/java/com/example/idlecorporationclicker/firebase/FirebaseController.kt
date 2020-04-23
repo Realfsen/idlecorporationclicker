@@ -6,22 +6,24 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.util.*
 
 object FirebaseController {
     private val realtimeDB = Firebase.database
     private val playersOnline = realtimeDB.getReference("playersOnline")
+    private val SYNC_DELAY_SECONDS = 10 * 1000
+    private val db = Firebase.firestore
 
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
     private var name: String = ""
     private var email: String = ""
     private var uid: String = ""
-    private var money: Int = 0
+    private var money: Long = 0
     private var incomePerSecond: Int = 0
-    private val db = Firebase.firestore
-
     private var isOnline: Boolean = false
-
     private var localPlayer: Player? = null
+    private var nextTimeToSync: Long = Date().time + SYNC_DELAY_SECONDS
+
 
 
     init {
@@ -50,6 +52,14 @@ object FirebaseController {
         localPlayer!!.name = this.name
         localPlayer!!.money = this.money
     }
+    
+    fun SyncMoneyWithFirestoreController() {
+//        money = localPlayer?.money
+        if (Date().time > nextTimeToSync) {
+            nextTimeToSync = Date().time + SYNC_DELAY_SECONDS
+            firestoreUpdateUser()
+        }
+    }
 
 
 
@@ -70,7 +80,8 @@ object FirebaseController {
                     val incomePerSecond : Long? = userDocument.getLong("incomePerSecond")
 
                     if (money != null) {
-                        this.money = money.toInt()
+//                        this.money = money.toInt()
+                        this.money = money
                     }
                     if (incomePerSecond != null) {
                         this.incomePerSecond = incomePerSecond.toInt()
@@ -107,7 +118,7 @@ object FirebaseController {
         db.collection("users")
             .document(uid)
             .update("money", localPlayer?.money)
-        TODO("Update ALL active resources")
+//        TODO("Update ALL active resources")
     }
 
 
@@ -139,7 +150,8 @@ object FirebaseController {
                 Log.d("Firebase", "User is online = TRUE")
             }
         firestoreUpdateUser()
-        TODO("Move firestoreUpdater() to a better place")
+        SyncMoneyWithFirestoreController()
+//        TODO("Move firestoreUpdater() to a better place")
     }
 
 // -------------------------------------------  Firebase  Authentication  ------------------------------------------- \\

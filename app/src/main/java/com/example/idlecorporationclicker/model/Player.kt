@@ -6,6 +6,7 @@ import com.example.idlecorporationclicker.buildings.IncomeBuilding
 import com.example.idlecorporationclicker.factory.BuildingFactory
 import com.example.idlecorporationclicker.factory.FACTORY_TYPE
 import com.example.idlecorporationclicker.factory.FactoryProvider
+import com.example.idlecorporationclicker.firebase.FirebaseController
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -15,7 +16,7 @@ class Player {
     var attackBuildings : MutableList<IBuilding>
     var defenseBuildings : MutableList<IBuilding>
     var passiveIncomeBuildings: MutableList<IBuilding>
-    var money : Int
+    var money : Long
     var buildingFactory : BuildingFactory
 
     init {
@@ -64,6 +65,7 @@ class Player {
         lastSynched = synchedNow
         var difinSec = TimeUnit.MILLISECONDS.toSeconds(timeDifference)
         money += difinSec.times(moneyPerSecond()).toInt()
+        FirebaseController.SyncMoneyWithFirestoreController()
     }
 
     fun upgradeBuilding(building: IBuilding) : Boolean {
