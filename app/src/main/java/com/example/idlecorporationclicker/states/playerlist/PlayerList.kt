@@ -29,13 +29,21 @@ class PlayerList(var attack: IAttack,
     private var batch : SpriteBatch
     private var stage: Stage
 
+    private var player1 = Player()
+    private var player2 = Player()
+    private var player3 = Player()
+    private val uiSkin = Skin(Gdx.files.internal("ui/uiskin.json"))
+
+    private val nameLabel = Label("Name", uiSkin)
+    private val defenseLabel = Label("Defense", uiSkin)
+    private val moneyLabel = Label("Money", uiSkin)
+    private val successLabel = Label("Success", uiSkin)
 
     init {
         background = Texture(Gdx.files.internal("backgrounds/1x/background-attackmdpi.png"))
         playerTable = Table()
 
         //chosenAttack = attackType
-        var uiSkin = Skin(Gdx.files.internal("ui/uiskin.json"))
         uiSkin.getFont("default-font").getData().setScale(3.5f)
 
         sabotageStr = Label("Sabotage", uiSkin)
@@ -45,32 +53,26 @@ class PlayerList(var attack: IAttack,
         stage = Stage()
         batch = SpriteBatch()
 
-
-        var nameLabel = Label("Name", uiSkin)
-        var defenseLabel = Label("Defense", uiSkin)
-        var moneyLabel = Label("Money", uiSkin)
-        var successLabel = Label("Success", uiSkin)
-
-
         playerTable.add(nameLabel);
         playerTable.add(defenseLabel);
         playerTable.add(moneyLabel);
         playerTable.add(successLabel);
-        var player1 = Player()
+
         player1.money = 300
         player1.name = "Andreas"
         player1.defenseBuildings[0].level = 50.0
         player1.defenseBuildings[0].value = player1.defenseBuildings[0].calculateValue()
-        var player2 = Player()
+
         player2.money = 5030
         player2.name = "Simon"
         player2.defenseBuildings[0].level = 10.0
         player2.defenseBuildings[0].value = player1.defenseBuildings[0].calculateValue()
-        var player3 = Player()
+
         player3.money = 30
         player3.name = "Dag"
         player3.defenseBuildings[0].level = 5.0
         player3.defenseBuildings[0].value = player1.defenseBuildings[0].calculateValue()
+
         createNewPlayerRow(gsm.player, player1)
         createNewPlayerRow(gsm.player,player2)
         createNewPlayerRow(gsm.player,player3)
@@ -87,13 +89,13 @@ class PlayerList(var attack: IAttack,
 
 
     fun createNewPlayerRow(attacker: Player, defender: Player) {
-        var uiSkin = Skin(Gdx.files.internal("ui/uiskin.json"))
+        val uiSkin = Skin(Gdx.files.internal("ui/uiskin.json"))
         uiSkin.getFont("default-font").getData().setScale(3f)
-        var btn = TextButton("Attack!", uiSkin)
-        var name = Label(defender.name, uiSkin)
-        var defense = Label(defender.defense().toInt().toString(), uiSkin)
-        var successChance = Label(attack.calculateSuccess(attacker, defender).toString()+"%", uiSkin)
-        var money = Label(defender.money.toInt().toString(), uiSkin)
+        val btn = TextButton("Attack!", uiSkin)
+        val name = Label(defender.name, uiSkin)
+        val defense = Label(defender.defense().toInt().toString(), uiSkin)
+        val successChance = Label(attack.calculateSuccess(attacker, defender).toString()+"%", uiSkin)
+        val money = Label(defender.money.toInt().toString(), uiSkin)
 
         playerTable.row().pad(10f)
         playerTable.add(name)
@@ -105,18 +107,27 @@ class PlayerList(var attack: IAttack,
 
         btn.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
-                //TODO attack player
                 println(attack.calculateSuccess(attacker, defender))
                 attack.doAttack(attacker, defender)
-                println("ATTACK!")
+                generateTable()
             }
             override fun touchDown(e : InputEvent, x : Float, y : Float, Point : Int, button : Int): Boolean {
                 return true
             }
         })
-
-
     }
+
+    fun generateTable() {
+        playerTable.clear()
+        playerTable.add(nameLabel);
+        playerTable.add(defenseLabel);
+        playerTable.add(moneyLabel);
+        playerTable.add(successLabel);
+        createNewPlayerRow(gsm.player, player1)
+        createNewPlayerRow(gsm.player,player2)
+        createNewPlayerRow(gsm.player,player3)
+    }
+
     override fun handleInput() {
     }
 
