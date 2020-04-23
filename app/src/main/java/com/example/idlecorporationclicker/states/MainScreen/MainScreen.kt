@@ -9,19 +9,19 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.TimeUtils
-import com.badlogic.gdx.utils.viewport.ScreenViewport
+import com.example.idlecorporationclicker.audio.MusicManager
 import com.example.idlecorporationclicker.states.BuildingScreen.BuildingScreen
 import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.states.SCREEN
 import com.example.idlecorporationclicker.states.State
 import com.example.idlecorporationclicker.states.attackscreen.AttackScreen
-import java.util.*
 
 class MainScreen(override var game: Game, override var gsm: GameStateManager) : State(gsm, game) {
 
-
-
+    private val screenHeight = Gdx.graphics.height.toFloat()
+    private val screenWidth = Gdx.graphics.width.toFloat()
     private var background : Texture
+    private var musicBtn : Image
     private var cookie: Image
     private var attackBuilding: Image
     private var incomeBuilding: Image
@@ -37,10 +37,10 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
 
 
     init {
-        background = Texture(Gdx.files.internal("backgrounds/1x/background-basemdpi.png"))
-        cookie = Image(Texture(Gdx.files.internal("cookie/1x/cookiemdpi.png")))
-        attackBuilding = Image(Texture(Gdx.files.internal("buildings/attack/base/1x/basemdpi.png")))
-        incomeBuilding = Image(Texture(Gdx.files.internal("buildings/income/base/1x/basemdpi.png")))
+        background = Texture("backgrounds/1x/background-basemdpi.png")
+        cookie = Image(Texture("cookie/1x/cookiemdpi.png"))
+        attackBuilding = Image(Texture("buildings/attack/base/1x/basemdpi.png"))
+        incomeBuilding = Image(Texture("buildings/income/base/1x/basemdpi.png"))
         buildingTable = Table()
         clickerTable = Table()
         statsTable = Table()
@@ -110,11 +110,20 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         statsTable.setFillParent(true)
         statsTable.top()
 
+        musicBtn = Image(Texture("buttons/toggleMusicButtonOn.png"))
+        musicBtn.setSize(120f, 120f)
+        musicBtn.setPosition(screenWidth-(screenWidth/10f)-60, screenHeight-screenHeight/10f)
+        musicBtn.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                MusicManager.togglePlayState()
+                musicBtn = Image(Texture("buttons/toggleMusicButtonOn.png"))
+            }
+        })
+
         stage.addActor(buildingTable)
         stage.addActor(clickerTable)
         stage.addActor(statsTable)
-
-
+        stage.addActor(musicBtn)
     }
 
     fun updateMoney() {
@@ -136,7 +145,7 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         }
 
         batch.begin()
-        batch.draw(background, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
+        batch.draw(background, 0f, 0f, screenWidth, screenHeight)
         batch.end()
         stage.act(Gdx.graphics.deltaTime)
         stage.draw()

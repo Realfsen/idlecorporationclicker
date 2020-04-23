@@ -8,20 +8,22 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.ScreenViewport
+import com.badlogic.gdx.audio.Music
 import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.states.State
 import com.example.idlecorporationclicker.states.attackscreen.AttackScreen
 import com.example.idlecorporationclicker.states.startmenu.StartMenu
+import com.example.idlecorporationclicker.audio.MusicManager
 
 
-public class IdleCorporationClicker : Game() {
+class IdleCorporationClicker : Game() {
     private lateinit var batch: SpriteBatch
     private lateinit var font: BitmapFont
     private lateinit var gsm : GameStateManager
     private lateinit var game : Game
 
     // Static variables / classes
-    companion object{
+    companion object {
         var WIDTH : Float = 480f
         var HEIGHT : Float = 800f
         var TITLE : String = "Idle Corporation Clicker"
@@ -33,6 +35,7 @@ public class IdleCorporationClicker : Game() {
         gsm = GameStateManager()
         game = this;
         game.setScreen(StartMenu(game,gsm))
+        MusicManager.play()
     }
 
     override fun render() {
@@ -49,5 +52,6 @@ public class IdleCorporationClicker : Game() {
 
     override fun dispose() {
         game.screen.dispose()
+        MusicManager.dispose()
     }
 }

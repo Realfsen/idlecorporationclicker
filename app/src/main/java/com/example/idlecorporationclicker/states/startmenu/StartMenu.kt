@@ -14,18 +14,25 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.ui.TextField
+import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.example.idlecorporationclicker.MainActivity
+import com.example.idlecorporationclicker.audio.MusicManager
 import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.states.MainScreen.MainScreen
 import com.example.idlecorporationclicker.states.State
+import org.w3c.dom.Text
+import kotlin.math.log
 
 public class StartMenu(override var game: Game, override var gsm: GameStateManager) : State(gsm, game) {
 
+    private val screenHeight = Gdx.graphics.height.toFloat()
+    private val screenWidth = Gdx.graphics.width.toFloat()
     private var stage: Stage
     private var background : Texture
     private var logo : Texture
+    private var musicBtn : Image
     private var logoOffset : Float
     private var logoWidth: Float
     private var logoHeight: Float
@@ -36,14 +43,24 @@ public class StartMenu(override var game: Game, override var gsm: GameStateManag
     private var batch : SpriteBatch
 
     init {
-        background = Texture(Gdx.files.internal("backgrounds/1x/background-basemdpi.png"))
-        logo = Texture(Gdx.files.internal("logo/2x/logoxhdpi.png"))
+        background = Texture("backgrounds/1x/background-basemdpi.png")
+        logo = Texture("logo/2x/logoxhdpi.png")
         uiSkin = Skin(Gdx.files.internal("ui/uiskin.json"))
         logoOffset = 0.8f
         logoWidth = logo.width.toFloat()*logoOffset
         logoHeight = logo.height.toFloat()*logoOffset
 
-        var tableWidth : Float = Gdx.graphics.width.toFloat()/2
+        musicBtn = Image(Texture("buttons/toggleMusicButtonOn.png"))
+        musicBtn.setSize(120f, 120f)
+        musicBtn.setPosition(screenWidth-(screenWidth/10f)-60, screenHeight-screenHeight/10f)
+        musicBtn.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                MusicManager.togglePlayState()
+                musicBtn = Image(Texture("buttons/toggleMusicButtonOn.png"))
+            }
+        })
+
+        var tableWidth : Float = screenWidth/2f
         var tableHeight : Float = 200f
 
         textField = TextField("Insert name here", uiSkin)
@@ -61,11 +78,12 @@ public class StartMenu(override var game: Game, override var gsm: GameStateManag
         loginTable = Table()
         loginTable.add(textField).width(tableWidth+200).height(tableHeight)
         loginTable.row()
-        loginTable.add(loginBtn).width(Gdx.graphics.width.toFloat()/2).height(tableHeight)
+        loginTable.add(loginBtn).width(screenWidth/2f).height(tableHeight)
         loginTable.setFillParent(true);
         stage = Stage(ScreenViewport(cam))
         batch = SpriteBatch()
         stage.addActor(loginTable)
+        stage.addActor(musicBtn)
     }
 
     override fun handleInput() {
@@ -74,13 +92,14 @@ public class StartMenu(override var game: Game, override var gsm: GameStateManag
     override fun update(dt: Float) {
     }
 
-    override fun render(delta: Float) {
-            batch.begin()
-            batch.draw(background, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
-            batch.draw(logo, (Gdx.graphics.width.toFloat()/2) - (logoWidth/2), Gdx.graphics.height.toFloat()/1.8f,logoWidth, logoHeight)
-            batch.end()
-            stage.act(Gdx.graphics.deltaTime)
-            stage.draw()
+    override fun render(dt: Float) {
+        batch.begin()
+        batch.draw(background, 0f, 0f, screenWidth, screenHeight)
+        batch.draw(logo, (screenWidth/2) - (logoWidth/2f), screenHeight/1.9f,logoWidth, logoHeight)
+//        batch.draw(musicBtn, 10f, screenHeight - screenHeight/10f, 120f, 120f)
+        batch.end()
+        stage.act(Gdx.graphics.deltaTime)
+        stage.draw()
     }
 
 
@@ -90,6 +109,7 @@ public class StartMenu(override var game: Game, override var gsm: GameStateManag
     }
 
     override fun hide() {
+
     }
 
     override fun show() {
@@ -98,11 +118,14 @@ public class StartMenu(override var game: Game, override var gsm: GameStateManag
     }
 
     override fun pause() {
+
     }
 
     override fun resume() {
+
     }
 
     override fun resize(width: Int, height: Int) {
+
     }
 }
