@@ -1,14 +1,11 @@
 package com.example.idlecorporationclicker.model
 
-import com.example.idlecorporationclicker.buildings.AttackBuilding
-
 interface IAttack {
     val type: ATTACK_TYPE
     val name: String
-    var value: Int
-    var attackBuildings: List<AttackBuilding>
-    fun calculateAttackValue() : Int
-
+    fun calculateAttackValue(player : Player) : Double
+    fun doAttack(player: Player, defender: Player) : Boolean
+    fun calculateSuccess(player: Player, defender: Player) : Int
 }
 
 enum class ATTACK_TYPE {

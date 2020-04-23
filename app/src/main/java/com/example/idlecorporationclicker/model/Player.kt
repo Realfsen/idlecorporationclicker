@@ -15,8 +15,8 @@ class Player {
     var attackBuildings : MutableList<IBuilding>
     var defenseBuildings : MutableList<IBuilding>
     var passiveIncomeBuildings: MutableList<IBuilding>
+    var money : Int
     var buildingFactory : BuildingFactory
-    var income : Int
 
     init {
         name = "Kent"
@@ -27,7 +27,7 @@ class Player {
         passiveIncomeBuildings = mutableListOf(buildingFactory.create<IncomeBuilding, BuildingType>(BuildingType.INCOME))
         attackBuildings= mutableListOf(buildingFactory.create<AttackBuilding, BuildingType>(BuildingType.ATTACK))
         defenseBuildings = mutableListOf(buildingFactory.create<DefenseBuilding, BuildingType>(BuildingType.DEFENSE))
-        income = 0
+        money = 0
     }
 
     fun moneyPerSecond() : Double {
@@ -55,7 +55,7 @@ class Player {
     }
 
     fun addClickMoney() {
-       income += moneyPerSecond().toInt()
+       money += moneyPerSecond().toInt()
     }
 
     fun addMoneySinceLastSynched() {
@@ -63,16 +63,15 @@ class Player {
         var timeDifference = synchedNow.getTime() - lastSynched.getTime()
         lastSynched = synchedNow
         var difinSec = TimeUnit.MILLISECONDS.toSeconds(timeDifference)
-        income += difinSec.times(moneyPerSecond()).toInt()
+        money += difinSec.times(moneyPerSecond()).toInt()
     }
 
-
-    fun buyBuilding(type: BuildingType, building: IBuilding) {
-        when(type) {
-            BuildingType.ATTACK-> building.upgrade()
-            BuildingType.DEFENSE-> building.upgrade()
-            BuildingType.INCOME-> building.upgrade()
+    fun upgradeBuilding(building: IBuilding) : Boolean {
+        if(building.calculateUpgradeCost() < money) {
+            money - building.calculateUpgradeCost()
+            building.upgrade()
+            return true
         }
+        return false
     }
-
 }
