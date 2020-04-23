@@ -30,7 +30,6 @@ public class StartMenu(override var game: Game, override var gsm: GameStateManag
     private var stage: Stage
     private var background : Texture
     private var logo : Texture
-    private var musicBtn : Image
     private var logoOffset : Float
     private var logoWidth: Float
     private var logoHeight: Float
@@ -50,15 +49,6 @@ public class StartMenu(override var game: Game, override var gsm: GameStateManag
 
 
 
-        musicBtn = Image(Texture("buttons/toggleMusicButtonOn.png"))
-        musicBtn.setSize(120f, 120f)
-        musicBtn.setPosition(screenWidth-(screenWidth/10f)-60, screenHeight-screenHeight/10f)
-        musicBtn.addListener(object : ClickListener() {
-            override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                MusicManager.togglePlayState()
-                musicBtn = Image(Texture("buttons/toggleMusicButtonOn.png"))
-            }
-        })
 
         var tableWidth : Float = screenWidth/2f
         var tableHeight : Float = 200f
@@ -90,7 +80,7 @@ public class StartMenu(override var game: Game, override var gsm: GameStateManag
         stage = Stage(ScreenViewport(cam))
         batch = SpriteBatch()
         stage.addActor(loginTable)
-        stage.addActor(musicBtn)
+        stage.addActor(MusicManager.getMusicButtonTable())
     }
 
     override fun handleInput() {
