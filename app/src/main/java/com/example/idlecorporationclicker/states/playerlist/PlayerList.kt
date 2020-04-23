@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.example.idlecorporationclicker.audio.MusicManager
 import com.example.idlecorporationclicker.model.IAttack
 import com.example.idlecorporationclicker.model.Player
 import com.example.idlecorporationclicker.states.GameStateManager
@@ -85,6 +86,7 @@ class PlayerList(var attack: IAttack,
         bottom.setFillParent(true)
         stage.addActor(playerTable)
         stage.addActor(bottom)
+        stage.addActor(MusicManager.getMusicButtonTable())
     }
 
 
