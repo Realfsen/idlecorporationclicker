@@ -29,7 +29,7 @@ public class StartMenu(override var game: Game, override var gsm: GameStateManag
     private var logoOffset : Float
     private var logoWidth: Float
     private var logoHeight: Float
-    private var textField : TextField
+    private var textField : TextField? = null
     private var uiSkin : Skin
     private var loginBtn : TextButton
     private var loginTable : Table
@@ -46,9 +46,13 @@ public class StartMenu(override var game: Game, override var gsm: GameStateManag
         var tableWidth : Float = Gdx.graphics.width.toFloat()/2
         var tableHeight : Float = 200f
 
-        textField = TextField("Insert name here", uiSkin)
-        textField.setSize(tableWidth, 180f)
-        loginBtn = TextButton("Set username", uiSkin)
+        /**
+         * Henter navnet fra innloggingen, så trenger ikke sette eget brukernavn
+         * (Fjern denne kommentaren før innlevering)
+         */
+//        textField = TextField("Insert name here", uiSkin)
+//        textField.setSize(tableWidth, 180f)
+        loginBtn = TextButton("Start", uiSkin)
         uiSkin.getFont("default-font").getData().setScale(5f)
 
         loginBtn.setSize(tableWidth, 180f)
@@ -59,8 +63,8 @@ public class StartMenu(override var game: Game, override var gsm: GameStateManag
         })
 
         loginTable = Table()
-        loginTable.add(textField).width(tableWidth+200).height(tableHeight)
-        loginTable.row()
+//        loginTable.add(textField).width(tableWidth+200).height(tableHeight)
+//        loginTable.row()
         loginTable.add(loginBtn).width(Gdx.graphics.width.toFloat()/2).height(tableHeight)
         loginTable.setFillParent(true);
         stage = Stage(ScreenViewport(cam))
@@ -94,7 +98,7 @@ public class StartMenu(override var game: Game, override var gsm: GameStateManag
 
     override fun show() {
         Gdx.input.setInputProcessor(stage)
-        stage.setKeyboardFocus(textField)
+//        stage.setKeyboardFocus(textField)
     }
 
     override fun pause() {

@@ -12,7 +12,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.idlecorporationclicker.firebase.FirebaseHandler
+import com.example.idlecorporationclicker.firebase.FirebaseController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
 		if (user != null) {
 			// The user is already signed in
-			FirebaseHandler.start()
+			FirebaseController.start()
 			setupHomeScreen()
 			// ---------------- Signout code START:
 			AuthUI.getInstance()
@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
 			Log.d("Login", response.toString());
 			val test = response?.toString();
 //			FirebaseHandler.setSignedInUser(response);
-			FirebaseHandler.start()
+			FirebaseController.start()
 
 			if (resultCode == Activity.RESULT_OK) {
 				// Successfully signed in

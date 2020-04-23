@@ -66,7 +66,6 @@ class Player {
         money += difinSec.times(moneyPerSecond()).toInt()
     }
 
-
     fun upgradeBuilding(building: IBuilding) : Boolean {
         if(building.calculateUpgradeCost() < money) {
             money - building.calculateUpgradeCost()
@@ -75,6 +74,4 @@ class Player {
         }
         return false
     }
-
-
 }

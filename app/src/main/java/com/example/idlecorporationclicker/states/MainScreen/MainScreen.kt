@@ -47,10 +47,10 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         var uiSkin = Skin(Gdx.files.internal("ui/uiskin.json"))
         uiSkin.getFont("default-font").getData().setScale(5f)
 
-        var incomeStr: Label = Label("Income", uiSkin)
+        var incomeStr: Label = Label("Money", uiSkin)
         var attackStr: Label = Label("Attack", uiSkin)
         var moneyPerSecStr: Label = Label("Income per second: "+gsm.player.moneyPerSecond(), uiSkin)
-        moneyStr = Label("Income: "+gsm.player.money, uiSkin)
+        moneyStr = Label("Money: "+gsm.player.money, uiSkin)
         attack = Label("Attack: "+gsm.player.attack(), uiSkin)
         defense = Label("Defense: "+gsm.player.defense(), uiSkin)
 
@@ -130,7 +130,7 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         if (TimeUtils.timeSinceNanos(startTime) > 1000000000) {
             updateMoney()
             startTime = TimeUtils.nanoTime();
-            moneyStr.setText("Income: "+ gsm.player.money)
+            moneyStr.setText("Money: "+ gsm.player.money)
         }
 
         batch.begin()
