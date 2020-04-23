@@ -97,7 +97,7 @@ class PlayerList(var attack: IAttack,
         var btn = TextButton("Attack!", uiSkin)
         var name = Label(defender.name, uiSkin)
         var defense = Label(defender.defense().toInt().toString(), uiSkin)
-        var successChance = Label("99%", uiSkin)
+        var successChance = Label(attack.calculateSuccess(attacker, defender).toString()+"%", uiSkin)
         var money = Label(defender.income.toInt().toString(), uiSkin)
 
         playerTable.row().pad(10f)
@@ -111,6 +111,8 @@ class PlayerList(var attack: IAttack,
         btn.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
                 //TODO attack player
+                println(attack.calculateSuccess(attacker, defender))
+                attack.doAttack(attacker, defender)
                 println("ATTACK!")
             }
             override fun touchDown(e : InputEvent, x : Float, y : Float, Point : Int, button : Int): Boolean {
