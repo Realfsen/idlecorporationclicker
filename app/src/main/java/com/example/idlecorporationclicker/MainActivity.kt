@@ -1,11 +1,10 @@
 package com.example.idlecorporationclicker
 
-import android.content.Intent
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import android.util.Log
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -15,17 +14,16 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.idlecorporationclicker.firebase.FirebaseController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
+
 
 class MainActivity : AppCompatActivity() {
 	val user = FirebaseAuth.getInstance().currentUser
 	val RC_SIGN_IN = 131
 	val providers = arrayListOf(
 		AuthUI.IdpConfig.EmailBuilder().build())
-//		AuthUI.IdpConfig.PhoneBuilder().build(),
 //		AuthUI.IdpConfig.GoogleBuilder().build(),
-//		AuthUI.IdpConfig.FacebookBuilder().build(),
-//		AuthUI.IdpConfig.TwitterBuilder().build())
 
 
 
@@ -35,22 +33,25 @@ class MainActivity : AppCompatActivity() {
 		if (user != null) {
 			// The user is already signed in
 			FirebaseController.start()
-			setupHomeScreen()
-			// ---------------- Signout code START:
-			AuthUI.getInstance()
-//				.signOut(this)
-//				.addOnCompleteListener {
-//					// ...
-//				}
-			// ---------------- Signout code END:
+			launchGame()
+//			signOut()
 		} else {
 			// No user is signed in
 			showSignInOptions();
 		}
 	}
 
-	private fun showSignInOptions() {
+	private fun signOut() {
+		AuthUI.getInstance()
+			.signOut(this)
+			.addOnCompleteListener {
+				val intent = intent
+				finish()
+				startActivity(intent)
+			}
+	}
 
+	private fun showSignInOptions() {
 		startActivityForResult(
 			AuthUI.getInstance()
 				.createSignInIntentBuilder()
@@ -66,20 +67,14 @@ class MainActivity : AppCompatActivity() {
 
 		if (requestCode == RC_SIGN_IN) {
 			val response = IdpResponse.fromResultIntent(data)
-			Log.d("Login", response.toString());
-			val test = response?.toString();
-//			FirebaseHandler.setSignedInUser(response);
 			FirebaseController.start()
 
 			if (resultCode == Activity.RESULT_OK) {
 				// Successfully signed in
-				setupHomeScreen()
+				launchGame()
 
 			} else {
 				// Sign in failed. If response is null the user canceled the
-				// sign-in flow using the back button. Otherwise check
-				// response.getError().getErrorCode() and handle the error.
-
 				val toast = Toast.makeText(applicationContext, "Failed to sign in.", Toast.LENGTH_LONG)
                 toast.show()
 
@@ -90,27 +85,8 @@ class MainActivity : AppCompatActivity() {
 		}
 	}
 
-	private fun setupHomeScreen() {
-		setContentView(R.layout.activity_main)
-		val navView: BottomNavigationView = findViewById(R.id.nav_view)
-
-		val navController = findNavController(R.id.nav_host_fragment)
-
-		//		 Passing each menu ID as a set of Ids because each
-		//		 menu should be considered as top level destinations.
-		val appBarConfiguration = AppBarConfiguration(
-			setOf(
-				R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
-			)
-		)
-		setupActionBarWithNavController(navController, appBarConfiguration)
-		navView.setupWithNavController(navController)
-
-		val libGDXLauncherBtn : Button = findViewById(R.id.launch_libgdx) as Button
-
-		libGDXLauncherBtn.setOnClickListener {
-			launchlibGDX()
-		}
+	private fun launchGame() {
+		launchlibGDX()
 	}
 	fun launchlibGDX() {
 		val intent = Intent(this, Launcher::class.java)

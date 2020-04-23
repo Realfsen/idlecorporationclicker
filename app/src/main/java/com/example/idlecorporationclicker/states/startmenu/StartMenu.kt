@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.viewport.ScreenViewport
+import com.example.idlecorporationclicker.Launcher
 import com.example.idlecorporationclicker.MainActivity
 import com.example.idlecorporationclicker.audio.MusicManager
 import com.example.idlecorporationclicker.states.GameStateManager
@@ -66,6 +67,8 @@ public class StartMenu(override var game: Game, override var gsm: GameStateManag
         loginBtn.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
                 game.setScreen(MainScreen(game, gsm))
+//                val launcher = Launcher()
+//                launcher.signOut()
             }
         })
 

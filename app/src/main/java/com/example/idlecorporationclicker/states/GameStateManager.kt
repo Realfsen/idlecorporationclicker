@@ -9,11 +9,11 @@ import com.example.idlecorporationclicker.states.attackscreen.AttackScreen
 import com.example.idlecorporationclicker.states.playerlist.PlayerList
 import java.util.*
 
-public class GameStateManager {
+class GameStateManager {
 
     private var states : Stack<State>
     private var screenHistory : Stack<SCREEN>
-    public var player : Player
+    var player : Player
 
 
     constructor() {
@@ -23,7 +23,7 @@ public class GameStateManager {
         FirebaseController.initiateLocalPlayer(player)
     }
 
-    public fun pushHistory(hist : SCREEN) {
+    fun pushHistory(hist : SCREEN) {
         screenHistory.push(hist)
     }
 
@@ -41,33 +41,33 @@ public class GameStateManager {
         }
     }
 
-    public fun push(state: State) {
+    fun push(state: State) {
         states.push(state)
     }
 
-    public fun pop() : State{
+    fun pop() : State{
         return states.pop()
     }
 
-    public fun set(state: State) {
+    fun set(state: State) {
         states.pop()
         states.push(state)
 
     }
 
-    public fun peek() : State {
+    fun peek() : State {
         return states.peek()
     }
 
-    public fun update(dt : Float) {
+    fun update(dt : Float) {
         states.peek().update(dt);
     }
 
-    public fun render(dt : Float) {
+    fun render(dt : Float) {
         states.peek().render(dt)
     }
 
-    public fun dispose() {
+    fun dispose() {
         states.peek().dispose()
     }
 }
