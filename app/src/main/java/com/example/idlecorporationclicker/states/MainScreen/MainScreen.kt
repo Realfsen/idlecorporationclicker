@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter
+/*import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter*/
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Image
@@ -47,8 +47,8 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
     private var cashGfx : TextureRegion
     private var cashSymbol : TextureRegion
     private var numberBar : TextureRegion
-    private var generator : FreeTypeFontGenerator
-    private var parameter : FreeTypeFontParameter
+   /* private var generator : FreeTypeFontGenerator
+    private var parameter : FreeTypeFontParameter*/
 
 
     init {
@@ -67,24 +67,24 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         cashSymbol = TextureRegion(gui, 1985, 4810, 95, 145)
         numberBar = TextureRegion(gui, 3699, 4294, 210, 58)
 
-        generator = FreeTypeFontGenerator(Gdx.files.internal("fonts/signika/Signika-Bold.ttf"))
+        /*generator = FreeTypeFontGenerator(Gdx.files.internal("fonts/signika/Signika-Bold.ttf"))
         parameter = FreeTypeFontParameter()
 
         val signika : BitmapFont = generator.generateFont(parameter)
         generator.dispose()
 
         val newLabelStyle : Label.LabelStyle = Label.LabelStyle()
-        newLabelStyle.font = signika
+        newLabelStyle.font = signika*/
 
         var uiSkin = Skin(Gdx.files.internal("ui/uiskin.json"))
         uiSkin.getFont("default-font").getData().setScale(4f)
 
-        var incomeStr: Label = Label("Cash", newLabelStyle)
-        var attackStr: Label = Label("Attack", newLabelStyle)
-        var moneyPerSecStr: Label = Label(""+gsm.player.moneyPerSecond()+" per second", newLabelStyle)
-        moneyStr = Label(gsm.player.money.toString(), newLabelStyle)
-        attack = Label("Attack: "+gsm.player.attack(), newLabelStyle)
-        defense = Label("Defense: "+gsm.player.defense(), newLabelStyle)
+        var incomeStr: Label = Label("Cash", uiSkin)
+        var attackStr: Label = Label("Attack", uiSkin)
+        var moneyPerSecStr: Label = Label(""+gsm.player.moneyPerSecond()+" per second", uiSkin)
+        moneyStr = Label(gsm.player.money.toString(), uiSkin)
+        attack = Label("Attack: "+gsm.player.attack(), uiSkin)
+        defense = Label("Defense: "+gsm.player.defense(), uiSkin)
 
         stage = Stage()
         batch = SpriteBatch()
@@ -201,6 +201,6 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
     override fun dispose() {
         batch.dispose()
         stage.dispose()
-        generator.dispose()
+//        generator.dispose()
     }
 }
