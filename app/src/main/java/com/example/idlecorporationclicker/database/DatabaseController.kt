@@ -12,7 +12,7 @@ import java.util.*
 object DatabaseController: IDatabaseController {
     private val realtimeDB = Firebase.database
     private val playersOnline = realtimeDB.getReference("playersOnline")
-    private val SYNC_DELAY_SECONDS = 10 * 1000
+    private val SYNC_DELAY_SECONDS = 30 * 1000
     private val db = Firebase.firestore
 
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
