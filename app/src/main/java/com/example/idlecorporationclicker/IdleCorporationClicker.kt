@@ -35,7 +35,7 @@ class IdleCorporationClicker : Game() {
         gsm = GameStateManager()
         game = this;
         game.setScreen(StartMenu(game,gsm))
-        MusicManager.play()
+//        MusicManager.play()
     }
 
     override fun render() {
