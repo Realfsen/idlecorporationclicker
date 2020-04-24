@@ -30,6 +30,16 @@ class IncomeBuilding(override var level : Double) : IBuilding{
         return IBuildingUtils.calculateUpgradeCost(baseCost, level)
     }
 
+    override fun sellValue(): Double {
+        return IBuildingUtils.calculateUpgradeCost(baseCost, level-1)
+    }
+
+    override fun sell() {
+        level--
+        value = calculateValue()
+        upgradeCost = calculateUpgradeCost()
+    }
+
     override fun upgrade() {
         level++
         value = calculateValue()

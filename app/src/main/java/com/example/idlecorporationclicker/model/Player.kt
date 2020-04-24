@@ -67,11 +67,16 @@ class Player {
     }
 
     fun upgradeBuilding(building: IBuilding) : Boolean {
-        if(building.calculateUpgradeCost() < money) {
-            money - building.calculateUpgradeCost()
+        if(hasMoneyForBuilding(building)) {
+            money = money - building.calculateUpgradeCost().toInt()
             building.upgrade()
             return true
         }
         return false
     }
+
+    fun hasMoneyForBuilding(building: IBuilding) : Boolean {
+       return building.calculateUpgradeCost() < money
+    }
+
 }
