@@ -73,9 +73,6 @@ public class StartMenu(override var game: Game, override var gsm: GameStateManag
         loginTable.add(textField).width(tableWidth+200).height(tableHeight)
         loginTable.row()
         loginTable.add(loginBtn).width(screenWidth/2f).height(tableHeight)
-//        loginTable.add(textField).width(tableWidth+200).height(tableHeight)
-//        loginTable.row()
-        loginTable.add(loginBtn).width(Gdx.graphics.width.toFloat()/2).height(tableHeight)
         loginTable.setFillParent(true);
         stage = Stage(ScreenViewport(cam))
         batch = SpriteBatch()

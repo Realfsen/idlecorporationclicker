@@ -17,7 +17,7 @@ interface IBuilding {
     abstract fun calculateValue() : Double
     abstract fun calculateUpgradeCost() : Double
     abstract fun sellValue() : Double
-    abstract fun sell()
+    abstract fun downgrade()
 }
 
 enum class BuildingType {

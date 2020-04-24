@@ -23,7 +23,6 @@ class Player {
         lastSynched = Date()
         var factory = FactoryProvider()
         buildingFactory =  factory.getFactory(FACTORY_TYPE.BUILDING) as BuildingFactory
-
         passiveIncomeBuildings = mutableListOf(buildingFactory.create<IncomeBuilding, BuildingType>(BuildingType.INCOME))
         attackBuildings= mutableListOf(buildingFactory.create<AttackBuilding, BuildingType>(BuildingType.ATTACK))
         defenseBuildings = mutableListOf(buildingFactory.create<DefenseBuilding, BuildingType>(BuildingType.DEFENSE))
@@ -66,14 +65,20 @@ class Player {
         money += difinSec.times(moneyPerSecond()).toInt()
     }
 
-    fun upgradeBuilding(building: IBuilding) : Boolean {
+    fun buyBuilding(building: IBuilding){
         if(hasMoneyForBuilding(building)) {
             money = money - building.calculateUpgradeCost().toInt()
             building.upgrade()
-            return true
         }
-        return false
     }
+
+    fun sellBuilding(building: IBuilding) {
+        if(building.level > 1) {
+            money = money + building.sellValue().toInt()
+            building.downgrade()
+        }
+    }
+
 
     fun hasMoneyForBuilding(building: IBuilding) : Boolean {
        return building.calculateUpgradeCost() < money

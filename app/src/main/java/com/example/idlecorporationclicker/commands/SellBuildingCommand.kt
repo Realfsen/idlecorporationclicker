@@ -3,20 +3,20 @@ package com.example.idlecorporationclicker.commands
 import com.example.idlecorporationclicker.model.IBuilding
 import com.example.idlecorporationclicker.model.Player
 
-class BuyBuildingCommand(player: Player, building: IBuilding) : ICommand {
+class SellBuildingCommand(player: Player, building: IBuilding) : ICommand {
     private var player = player
     private var building = building
 
     override fun Execute() {
-        player.buyBuilding(building)
+        player.sellBuilding(building)
     }
 
     override fun CanExecute(): Boolean {
-        return player.hasMoneyForBuilding(building)
+        return building.level > 1
     }
 
     override fun Undo() {
-        player.sellBuilding(building)
+        player.buyBuilding(building)
     }
 
 }

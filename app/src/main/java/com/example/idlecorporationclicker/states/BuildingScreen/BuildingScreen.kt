@@ -65,7 +65,7 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
 
         BuyButton.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
-                gsm.player.upgradeBuilding(building)
+                gsm.player.buyBuilding(building)
                 wholeGroup.clear()
                 buildStatsTable()
                 buildAllBuildings()

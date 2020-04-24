@@ -1,7 +1,7 @@
-package com.example.idlecorporationclicker.model
+package com.example.idlecorporationclicker.commands
 
 interface ICommand {
     fun Execute()
-    fun CanExecute()
+    fun CanExecute() : Boolean
     fun Undo()
 }
