@@ -2,6 +2,7 @@ package com.example.idlecorporationclicker.states.BuildingScreen
 
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.InputEvent
@@ -11,6 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.TimeUtils
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.example.idlecorporationclicker.audio.MusicManager
+import com.example.idlecorporationclicker.commands.BuyBuildingCommand
+import com.example.idlecorporationclicker.commands.SellBuildingCommand
 import com.example.idlecorporationclicker.model.BuildingType
 import com.example.idlecorporationclicker.model.IBuilding
 import com.example.idlecorporationclicker.states.GameStateManager
@@ -49,7 +52,12 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
     }
 
     fun buildingTemplate(building : IBuilding, type: BuildingType, labelPrefix : String) : HorizontalGroup {
+
+        var buyBuilding = BuyBuildingCommand(gsm.player, building)
         var BuyButton = TextButton("Buy: "+building.upgradeCost.toInt(), uiSkin)
+        if(!buyBuilding.CanExecute()) {
+            BuyButton.color = Color.RED
+        }
         var LevelLabel = Label(building.level.toInt().toString(), uiSkin )
         var leftTable= VerticalGroup().pad(5f)
         leftTable.addActor(building.image)
@@ -65,11 +73,12 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
 
         BuyButton.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
-                gsm.player.buyBuilding(building)
+                if(buyBuilding.CanExecute()) {
+                    buyBuilding.Execute()
+                }
                 wholeGroup.clear()
                 buildStatsTable()
                 buildAllBuildings()
-
             }
 
             override fun touchDown(e : InputEvent, x : Float, y : Float, Point : Int, button : Int): Boolean {
@@ -126,6 +135,9 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
             updateMoney()
             startTime = TimeUtils.nanoTime();
             moneyStr.setText("Income: "+ gsm.player.money)
+            wholeGroup.clear()
+            buildStatsTable()
+            buildAllBuildings()
         }
         batch.begin()
         batch.draw(background, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())

@@ -34,6 +34,7 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
     private var moneyStr : Label
     private var attack : Label
     private var defense: Label
+    private var cookieManager : CookieClickerManager
 
 
     init {
@@ -45,6 +46,7 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         clickerTable = Table()
         statsTable = Table()
         startTime = TimeUtils.nanoTime()
+        cookieManager = CookieClickerManager()
 
         var uiSkin = Skin(Gdx.files.internal("ui/uiskin.json"))
         uiSkin.getFont("default-font").getData().setScale(5f)
@@ -82,6 +84,7 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
                 gsm.player.addClickMoney()
                 moneyStr.setText("Income: "+ gsm.player.money)
+                stage.addActor(cookieManager.getNextActor(x, y, screenHeight))
             }
             override fun touchDown(e : InputEvent, x : Float, y : Float, Point : Int, button : Int): Boolean {
                 return true
