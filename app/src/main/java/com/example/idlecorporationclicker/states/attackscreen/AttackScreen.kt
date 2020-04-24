@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.g3d.particles.ParticleShader.Inputs.screenWidth
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Image
@@ -17,6 +18,7 @@ import com.example.idlecorporationclicker.audio.MusicManager
 import com.example.idlecorporationclicker.factory.AttackFactory
 import com.example.idlecorporationclicker.factory.FACTORY_TYPE
 import com.example.idlecorporationclicker.factory.FactoryProvider
+import com.example.idlecorporationclicker.model.ATTACK_DESCRIPTION
 import com.example.idlecorporationclicker.model.ATTACK_TYPE
 import com.example.idlecorporationclicker.model.IAttack
 import com.example.idlecorporationclicker.states.BuildingScreen.BuildingScreen
@@ -29,12 +31,8 @@ import com.example.idlecorporationclicker.states.playerlist.PlayerList
 class AttackScreen(override var game: Game, override var gsm: GameStateManager) : State(gsm, game) {
 
 
-    public enum class attackType {
-        NONE,
-        SABOTAGE,
-        STEAL
-    }
 
+    private var attackFlavourText: Label
     private var chosenAttackStr: Label
     private var attackStr: Label
     private var sabotageStr: Label
@@ -46,7 +44,7 @@ class AttackScreen(override var game: Game, override var gsm: GameStateManager) 
     private var attackTable : Table
     private var findPlayerTable : Table
     private var statsTable : Table
-    private var chosenAttack: attackType
+    private var chosenAttack: ATTACK_TYPE
     private var batch : SpriteBatch
     private var stage: Stage
     private var attackFactory : AttackFactory
@@ -63,7 +61,7 @@ class AttackScreen(override var game: Game, override var gsm: GameStateManager) 
         statsTable = Table()
         var provider = FactoryProvider()
         attackFactory = provider.getFactory(FACTORY_TYPE.ATTACK) as AttackFactory
-        chosenAttack = attackType.NONE;
+        chosenAttack = ATTACK_TYPE.NONE
         var uiSkin = Skin(Gdx.files.internal("ui/uiskin.json"))
         uiSkin.getFont("default-font").getData().setScale(5f)
 
@@ -73,11 +71,14 @@ class AttackScreen(override var game: Game, override var gsm: GameStateManager) 
         attackStr = Label("Steal", uiSkin)
         findPlayerStr = Label("Find player", uiSkin)
         chosenAttackStr = Label("Chosen attack: "+chosenAttack, uiSkin)
+        attackFlavourText = Label(ATTACK_DESCRIPTION.getText(chosenAttack), uiSkin)
+        attackFlavourText.setWrap(true)
 
         attack.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
-                chosenAttack = attackType.STEAL;
+                chosenAttack = ATTACK_TYPE.STEAL;
                 chosenAttackStr.setText("Chosen attack: "+chosenAttack)
+                attackFlavourText.setText(ATTACK_DESCRIPTION.getText(chosenAttack))
             }
             override fun touchDown(e : InputEvent, x : Float, y : Float, Point : Int, button : Int): Boolean {
                 return true
@@ -86,8 +87,9 @@ class AttackScreen(override var game: Game, override var gsm: GameStateManager) 
 
         sabotage.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
-                chosenAttack = attackType.SABOTAGE;
+                chosenAttack = ATTACK_TYPE.SABOTAGE;
                 chosenAttackStr.setText("Chosen attack: "+chosenAttack)
+                attackFlavourText.setText(ATTACK_DESCRIPTION.getText(chosenAttack))
             }
             override fun touchDown(e : InputEvent, x : Float, y : Float, Point : Int, button : Int): Boolean {
                 return true
@@ -96,7 +98,7 @@ class AttackScreen(override var game: Game, override var gsm: GameStateManager) 
 
         player.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
-                if(chosenAttack != attackType.NONE) {
+                if(chosenAttack != ATTACK_TYPE.NONE) {
                     game.setScreen(PlayerList(createAttack(), game, gsm))
                     gsm.pushHistory(SCREEN.AttackScreen)
                 }
@@ -114,8 +116,8 @@ class AttackScreen(override var game: Game, override var gsm: GameStateManager) 
 
     fun createAttack() : IAttack {
         when(chosenAttack) {
-            attackType.STEAL -> return  attackFactory.create(ATTACK_TYPE.STEAL)
-            attackType.SABOTAGE-> return  attackFactory.create(ATTACK_TYPE.SABOTAGE)
+            ATTACK_TYPE.STEAL -> return  attackFactory.create(ATTACK_TYPE.STEAL)
+            ATTACK_TYPE.SABOTAGE-> return  attackFactory.create(ATTACK_TYPE.SABOTAGE)
         }
         return null as IAttack
     }
@@ -135,9 +137,12 @@ class AttackScreen(override var game: Game, override var gsm: GameStateManager) 
         findPlayerTable.add(findPlayerStr)
         findPlayerTable.setFillParent(true)
 
-        statsTable.add(chosenAttackStr)
+        statsTable.add(chosenAttackStr).left()
+        statsTable.row()
+        statsTable.add(attackFlavourText).left().growX()
         statsTable.setFillParent(true)
         statsTable.top()
+        statsTable.padLeft(50f).left()
         stage.addActor(attackTable)
         stage.addActor(findPlayerTable)
         stage.addActor(statsTable)

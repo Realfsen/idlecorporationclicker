@@ -58,14 +58,14 @@ class Player {
         var synchedNow = Date()
         var timeDifference = synchedNow.getTime() - lastAttack.getTime()
         var difinSec = TimeUnit.MILLISECONDS.toSeconds(timeDifference)
-        return difinSec > IAttack.companion.SECONDS_BETWEEN_ATTACKS
+        return difinSec > IAttack.SECONDS_BETWEEN_ATTACKS
     }
 
     fun secondsTillAttack() : Int {
         var synchedNow = Date()
         var timeDifference = synchedNow.getTime() - lastAttack.getTime()
         var difinSec = TimeUnit.MILLISECONDS.toSeconds(timeDifference)
-        return IAttack.companion.SECONDS_BETWEEN_ATTACKS-difinSec.toInt()
+        return IAttack.SECONDS_BETWEEN_ATTACKS-difinSec.toInt()
     }
 
     fun defense() : Double {
