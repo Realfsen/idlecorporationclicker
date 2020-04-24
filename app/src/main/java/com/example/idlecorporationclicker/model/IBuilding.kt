@@ -16,6 +16,12 @@ interface IBuilding {
     abstract fun upgrade()
     abstract fun calculateValue() : Double
     abstract fun calculateUpgradeCost() : Double
+
+    fun setBuildingsStartLevel(level: Double) {
+        this.level = level
+        value = calculateValue()
+        upgradeCost = calculateUpgradeCost()
+    }
 }
 
 enum class BuildingType {

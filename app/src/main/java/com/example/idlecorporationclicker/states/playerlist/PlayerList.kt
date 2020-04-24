@@ -61,18 +61,24 @@ class PlayerList(var attack: IAttack,
 
         player1.money = 300
         player1.name = "Andreas"
-        player1.defenseBuildings[0].level = 50.0
-        player1.defenseBuildings[0].value = player1.defenseBuildings[0].calculateValue()
+//        player1.defenseBuildings[0].level = 50.0
+//        player1.defenseBuildings[0].value = player1.defenseBuildings[0].calculateValue()
+        player1.defenseBuilding.level = 50.0
+        player1.defenseBuilding.value = player1.defenseBuilding.calculateValue()
 
         player2.money = 5030
         player2.name = "Simon"
-        player2.defenseBuildings[0].level = 10.0
-        player2.defenseBuildings[0].value = player1.defenseBuildings[0].calculateValue()
+//        player2.defenseBuildings[0].level = 10.0
+//        player2.defenseBuildings[0].value = player1.defenseBuildings[0].calculateValue()
+        player2.defenseBuilding.level = 10.0
+        player2.defenseBuilding.value = player1.defenseBuilding.calculateValue()
 
         player3.money = 30
         player3.name = "Dag"
-        player3.defenseBuildings[0].level = 5.0
-        player3.defenseBuildings[0].value = player1.defenseBuildings[0].calculateValue()
+//        player3.defenseBuildings[0].level = 5.0
+//        player3.defenseBuildings[0].value = player1.defenseBuildings[0].calculateValue()
+        player3.defenseBuilding.level = 5.0
+        player3.defenseBuilding.value = player1.defenseBuilding.calculateValue()
 
         createNewPlayerRow(gsm.player, player1)
         createNewPlayerRow(gsm.player,player2)

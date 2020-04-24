@@ -3,10 +3,10 @@ package com.example.idlecorporationclicker.buildings
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.example.idlecorporationclicker.database.DatabaseController
 import com.example.idlecorporationclicker.model.BuildingType
 import com.example.idlecorporationclicker.model.IBuilding
 import com.example.idlecorporationclicker.model.IBuildingUtils
-import kotlin.math.pow
 
 class IncomeBuilding(override var level : Double) : IBuilding{
     override val image: Image
@@ -34,7 +34,7 @@ class IncomeBuilding(override var level : Double) : IBuilding{
         level++
         value = calculateValue()
         upgradeCost = calculateUpgradeCost()
-
+        DatabaseController.buildingUpdateIncome()
     }
 
 }

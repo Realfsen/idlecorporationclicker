@@ -1,6 +1,5 @@
 package com.example.idlecorporationclicker.states.startmenu
 
-import android.graphics.fonts.Font
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
@@ -24,7 +23,7 @@ import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.states.MainScreen.MainScreen
 import com.example.idlecorporationclicker.states.State
 
-public class StartMenu(override var game: Game, override var gsm: GameStateManager) : State(gsm, game) {
+class StartMenu(override var game: Game, override var gsm: GameStateManager) : State(gsm, game) {
 
     private val screenHeight = Gdx.graphics.height.toFloat()
     private val screenWidth = Gdx.graphics.width.toFloat()
@@ -67,8 +66,6 @@ public class StartMenu(override var game: Game, override var gsm: GameStateManag
         loginBtn.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
                 game.setScreen(MainScreen(game, gsm))
-//                val launcher = Launcher()
-//                launcher.signOut()
             }
         })
 

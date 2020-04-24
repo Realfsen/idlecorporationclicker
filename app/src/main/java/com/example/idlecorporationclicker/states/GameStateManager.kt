@@ -1,12 +1,10 @@
 package com.example.idlecorporationclicker.states
 
 import com.badlogic.gdx.Game
-import com.example.idlecorporationclicker.firebase.FirebaseController
+import com.example.idlecorporationclicker.database.DatabaseController
 import com.example.idlecorporationclicker.model.Player
-import com.example.idlecorporationclicker.states.BuildingScreen.BuildingScreen
 import com.example.idlecorporationclicker.states.MainScreen.MainScreen
 import com.example.idlecorporationclicker.states.attackscreen.AttackScreen
-import com.example.idlecorporationclicker.states.playerlist.PlayerList
 import java.util.*
 
 class GameStateManager {
@@ -20,7 +18,7 @@ class GameStateManager {
         states = Stack<State>()
         screenHistory = Stack<SCREEN>()
         player = Player()
-        FirebaseController.initiateLocalPlayer(player)
+        DatabaseController.initiateLocalPlayer(player)
     }
 
     fun pushHistory(hist : SCREEN) {
