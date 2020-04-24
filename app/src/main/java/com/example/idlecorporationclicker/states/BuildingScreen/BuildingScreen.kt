@@ -90,18 +90,25 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
     }
 
     fun buildAllBuildings() {
-        gsm.player.passiveIncomeBuildings.forEach( {
-            wholeGroup.add(buildingTemplate(it, BuildingType.INCOME, "$ "))
+//        gsm.player.passiveIncomeBuildings.forEach( {
+//            wholeGroup.add(buildingTemplate(it, BuildingType.INCOME, "$ "))
+//            wholeGroup.row()
+//        })
+//        gsm.player.attackBuildings.forEach( {
+//            wholeGroup.add(buildingTemplate(it, BuildingType.ATTACK, "Attack power  "))
+//            wholeGroup.row()
+//        })
+//        gsm.player.defenseBuildings.forEach( {
+//            wholeGroup.add(buildingTemplate(it, BuildingType.DEFENSE, "Defense power "))
+//            wholeGroup.row()
+//        })
+
+            wholeGroup.add(buildingTemplate(gsm.player.passiveIncomeBuilding, BuildingType.INCOME, "$ "))
             wholeGroup.row()
-        })
-        gsm.player.attackBuildings.forEach( {
-            wholeGroup.add(buildingTemplate(it, BuildingType.ATTACK, "Attack power  "))
+            wholeGroup.add(buildingTemplate(gsm.player.attackBuilding, BuildingType.ATTACK, "Attack power  "))
             wholeGroup.row()
-        })
-        gsm.player.defenseBuildings.forEach( {
-            wholeGroup.add(buildingTemplate(it, BuildingType.DEFENSE, "Defense power "))
+            wholeGroup.add(buildingTemplate(gsm.player.defenseBuilding, BuildingType.DEFENSE, "Defense power "))
             wholeGroup.row()
-        })
     }
 
     fun buildStatsTable() {

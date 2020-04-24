@@ -1,6 +1,5 @@
 package com.example.idlecorporationclicker.states.startmenu
 
-import android.graphics.fonts.Font
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
@@ -17,13 +16,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.viewport.ScreenViewport
+import com.example.idlecorporationclicker.Launcher
 import com.example.idlecorporationclicker.MainActivity
 import com.example.idlecorporationclicker.audio.MusicManager
 import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.states.MainScreen.MainScreen
 import com.example.idlecorporationclicker.states.State
 
-public class StartMenu(override var game: Game, override var gsm: GameStateManager) : State(gsm, game) {
+class StartMenu(override var game: Game, override var gsm: GameStateManager) : State(gsm, game) {
 
     private val screenHeight = Gdx.graphics.height.toFloat()
     private val screenWidth = Gdx.graphics.width.toFloat()
