@@ -3,6 +3,7 @@ package com.example.idlecorporationclicker.buildings
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.example.idlecorporationclicker.database.DatabaseController
 import com.example.idlecorporationclicker.model.BuildingType
 import com.example.idlecorporationclicker.model.IBuilding
 import com.example.idlecorporationclicker.model.IBuildingUtils
@@ -31,12 +32,20 @@ class AttackBuilding(override var level: Double)
         return IBuildingUtils.calculateUpgradeCost(baseCost, level)
     }
 
-    override fun upgrade() {
-        level++
+    override fun sellValue(): Double {
+        return IBuildingUtils.calculateUpgradeCost(baseCost, level-1)
+    }
+
+    override fun downgrade() {
+        level--
         value = calculateValue()
         upgradeCost = calculateUpgradeCost()
     }
 
-
-
+    override fun upgrade() {
+        level++
+        value = calculateValue()
+        upgradeCost = calculateUpgradeCost()
+        DatabaseController.buildingUpdateAttack()
+    }
 }

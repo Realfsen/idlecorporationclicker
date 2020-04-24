@@ -1,6 +1,5 @@
 package com.example.idlecorporationclicker.states.startmenu
 
-import android.graphics.fonts.Font
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
@@ -17,20 +16,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.viewport.ScreenViewport
+import com.example.idlecorporationclicker.Launcher
 import com.example.idlecorporationclicker.MainActivity
 import com.example.idlecorporationclicker.audio.MusicManager
 import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.states.MainScreen.MainScreen
 import com.example.idlecorporationclicker.states.State
 
-public class StartMenu(override var game: Game, override var gsm: GameStateManager) : State(gsm, game) {
+class StartMenu(override var game: Game, override var gsm: GameStateManager) : State(gsm, game) {
 
     private val screenHeight = Gdx.graphics.height.toFloat()
     private val screenWidth = Gdx.graphics.width.toFloat()
     private var stage: Stage
     private var background : Texture
     private var logo : Texture
-    private var musicBtn : Image
     private var logoOffset : Float
     private var logoWidth: Float
     private var logoHeight: Float
@@ -50,15 +49,6 @@ public class StartMenu(override var game: Game, override var gsm: GameStateManag
 
 
 
-        musicBtn = Image(Texture("buttons/toggleMusicButtonOn.png"))
-        musicBtn.setSize(120f, 120f)
-        musicBtn.setPosition(screenWidth-(screenWidth/10f)-60, screenHeight-screenHeight/10f)
-        musicBtn.addListener(object : ClickListener() {
-            override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                MusicManager.togglePlayState()
-                musicBtn = Image(Texture("buttons/toggleMusicButtonOn.png"))
-            }
-        })
 
         var tableWidth : Float = screenWidth/2f
         var tableHeight : Float = 200f
@@ -83,14 +73,11 @@ public class StartMenu(override var game: Game, override var gsm: GameStateManag
         loginTable.add(textField).width(tableWidth+200).height(tableHeight)
         loginTable.row()
         loginTable.add(loginBtn).width(screenWidth/2f).height(tableHeight)
-//        loginTable.add(textField).width(tableWidth+200).height(tableHeight)
-//        loginTable.row()
-        loginTable.add(loginBtn).width(Gdx.graphics.width.toFloat()/2).height(tableHeight)
         loginTable.setFillParent(true);
         stage = Stage(ScreenViewport(cam))
         batch = SpriteBatch()
         stage.addActor(loginTable)
-        stage.addActor(musicBtn)
+        stage.addActor(MusicManager.getMusicButtonTable())
     }
 
     override fun handleInput() {

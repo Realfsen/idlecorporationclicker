@@ -1,8 +1,11 @@
 package com.example.idlecorporationclicker
+import android.content.Intent
 import android.os.Bundle
 import com.badlogic.gdx.backends.android.AndroidApplication
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration
-import com.example.idlecorporationclicker.firebase.FirebaseController
+import com.example.idlecorporationclicker.database.DatabaseController
+import com.firebase.ui.auth.AuthUI
+
 
 class Launcher : AndroidApplication() {
 
@@ -14,11 +17,21 @@ class Launcher : AndroidApplication() {
 
     override fun onPause() {
         super.onPause()
-        FirebaseController.goOfline()
+        DatabaseController.goOfline()
     }
 
     override fun onResume() {
         super.onResume()
-        FirebaseController.goOnline()
+        DatabaseController.goOnline()
+    }
+
+    fun signOut() {
+        AuthUI.getInstance()
+            .signOut(this)
+            .addOnCompleteListener {
+                val intent = Intent(this, MainActivity::class.java)
+                finish()
+                startActivity(intent)
+            }
     }
 }

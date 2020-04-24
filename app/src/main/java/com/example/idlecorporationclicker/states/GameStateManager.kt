@@ -1,29 +1,27 @@
 package com.example.idlecorporationclicker.states
 
 import com.badlogic.gdx.Game
-import com.example.idlecorporationclicker.firebase.FirebaseController
+import com.example.idlecorporationclicker.database.DatabaseController
 import com.example.idlecorporationclicker.model.Player
-import com.example.idlecorporationclicker.states.BuildingScreen.BuildingScreen
 import com.example.idlecorporationclicker.states.MainScreen.MainScreen
 import com.example.idlecorporationclicker.states.attackscreen.AttackScreen
-import com.example.idlecorporationclicker.states.playerlist.PlayerList
 import java.util.*
 
-public class GameStateManager {
+class GameStateManager {
 
     private var states : Stack<State>
     private var screenHistory : Stack<SCREEN>
-    public var player : Player
+    var player : Player
 
 
     constructor() {
         states = Stack<State>()
         screenHistory = Stack<SCREEN>()
         player = Player()
-        FirebaseController.initiateLocalPlayer(player)
+        DatabaseController.initiateLocalPlayer(player)
     }
 
-    public fun pushHistory(hist : SCREEN) {
+    fun pushHistory(hist : SCREEN) {
         screenHistory.push(hist)
     }
 
@@ -41,33 +39,33 @@ public class GameStateManager {
         }
     }
 
-    public fun push(state: State) {
+    fun push(state: State) {
         states.push(state)
     }
 
-    public fun pop() : State{
+    fun pop() : State{
         return states.pop()
     }
 
-    public fun set(state: State) {
+    fun set(state: State) {
         states.pop()
         states.push(state)
 
     }
 
-    public fun peek() : State {
+    fun peek() : State {
         return states.peek()
     }
 
-    public fun update(dt : Float) {
+    fun update(dt : Float) {
         states.peek().update(dt);
     }
 
-    public fun render(dt : Float) {
+    fun render(dt : Float) {
         states.peek().render(dt)
     }
 
-    public fun dispose() {
+    fun dispose() {
         states.peek().dispose()
     }
 }
