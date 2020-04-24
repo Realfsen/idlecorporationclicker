@@ -38,7 +38,7 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
 
 
     init {
-        background = Texture("backgrounds/1x/background-basemdpi.png")
+        background = Texture("backgrounds/1x/background-basemdpi2.png")
         cookie = Image(Texture("cookie/1x/cookiemdpi.png"))
         attackBuilding = Image(Texture("buildings/attack/base/1x/basemdpi.png"))
         incomeBuilding = Image(Texture("buildings/income/base/1x/basemdpi.png"))
@@ -48,12 +48,12 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         startTime = TimeUtils.nanoTime()
 
         var uiSkin = Skin(Gdx.files.internal("ui/uiskin.json"))
-        uiSkin.getFont("default-font").getData().setScale(5f)
+        uiSkin.getFont("default-font").getData().setScale(4f)
 
-        var incomeStr: Label = Label("Money", uiSkin)
+        var incomeStr: Label = Label("Cash", uiSkin)
         var attackStr: Label = Label("Attack", uiSkin)
-        var moneyPerSecStr: Label = Label("Income per second: "+gsm.player.moneyPerSecond(), uiSkin)
-        moneyStr = Label("Money: "+gsm.player.money, uiSkin)
+        var moneyPerSecStr: Label = Label(""+gsm.player.moneyPerSecond()+" per second", uiSkin)
+        moneyStr = Label("Cash: "+gsm.player.money, uiSkin)
         attack = Label("Attack: "+gsm.player.attack(), uiSkin)
         defense = Label("Defense: "+gsm.player.defense(), uiSkin)
 
@@ -102,11 +102,11 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         clickerTable.setFillParent(true)
 
         statsTable.add(moneyStr)
-        statsTable.row()
+//        statsTable.row()
         statsTable.add(moneyPerSecStr)
         statsTable.row()
         statsTable.add(attack)
-        statsTable.row()
+//        statsTable.row()
         statsTable.add(defense)
         statsTable.setFillParent(true)
         statsTable.top()
