@@ -46,6 +46,8 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
     private var topBar : TextureRegion
     private var cashGfx : TextureRegion
     private var cashSymbol : TextureRegion
+    private var shieldSymbol : TextureRegion
+    private var starSymbol : TextureRegion
     private var numberBar : TextureRegion
    /* private var generator : FreeTypeFontGenerator
     private var parameter : FreeTypeFontParameter*/
@@ -65,6 +67,8 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         topBar = TextureRegion(gui, 3540, 2845, 430, 140)
         cashGfx = TextureRegion(gui, 2890, 4100, 285, 115)
         cashSymbol = TextureRegion(gui, 1985, 4810, 95, 145)
+        shieldSymbol = TextureRegion(gui, 1680, 4810, 110, 145)
+        starSymbol = TextureRegion(gui, 1830, 4810, 135, 130)
         numberBar = TextureRegion(gui, 3699, 4294, 210, 58)
 
         /*generator = FreeTypeFontGenerator(Gdx.files.internal("fonts/signika/Signika-Bold.ttf"))
@@ -81,10 +85,10 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
 
         var incomeStr: Label = Label("Cash", uiSkin)
         var attackStr: Label = Label("Attack", uiSkin)
-        var moneyPerSecStr: Label = Label(""+gsm.player.moneyPerSecond()+" per second", uiSkin)
+        var moneyPerSecStr: Label = Label(""+gsm.player.moneyPerSecond()+" /s", uiSkin)
         moneyStr = Label(gsm.player.money.toString(), uiSkin)
-        attack = Label("Attack: "+gsm.player.attack(), uiSkin)
-        defense = Label("Defense: "+gsm.player.defense(), uiSkin)
+        attack = Label(""+gsm.player.attack(), uiSkin)
+        defense = Label(""+gsm.player.defense(), uiSkin)
 
         stage = Stage()
         batch = SpriteBatch()
@@ -131,13 +135,13 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         clickerTable.add(cookie)
         clickerTable.setFillParent(true)
 
-        statsTable.add(moneyStr)
-//        statsTable.row()
-        statsTable.add(moneyPerSecStr)
+        statsTable.add(moneyStr).width(screenWidth/2.5f).padTop(55f)
+        statsTable.add(defense).padTop(55f)
         statsTable.row()
-        statsTable.add(attack)
+        statsTable.add(moneyPerSecStr).width(screenWidth/2.5f).padTop(40f)
+        statsTable.add(attack).padTop(40f)
 //        statsTable.row()
-        statsTable.add(defense)
+//        statsTable.row()
         statsTable.setFillParent(true)
         statsTable.top()
 
@@ -154,10 +158,16 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
 
     fun drawTopBar() {
         batch.draw(topBar, 0f, screenHeight-screenHeight/6, screenWidth, screenHeight/6)
-//        batch.draw(cashGfx, 25f, screenHeight-cashGfx.regionHeight*2.5f, screenWidth/2.5f, screenHeight/12)
-        batch.draw(numberBar, 100f, screenHeight-screenHeight/13.5f, screenWidth/2.25f, screenHeight/20)
-        batch.draw(numberBar, 100f, screenHeight-screenHeight/7.5f, screenWidth/2.25f, screenHeight/20)
-        batch.draw(cashSymbol, 20f, screenHeight-cashGfx.regionHeight*3f, screenWidth/6, screenHeight/6.5f)
+        /* CASH */
+        batch.draw(numberBar, 100f, screenHeight-screenHeight/13.5f, screenWidth/2.5f, screenHeight/20)
+        batch.draw(numberBar, 100f, screenHeight-screenHeight/7.5f, screenWidth/2.5f, screenHeight/20)
+        batch.draw(cashSymbol, 20f, screenHeight-cashSymbol.regionHeight*2.5f, screenWidth/6, screenHeight/6.5f)
+        /* DEFENSE */
+        batch.draw(numberBar, screenWidth/2f, screenHeight-screenHeight/13.5f, screenWidth/3f, screenHeight/20)
+        batch.draw(shieldSymbol, screenWidth/2f, screenHeight-shieldSymbol.regionHeight*1.25f, screenWidth/10f, screenHeight/16f)
+        /* ATTACK */
+        batch.draw(numberBar, screenWidth/2f, screenHeight-screenHeight/7.5f, screenWidth/3f, screenHeight/20)
+        batch.draw(starSymbol, screenWidth/2f, screenHeight-starSymbol.regionHeight*2.45f, screenWidth/10f, screenHeight/16f)
     }
 
 
