@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 /*import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
@@ -15,6 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable
 import com.badlogic.gdx.utils.TimeUtils
 import com.example.idlecorporationclicker.audio.MusicManager
 import com.example.idlecorporationclicker.states.BuildingScreen.BuildingScreen
@@ -70,6 +73,7 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         shieldSymbol = TextureRegion(gui, 1680, 4810, 110, 145)
         starSymbol = TextureRegion(gui, 1830, 4810, 135, 130)
         numberBar = TextureRegion(gui, 3699, 4294, 210, 58)
+
 
         /*generator = FreeTypeFontGenerator(Gdx.files.internal("fonts/signika/Signika-Bold.ttf"))
         parameter = FreeTypeFontParameter()
@@ -157,17 +161,28 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
     }
 
     fun drawTopBar() {
+//        batch.draw(topBar, 0f, screenHeight-screenHeight/6, screenWidth, screenHeight/6)
+//        /* CASH */
+//        batch.draw(numberBar, 100f, screenHeight-screenHeight/13.5f, screenWidth/2.5f, screenHeight/20)
+//        batch.draw(numberBar, 100f, screenHeight-screenHeight/7.5f, screenWidth/2.5f, screenHeight/20)
+//        batch.draw(cashSymbol, 20f, screenHeight-cashSymbol.regionHeight*2.5f, screenWidth/6, screenHeight/6.5f)
+//        /* DEFENSE */
+//        batch.draw(numberBar, screenWidth/2f, screenHeight-screenHeight/13.5f, screenWidth/3f, screenHeight/20)
+//        batch.draw(shieldSymbol, screenWidth/2f, screenHeight-shieldSymbol.regionHeight*1.25f, screenWidth/10f, screenHeight/16f)
+//        /* ATTACK */
+//        batch.draw(numberBar, screenWidth/2f, screenHeight-screenHeight/7.5f, screenWidth/3f, screenHeight/20)
+//        batch.draw(starSymbol, screenWidth/2f, screenHeight-starSymbol.regionHeight*2.45f, screenWidth/10f, screenHeight/16f)
         batch.draw(topBar, 0f, screenHeight-screenHeight/6, screenWidth, screenHeight/6)
         /* CASH */
         batch.draw(numberBar, 100f, screenHeight-screenHeight/13.5f, screenWidth/2.5f, screenHeight/20)
         batch.draw(numberBar, 100f, screenHeight-screenHeight/7.5f, screenWidth/2.5f, screenHeight/20)
-        batch.draw(cashSymbol, 20f, screenHeight-cashSymbol.regionHeight*2.5f, screenWidth/6, screenHeight/6.5f)
+        batch.draw(cashSymbol, 20f, screenHeight-cashSymbol.regionHeight*2.0f, screenWidth/6, screenHeight/6.5f)
         /* DEFENSE */
         batch.draw(numberBar, screenWidth/2f, screenHeight-screenHeight/13.5f, screenWidth/3f, screenHeight/20)
-        batch.draw(shieldSymbol, screenWidth/2f, screenHeight-shieldSymbol.regionHeight*1.25f, screenWidth/10f, screenHeight/16f)
+        batch.draw(shieldSymbol, screenWidth/2f, screenHeight-shieldSymbol.regionHeight*1.0f, screenWidth/10f, screenHeight/16f)
         /* ATTACK */
         batch.draw(numberBar, screenWidth/2f, screenHeight-screenHeight/7.5f, screenWidth/3f, screenHeight/20)
-        batch.draw(starSymbol, screenWidth/2f, screenHeight-starSymbol.regionHeight*2.45f, screenWidth/10f, screenHeight/16f)
+        batch.draw(starSymbol, screenWidth/2f, screenHeight-starSymbol.regionHeight*2.0f, screenWidth/10f, screenHeight/16f)
     }
 
 

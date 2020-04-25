@@ -23,8 +23,6 @@ import com.example.idlecorporationclicker.states.State
 class PlayerList(var attack: IAttack,
                  override var game: Game, override var gsm: GameStateManager
 ) : State(gsm, game) {
-
-
     private var topWrapper: Table
     private var attackLabel: Label
     private var startTime: Long
@@ -115,9 +113,7 @@ class PlayerList(var attack: IAttack,
         btn.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
                 println(attack.calculateSuccess(attacker, defender))
-                if(attackCommand.CanExecute()) {
-                   attackCommand.Execute()
-                }
+                gsm.commandManager.Invoke(attackCommand)
                 playerTable.clear()
                 generateTable()
             }

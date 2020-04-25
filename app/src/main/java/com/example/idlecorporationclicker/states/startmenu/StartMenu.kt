@@ -90,7 +90,7 @@ class StartMenu(override var game: Game, override var gsm: GameStateManager) : S
         batch.begin()
         batch.draw(background, 0f, 0f, screenWidth, screenHeight)
         batch.draw(logo, (screenWidth/2) - (logoWidth/2f), screenHeight/1.9f,logoWidth, logoHeight)
-//        batch.draw(musicBtn, 10f, screenHeight - screenHeight/10f, 120f, 120f)
+//      batch.draw(musicBtn, 10f, screenHeight - screenHeight/10f, 120f, 120f)
         batch.end()
         stage.act(Gdx.graphics.deltaTime)
         stage.draw()

@@ -52,7 +52,6 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
     }
 
     fun buildingTemplate(building : IBuilding, type: BuildingType, labelPrefix : String) : HorizontalGroup {
-
         var buyBuilding = BuyBuildingCommand(gsm.player, building)
         var BuyButton = TextButton("Buy: "+building.upgradeCost.toInt(), uiSkin)
         if(!buyBuilding.CanExecute()) {
@@ -73,9 +72,7 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
 
         BuyButton.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
-                if(buyBuilding.CanExecute()) {
-                    buyBuilding.Execute()
-                }
+                gsm.commandManager.Invoke(buyBuilding)
                 wholeGroup.clear()
                 buildStatsTable()
                 buildAllBuildings()
