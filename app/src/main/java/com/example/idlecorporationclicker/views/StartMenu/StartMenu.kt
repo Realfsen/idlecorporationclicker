@@ -49,8 +49,6 @@ class StartMenu(override var game: Game, override var gsm: GameStateManager) : S
          * Henter navnet fra innloggingen, så trenger ikke sette eget brukernavn
          * (Fjern denne kommentaren før innlevering)
          */
-//        textField = TextField("Insert name here", uiSkin)
-//        textField.setSize(tableWidth, 180f)
         loginBtn = TextButton("Start", uiSkin)
         uiSkin.getFont("default-font").getData().setScale(5f)
 
