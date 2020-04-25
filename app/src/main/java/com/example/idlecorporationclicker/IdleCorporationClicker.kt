@@ -5,9 +5,9 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.example.idlecorporationclicker.views.GameStateManager
 import com.example.idlecorporationclicker.views.StartMenu.StartMenu
 import com.example.idlecorporationclicker.models.audio.MusicPlayer
+import com.example.idlecorporationclicker.states.GameStateManager
 
 
 class IdleCorporationClicker : Game() {

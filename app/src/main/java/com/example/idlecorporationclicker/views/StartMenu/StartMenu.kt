@@ -13,8 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.example.idlecorporationclicker.models.audio.MusicPlayer
-import com.example.idlecorporationclicker.views.GameStateManager
-import com.example.idlecorporationclicker.views.MainScreen.MainScreen
+import com.example.idlecorporationclicker.states.GameStateManager
+import com.example.idlecorporationclicker.states.MainScreen.MainScreen
 import com.example.idlecorporationclicker.views.ScreenTemplate
 
 class StartMenu(override var game: Game, override var gsm: GameStateManager) : ScreenTemplate(gsm, game) {

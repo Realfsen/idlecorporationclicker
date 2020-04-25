@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.math.Vector3
+import com.example.idlecorporationclicker.states.GameStateManager
 
 abstract class ScreenTemplate (gsm: GameStateManager, game : Game) : Screen {
     public var cam : OrthographicCamera

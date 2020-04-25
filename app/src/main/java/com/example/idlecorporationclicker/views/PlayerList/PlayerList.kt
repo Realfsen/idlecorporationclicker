@@ -17,7 +17,7 @@ import com.example.idlecorporationclicker.models.attack.IAttack
 import com.example.idlecorporationclicker.models.player.IPlayer
 import com.example.idlecorporationclicker.models.player.Player
 import com.example.idlecorporationclicker.models.player.PlayerOpponent
-import com.example.idlecorporationclicker.views.GameStateManager
+import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.views.ScreenTemplate
 
 class PlayerList(var attack: IAttack,

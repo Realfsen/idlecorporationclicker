@@ -17,8 +17,8 @@ import com.example.idlecorporationclicker.factory.FactoryProvider
 import com.example.idlecorporationclicker.models.attack.ATTACK_DESCRIPTION
 import com.example.idlecorporationclicker.models.attack.ATTACK_TYPE
 import com.example.idlecorporationclicker.models.attack.IAttack
-import com.example.idlecorporationclicker.views.GameStateManager
-import com.example.idlecorporationclicker.views.SCREEN
+import com.example.idlecorporationclicker.states.GameStateManager
+import com.example.idlecorporationclicker.states.SCREEN
 import com.example.idlecorporationclicker.views.ScreenTemplate
 import com.example.idlecorporationclicker.views.PlayerList.PlayerList
 
