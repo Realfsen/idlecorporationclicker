@@ -51,9 +51,11 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
 
     fun buildingTemplate(building : IBuilding, type: BuildingType, labelPrefix : String) : HorizontalGroup {
         var buyBuilding = BuyBuildingCommand(gsm.player, building)
-        var BuyButton = TextButton("Buy: "+building.upgradeCost.toInt(), uiSkin)
+        var buyButton = TextButton("Buy: "+building.upgradeCost.toInt(), uiSkin)
+        buyButton.isTransform = true
+        buyButton.scaleBy(2f)
         if(!buyBuilding.CanExecute()) {
-            BuyButton.color = Color.RED
+            buyButton.color = Color.RED
         }
         var LevelLabel = Label(building.level.toInt().toString(), gsm.fontStyle )
         var leftTable= VerticalGroup().pad(5f)
@@ -62,13 +64,13 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
 
         var rightTable = VerticalGroup().pad(5f)
         rightTable.addActor(Label(labelPrefix+building.value.toInt(), gsm.fontStyle))
-        rightTable.addActor(BuyButton)
+        rightTable.addActor(buyButton)
 
         var group = HorizontalGroup().pad(5f)
         group.addActor(leftTable)
         group.addActor(rightTable)
 
-        BuyButton.addListener(object : ClickListener() {
+        buyButton.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
                 gsm.commandManager.Invoke(buyBuilding)
                 wholeGroup.clear()
@@ -118,8 +120,8 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
         statsTable.add(attack)
         statsTable.row()
         statsTable.add(defense)
-        wholeGroup.add(statsTable)
-        wholeGroup.row().padTop(40f)
+//        wholeGroup.add(statsTable)
+        wholeGroup.row().padTop(500f)
     }
 
     override fun handleInput() {
@@ -143,6 +145,7 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
         }
         batch.begin()
         batch.draw(background, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
+        gsm.drawTopBar(batch, stage)
         batch.end()
         stage.act(Gdx.graphics.deltaTime)
         stage.draw()

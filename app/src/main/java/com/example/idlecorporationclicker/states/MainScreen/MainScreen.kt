@@ -2,18 +2,12 @@ package com.example.idlecorporationclicker.states.MainScreen
 
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.graphics.g2d.TextureRegion
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.TimeUtils
@@ -43,13 +37,6 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
     private var attack : Label
     private var defense: Label
     private var cookieManager : CookieClickerManager
-    private var gui: Texture
-    private var topBar : TextureRegion
-    private var cashGfx : TextureRegion
-    private var cashSymbol : TextureRegion
-    private var shieldSymbol : TextureRegion
-    private var starSymbol : TextureRegion
-    private var numberBar : TextureRegion
 
 
     init {
@@ -62,15 +49,8 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         statsTable = Table()
         startTime = TimeUtils.nanoTime()
         cookieManager = CookieClickerManager()
-        gui = Texture(Gdx.files.internal("freegui/png/Window.png"))
-        topBar = TextureRegion(gui, 3540, 2845, 430, 140)
-        cashGfx = TextureRegion(gui, 2890, 4100, 285, 115)
-        cashSymbol = TextureRegion(gui, 1985, 4810, 95, 145)
-        shieldSymbol = TextureRegion(gui, 1680, 4810, 110, 145)
-        starSymbol = TextureRegion(gui, 1830, 4810, 135, 130)
-        numberBar = TextureRegion(gui, 3699, 4294, 210, 58)
 
-        var incomeStr: Label = Label("Cash", gsm.fontStyle)
+        var incomeStr: Label = Label("Buildings", gsm.fontStyle)
         var attackStr: Label = Label("Attack", gsm.fontStyle)
         var moneyPerSecStr: Label = Label(""+gsm.player.moneyPerSecond()+" /s", gsm.fontStyle)
         moneyStr = Label(gsm.player.money.toString(), gsm.fontStyle)
@@ -136,36 +116,11 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         stage.addActor(MusicManager.getMusicButtonTable())
         stage.addActor(buildingTable)
         stage.addActor(clickerTable)
-        stage.addActor(statsTable)
+//        stage.addActor(statsTable)
     }
 
     fun updateMoney() {
         gsm.player.addMoneySinceLastSynched()
-    }
-
-    fun drawTopBar() {
-//        batch.draw(topBar, 0f, screenHeight-screenHeight/6, screenWidth, screenHeight/6)
-//        /* CASH */
-//        batch.draw(numberBar, 100f, screenHeight-screenHeight/13.5f, screenWidth/2.5f, screenHeight/20)
-//        batch.draw(numberBar, 100f, screenHeight-screenHeight/7.5f, screenWidth/2.5f, screenHeight/20)
-//        batch.draw(cashSymbol, 20f, screenHeight-cashSymbol.regionHeight*2.5f, screenWidth/6, screenHeight/6.5f)
-//        /* DEFENSE */
-//        batch.draw(numberBar, screenWidth/2f, screenHeight-screenHeight/13.5f, screenWidth/3f, screenHeight/20)
-//        batch.draw(shieldSymbol, screenWidth/2f, screenHeight-shieldSymbol.regionHeight*1.25f, screenWidth/10f, screenHeight/16f)
-//        /* ATTACK */
-//        batch.draw(numberBar, screenWidth/2f, screenHeight-screenHeight/7.5f, screenWidth/3f, screenHeight/20)
-//        batch.draw(starSymbol, screenWidth/2f, screenHeight-starSymbol.regionHeight*2.45f, screenWidth/10f, screenHeight/16f)
-        batch.draw(topBar, 0f, screenHeight-screenHeight/6, screenWidth, screenHeight/6)
-        /* CASH */
-        batch.draw(numberBar, 100f, screenHeight-screenHeight/13.5f, screenWidth/2.5f, screenHeight/20)
-        batch.draw(numberBar, 100f, screenHeight-screenHeight/7.5f, screenWidth/2.5f, screenHeight/20)
-        batch.draw(cashSymbol, 20f, screenHeight-cashSymbol.regionHeight*2.0f, screenWidth/6, screenHeight/6.5f)
-        /* DEFENSE */
-        batch.draw(numberBar, screenWidth/2f, screenHeight-screenHeight/13.5f, screenWidth/3f, screenHeight/20)
-        batch.draw(shieldSymbol, screenWidth/2f, screenHeight-shieldSymbol.regionHeight*1.0f, screenWidth/10f, screenHeight/16f)
-        /* ATTACK */
-        batch.draw(numberBar, screenWidth/2f, screenHeight-screenHeight/7.5f, screenWidth/3f, screenHeight/20)
-        batch.draw(starSymbol, screenWidth/2f, screenHeight-starSymbol.regionHeight*2.0f, screenWidth/10f, screenHeight/16f)
     }
 
 
@@ -184,7 +139,7 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
 
         batch.begin()
         batch.draw(background, 0f, 0f, screenWidth, screenHeight)
-        drawTopBar()
+        gsm.drawTopBar(batch, stage)
         batch.end()
         stage.act(Gdx.graphics.deltaTime)
         stage.draw()
@@ -209,6 +164,5 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
     override fun dispose() {
         batch.dispose()
         stage.dispose()
-//        generator.dispose()
     }
 }
