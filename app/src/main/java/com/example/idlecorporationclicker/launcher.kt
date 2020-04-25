@@ -3,7 +3,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.badlogic.gdx.backends.android.AndroidApplication
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration
-import com.example.idlecorporationclicker.database.DatabaseController
+import com.example.idlecorporationclicker.models.database.DatabaseController
 import com.firebase.ui.auth.AuthUI
 
 

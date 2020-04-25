@@ -1,10 +1,9 @@
 package com.example.idlecorporationclicker.factory
 
-import com.example.idlecorporationclicker.buildings.AttackBuilding
-import com.example.idlecorporationclicker.buildings.DefenseBuilding
-import com.example.idlecorporationclicker.buildings.IncomeBuilding
-import com.example.idlecorporationclicker.model.BuildingType
-import com.example.idlecorporationclicker.model.IBuilding
+import com.example.idlecorporationclicker.models.building.AttackBuilding
+import com.example.idlecorporationclicker.models.building.DefenseBuilding
+import com.example.idlecorporationclicker.models.building.IncomeBuilding
+import com.example.idlecorporationclicker.models.building.BuildingType
 
 class BuildingFactory() : AbstractFactory {
 
@@ -20,11 +19,17 @@ class BuildingFactory() : AbstractFactory {
 
     override fun <IBuilding, BUILDING_TYPE> create(b : BUILDING_TYPE) : IBuilding {
         when(b) {
-            BuildingType.ATTACK -> return AttackBuilding(this.level) as IBuilding
+            BuildingType.ATTACK -> return AttackBuilding(
+                this.level
+            ) as IBuilding
             @Suppress("UNCHECKED CAST")
-            BuildingType.INCOME-> return IncomeBuilding(this.level) as IBuilding
+            BuildingType.INCOME-> return IncomeBuilding(
+                this.level
+            ) as IBuilding
             @Suppress("UNCHECKED CAST")
-            BuildingType.DEFENSE-> return DefenseBuilding(this.level) as IBuilding
+            BuildingType.DEFENSE-> return DefenseBuilding(
+                this.level
+            ) as IBuilding
         }
         @Suppress("UNCHECKED CAST")
         return null as IBuilding

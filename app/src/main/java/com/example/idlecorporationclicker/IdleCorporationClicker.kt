@@ -1,19 +1,13 @@
 package com.example.idlecorporationclicker
-import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.utils.viewport.ScreenViewport
-import com.badlogic.gdx.audio.Music
-import com.example.idlecorporationclicker.states.GameStateManager
-import com.example.idlecorporationclicker.states.State
-import com.example.idlecorporationclicker.states.attackscreen.AttackScreen
-import com.example.idlecorporationclicker.states.startmenu.StartMenu
-import com.example.idlecorporationclicker.audio.MusicManager
+import com.example.idlecorporationclicker.views.GameStateManager
+import com.example.idlecorporationclicker.views.StartMenu.StartMenu
+import com.example.idlecorporationclicker.models.audio.MusicManager
 
 
 class IdleCorporationClicker : Game() {
