@@ -2,6 +2,8 @@ package com.example.idlecorporationclicker.database
 
 import android.util.Log
 import com.example.idlecorporationclicker.model.Player
+import com.example.idlecorporationclicker.model.PlayerOpponent
+import com.example.idlecorporationclicker.states.playerlist.PlayerList
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.ktx.database
@@ -19,15 +21,13 @@ object DatabaseController: IDatabaseController {
     private var name: String = ""
     private var email: String = ""
     private var uid: String = ""
-    private var money: Long = 0
-    private var incomePerSecond: Int = 0
     private var isOnline: Boolean = false
     private var localPlayer: Player? = null
+    private var playerList: PlayerList? = null
     private var nextTimeToSync: Long = Date().time + SYNC_DELAY_SECONDS
     private var timeLastSyncedFromDatabase: Date? = null
 
     init {
-
         val user: FirebaseUser? = auth.currentUser
         if (user != null) {
             name = user.displayName.toString()
@@ -41,6 +41,18 @@ object DatabaseController: IDatabaseController {
 
     fun start() {
 
+    }
+
+    fun createOponentCollection(playerList: PlayerList) : MutableCollection<PlayerOpponent> {
+        this.playerList = playerList
+
+        var dummyPlayer = PlayerOpponent("-", "-", 0, Date())
+        var players: MutableCollection<PlayerOpponent> = mutableListOf(dummyPlayer)
+        players.clear()
+
+        populateOpponentList()
+
+        return players
     }
 
     override fun initiateLocalPlayer(player: Player) {
@@ -83,27 +95,63 @@ object DatabaseController: IDatabaseController {
 
     // -------------------------------------------     Firebase Firestire     ------------------------------------------- \\
 
-    fun firestoreGetUser() {
+    private fun populateOpponentList() {
+        db.collection("users")
+            .get()
+            .addOnSuccessListener { userCollection ->
+                for (userDocument in userCollection) {
+                    if (uid.equals(userDocument.id)) continue
+
+                    val money : Long? = userDocument.getLong("money")
+                    val name : String? = userDocument.getString("name")
+                    val attack : Double? = userDocument.getDouble("attack")
+                    val defense : Double? = userDocument.getDouble("defense")
+                    val income : Double? = userDocument.getDouble("income")
+                    val timeLastSynced : Date? = userDocument.getDate("timeLastSynced")
+                    if (money != null) {
+                        if (name != null) {
+                            if (attack != null) {
+                                if (defense != null) {
+                                    if (income != null) {
+                                        if (timeLastSynced != null) {
+                                            var opponent : PlayerOpponent = PlayerOpponent(
+                                                userDocument.id,
+                                                name,
+                                                money,
+                                                timeLastSynced
+                                            )
+                                            opponent.attackBuilding.setBuildingsStartLevel(attack)
+                                            opponent.defenseBuilding.setBuildingsStartLevel(defense)
+                                            opponent.passiveIncomeBuilding.setBuildingsStartLevel(income)
+                                            playerList!!.players.add(opponent)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+
+                }
+            }
+    }
+
+    private fun firestoreGetUser() {
         db.collection("users")
             .document(uid)
             .get()
             .addOnSuccessListener { userDocument ->
-                Log.d("TAG", "${userDocument.id} => ${userDocument.data}")
+//                Log.d("TAG", "${userDocument.id} => ${userDocument.data}")
                 if(userDocument.data == null) {
                     firestoreCreateUser()
                 } else {
                     val money : Long? = userDocument.getLong("money")
-                    val incomePerSecond : Long? = userDocument.getLong("incomePerSecond")
                     val attack : Double? = userDocument.getDouble("attack")
                     val defense : Double? = userDocument.getDouble("defense")
                     val income : Double? = userDocument.getDouble("income")
 
                     if (money != null) {
-//                        this.money = money.toInt()
-                        this.money = money
-                    }
-                    if (incomePerSecond != null) {
-                        this.incomePerSecond = incomePerSecond.toInt()
+                        localPlayer!!.money = money
                     }
                     if (attack != null) {
                         localPlayer!!.attackBuilding.setBuildingsStartLevel(attack)
@@ -115,8 +163,6 @@ object DatabaseController: IDatabaseController {
                         localPlayer!!.passiveIncomeBuilding.setBuildingsStartLevel(income)
                     }
                     localPlayer!!.name = this.name
-                    localPlayer!!.money = this.money
-//                    localPlayer!!.attackBuilding.setStartLevel(5.0)
                     timeLastSyncedFromDatabase = Date()
                 }
             }
@@ -125,13 +171,17 @@ object DatabaseController: IDatabaseController {
             }
     }
 
-    fun firestoreCreateUser() {
+    private fun firestoreCreateUser() {
         // Create a new user with a first and last name
         val user = hashMapOf(
             "name" to name,
             "email" to email,
             "money" to 0,
-            "incomePerSecond" to 15
+            "income" to 15,
+            "attack" to 0,
+            "defense" to 0,
+            "timeLastSynced" to Date()
+
         )
 
         // Add a new document with a generated ID
@@ -146,20 +196,20 @@ object DatabaseController: IDatabaseController {
             }
     }
 
-    fun firestoreUpdateUser() {
+    private fun firestoreUpdateUser() {
         db.collection("users")
             .document(uid)
             .update("money", localPlayer?.money)
-//        TODO("Update ALL active resources")
+//        TODO: "Update ALL active resources"
     }
 
-    fun firestoreUpdateUsersMoney() {
+    private fun firestoreUpdateUsersMoney() {
         db.collection("users")
             .document(uid)
             .update("money", localPlayer?.money)
     }
 
-    fun firestoreUpdateUsersSomething(something: String, value: Any) {
+    private fun firestoreUpdateUsersSomething(something: String, value: Any) {
         db.collection("users")
             .document(uid)
             .update(something, value)
@@ -173,6 +223,7 @@ object DatabaseController: IDatabaseController {
             "name" to name,
             "email" to email,
             "income" to 0,
+            "money" to 0,
             "defenseBuildingsLevel" to 0,
             "defenseBuildingValue" to 0
         )
@@ -182,9 +233,6 @@ object DatabaseController: IDatabaseController {
                 isOnline = true
                 Log.d("Firebase", "User is online = TRUE")
             }
-
-
-
     }
 
     fun goOfline() {
@@ -195,7 +243,7 @@ object DatabaseController: IDatabaseController {
             }
         firestoreUpdateUser()
         SyncMoneyWithFirestoreController()
-//        TODO("Move firestoreUpdater() to a better place")
+//        TODO: "Move firestoreUpdater() to a better place"
     }
 
 // -------------------------------------------  Firebase  Authentication  ------------------------------------------- \\

@@ -6,8 +6,8 @@ interface IAttack {
     val type: ATTACK_TYPE
     val name: String
     fun calculateAttackValue(player : Player) : Double
-    fun doAttack(player: Player, defender: Player) : Boolean
-    fun calculateSuccess(player: Player, defender: Player) : Int
+    fun doAttack(player: Player, defender: IPlayer) : Boolean
+    fun calculateSuccess(player: Player, defender: IPlayer) : Int
     companion object{
         var SECONDS_BETWEEN_ATTACKS : Int = 5
     }
