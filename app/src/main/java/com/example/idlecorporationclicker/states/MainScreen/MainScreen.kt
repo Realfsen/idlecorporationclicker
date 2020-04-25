@@ -2,13 +2,13 @@ package com.example.idlecorporationclicker.states.MainScreen
 
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
-import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-/*import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter*/
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Image
@@ -16,8 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable
 import com.badlogic.gdx.utils.TimeUtils
 import com.example.idlecorporationclicker.audio.MusicManager
 import com.example.idlecorporationclicker.states.BuildingScreen.BuildingScreen
@@ -52,8 +50,6 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
     private var shieldSymbol : TextureRegion
     private var starSymbol : TextureRegion
     private var numberBar : TextureRegion
-   /* private var generator : FreeTypeFontGenerator
-    private var parameter : FreeTypeFontParameter*/
 
 
     init {
@@ -74,25 +70,12 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         starSymbol = TextureRegion(gui, 1830, 4810, 135, 130)
         numberBar = TextureRegion(gui, 3699, 4294, 210, 58)
 
-
-        /*generator = FreeTypeFontGenerator(Gdx.files.internal("fonts/signika/Signika-Bold.ttf"))
-        parameter = FreeTypeFontParameter()
-
-        val signika : BitmapFont = generator.generateFont(parameter)
-        generator.dispose()
-
-        val newLabelStyle : Label.LabelStyle = Label.LabelStyle()
-        newLabelStyle.font = signika*/
-
-        var uiSkin = Skin(Gdx.files.internal("ui/uiskin.json"))
-        uiSkin.getFont("default-font").getData().setScale(4f)
-
-        var incomeStr: Label = Label("Cash", uiSkin)
-        var attackStr: Label = Label("Attack", uiSkin)
-        var moneyPerSecStr: Label = Label(""+gsm.player.moneyPerSecond()+" /s", uiSkin)
-        moneyStr = Label(gsm.player.money.toString(), uiSkin)
-        attack = Label(""+gsm.player.attack(), uiSkin)
-        defense = Label(""+gsm.player.defense(), uiSkin)
+        var incomeStr: Label = Label("Cash", gsm.fontStyle)
+        var attackStr: Label = Label("Attack", gsm.fontStyle)
+        var moneyPerSecStr: Label = Label(""+gsm.player.moneyPerSecond()+" /s", gsm.fontStyle)
+        moneyStr = Label(gsm.player.money.toString(), gsm.fontStyle)
+        attack = Label(""+gsm.player.attack(), gsm.fontStyle)
+        defense = Label(""+gsm.player.defense(), gsm.fontStyle)
 
         stage = Stage()
         batch = SpriteBatch()

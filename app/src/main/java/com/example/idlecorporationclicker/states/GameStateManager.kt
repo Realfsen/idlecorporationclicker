@@ -1,6 +1,11 @@
 package com.example.idlecorporationclicker.states
 
 import com.badlogic.gdx.Game
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
+import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.example.idlecorporationclicker.commands.CommandManager
 import com.example.idlecorporationclicker.database.DatabaseController
 import com.example.idlecorporationclicker.model.Player
@@ -14,6 +19,9 @@ class GameStateManager {
     private var screenHistory : Stack<SCREEN>
     var player : Player
     var commandManager : CommandManager
+    private var generator : FreeTypeFontGenerator
+    private var parameter : FreeTypeFontGenerator.FreeTypeFontParameter
+    var fontStyle : Label.LabelStyle = Label.LabelStyle()
 
 
     constructor() {
@@ -22,6 +30,22 @@ class GameStateManager {
         player = Player()
         DatabaseController.initiateLocalPlayer(player)
         commandManager = CommandManager()
+
+        /* START FONT GENERATOR */
+        generator = FreeTypeFontGenerator(Gdx.files.internal("fonts/signika/Signika-Bold.ttf"))
+        parameter = FreeTypeFontGenerator.FreeTypeFontParameter()
+        /* FONT PARAMETERS */
+        parameter.size = 60
+        parameter.borderWidth = 7f
+        parameter.borderColor = Color.ORANGE;
+        parameter.shadowColor = Color(0f, 0f, 0f, 0.75f)
+        parameter.shadowOffsetX = 1
+        parameter.shadowOffsetY = 1
+
+        val signika : BitmapFont = generator.generateFont(parameter)
+        generator.dispose()
+        fontStyle.font = signika
+        /* END FONT GENERATOR */
     }
 
     fun pushHistory(hist : SCREEN) {

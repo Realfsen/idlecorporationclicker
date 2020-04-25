@@ -40,10 +40,10 @@ class PlayerList(var attack: IAttack,
     var players : MutableCollection<PlayerOpponent>
     private val uiSkin = Skin(Gdx.files.internal("ui/uiskin.json"))
 
-    private val nameLabel = Label("Name", uiSkin)
-    private val defenseLabel = Label("Defense", uiSkin)
-    private val moneyLabel = Label("Money", uiSkin)
-    private val successLabel = Label("Success", uiSkin)
+    private val nameLabel = Label("Name", gsm.fontStyle)
+    private val defenseLabel = Label("Defense", gsm.fontStyle)
+    private val moneyLabel = Label("Money", gsm.fontStyle)
+    private val successLabel = Label("Success", gsm.fontStyle)
 
 
     init {
@@ -55,15 +55,15 @@ class PlayerList(var attack: IAttack,
         //chosenAttack = attackType
         uiSkin.getFont("default-font").getData().setScale(3.5f)
 
-        sabotageStr = Label("Sabotage", uiSkin)
-        attackStr = Label("Steal", uiSkin)
-        findPlayerStr = Label("Find player", uiSkin)
-        chosenAttackStr = Label("Chosen attack: "+attack.type, uiSkin)
+        sabotageStr = Label("Sabotage", gsm.fontStyle)
+        attackStr = Label("Steal", gsm.fontStyle)
+        findPlayerStr = Label("Find player", gsm.fontStyle)
+        chosenAttackStr = Label("Chosen attack: "+attack.type, gsm.fontStyle)
         stage = Stage()
         batch = SpriteBatch()
 
         players = DatabaseController.createOponentCollection(this)
-        attackLabel = Label(createAttackLabelText(), uiSkin);
+        attackLabel = Label(createAttackLabelText(), gsm.fontStyle);
 
         topWrapper = Table()
         topWrapper.add(attackLabel)
@@ -96,10 +96,10 @@ class PlayerList(var attack: IAttack,
         if(!attacker.canAttack()) {
            btn.setColor(Color.RED)
         }
-        val name = Label(defender.name, uiSkin)
-        val defense = Label(defender.defense().toInt().toString(), uiSkin)
-        val successChance = Label(attack.calculateSuccess(attacker, defender).toString()+"%", uiSkin)
-        val money = Label(defender.money.toInt().toString(), uiSkin)
+        val name = Label(defender.name, gsm.fontStyle)
+        val defense = Label(defender.defense().toInt().toString(), gsm.fontStyle)
+        val successChance = Label(attack.calculateSuccess(attacker, defender).toString()+"%", gsm.fontStyle)
+        val money = Label(defender.money.toInt().toString(), gsm.fontStyle)
         val attackCommand = AttackPlayerCommand(attacker, defender, attack)
 
         playerTable.row().pad(10f)

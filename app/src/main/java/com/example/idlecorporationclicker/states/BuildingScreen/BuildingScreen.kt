@@ -37,10 +37,8 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
         batch = SpriteBatch()
         wholeGroup = Table()
         uiSkin = Skin(Gdx.files.internal("ui/uiskin.json"))
-        uiSkin.getFont("default-font").getData().setScale(3f)
-        moneyStr = Label("Income: "+gsm.player.money, uiSkin)
+        moneyStr = Label("Cash: "+gsm.player.money, gsm.fontStyle)
         startTime = TimeUtils.nanoTime()
-
 
 
         buildStatsTable()
@@ -57,13 +55,13 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
         if(!buyBuilding.CanExecute()) {
             BuyButton.color = Color.RED
         }
-        var LevelLabel = Label(building.level.toInt().toString(), uiSkin )
+        var LevelLabel = Label(building.level.toInt().toString(), gsm.fontStyle )
         var leftTable= VerticalGroup().pad(5f)
         leftTable.addActor(building.image)
         leftTable.addActor(LevelLabel)
 
         var rightTable = VerticalGroup().pad(5f)
-        rightTable.addActor(Label(labelPrefix+building.value.toInt(), uiSkin))
+        rightTable.addActor(Label(labelPrefix+building.value.toInt(), gsm.fontStyle))
         rightTable.addActor(BuyButton)
 
         var group = HorizontalGroup().pad(5f)
@@ -109,9 +107,9 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
     }
 
     fun buildStatsTable() {
-        var moneyPerSecStr = Label("Income per second: "+gsm.player.moneyPerSecond(), uiSkin)
-        var attack = Label("Attack: "+gsm.player.attack(), uiSkin)
-        var defense = Label("Defense: "+gsm.player.defense(), uiSkin)
+        var moneyPerSecStr = Label("Income per second: "+gsm.player.moneyPerSecond(), gsm.fontStyle)
+        var attack = Label("Attack: "+gsm.player.attack(), gsm.fontStyle)
+        var defense = Label("Defense: "+gsm.player.defense(), gsm.fontStyle)
         var statsTable = Table()
         statsTable.add(moneyStr)
         statsTable.row()
@@ -138,7 +136,7 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
         if (TimeUtils.timeSinceNanos(startTime) > 1000000000) {
             updateMoney()
             startTime = TimeUtils.nanoTime();
-            moneyStr.setText("Income: "+ gsm.player.money)
+            moneyStr.setText("Cash: "+ gsm.player.money)
             wholeGroup.clear()
             buildStatsTable()
             buildAllBuildings()

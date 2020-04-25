@@ -2,10 +2,11 @@ package com.example.idlecorporationclicker.states.attackscreen
 
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Input
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.graphics.g3d.particles.ParticleShader.Inputs.screenWidth
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Image
@@ -13,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
-import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.example.idlecorporationclicker.audio.MusicManager
 import com.example.idlecorporationclicker.factory.AttackFactory
 import com.example.idlecorporationclicker.factory.FACTORY_TYPE
@@ -21,14 +21,15 @@ import com.example.idlecorporationclicker.factory.FactoryProvider
 import com.example.idlecorporationclicker.model.ATTACK_DESCRIPTION
 import com.example.idlecorporationclicker.model.ATTACK_TYPE
 import com.example.idlecorporationclicker.model.IAttack
-import com.example.idlecorporationclicker.states.BuildingScreen.BuildingScreen
 import com.example.idlecorporationclicker.states.GameStateManager
-import com.example.idlecorporationclicker.states.MainScreen.MainScreen
 import com.example.idlecorporationclicker.states.SCREEN
 import com.example.idlecorporationclicker.states.State
 import com.example.idlecorporationclicker.states.playerlist.PlayerList
 
-class AttackScreen(override var game: Game, override var gsm: GameStateManager) : State(gsm, game) {
+class AttackScreen(
+    override var game: Game,
+    override var gsm: GameStateManager
+) : State(gsm, game) {
 
 
 
@@ -49,8 +50,6 @@ class AttackScreen(override var game: Game, override var gsm: GameStateManager) 
     private var stage: Stage
     private var attackFactory : AttackFactory
 
-
-
     init {
         background = Texture(Gdx.files.internal("backgrounds/1x/background-attackmdpi.png"))
         player = Image(Texture(Gdx.files.internal("attacks/1x/playermdpi.png")))
@@ -62,16 +61,14 @@ class AttackScreen(override var game: Game, override var gsm: GameStateManager) 
         var provider = FactoryProvider()
         attackFactory = provider.getFactory(FACTORY_TYPE.ATTACK) as AttackFactory
         chosenAttack = ATTACK_TYPE.NONE
-        var uiSkin = Skin(Gdx.files.internal("ui/uiskin.json"))
-        uiSkin.getFont("default-font").getData().setScale(5f)
 
         stage = Stage()
         batch = SpriteBatch()
-        sabotageStr = Label("Sabotage", uiSkin)
-        attackStr = Label("Steal", uiSkin)
-        findPlayerStr = Label("Find player", uiSkin)
-        chosenAttackStr = Label("Chosen attack: "+chosenAttack, uiSkin)
-        attackFlavourText = Label(ATTACK_DESCRIPTION.getText(chosenAttack), uiSkin)
+        sabotageStr = Label("Sabotage", gsm.fontStyle)
+        attackStr = Label("Steal", gsm.fontStyle)
+        findPlayerStr = Label("Find player", gsm.fontStyle)
+        chosenAttackStr = Label("Chosen attack: "+chosenAttack, gsm.fontStyle)
+        attackFlavourText = Label(ATTACK_DESCRIPTION.getText(chosenAttack), gsm.fontStyle)
         attackFlavourText.setWrap(true)
 
         attack.addListener(object : ClickListener() {
