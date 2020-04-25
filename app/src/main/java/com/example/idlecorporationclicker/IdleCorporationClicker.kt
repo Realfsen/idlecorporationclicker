@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.example.idlecorporationclicker.views.GameStateManager
 import com.example.idlecorporationclicker.views.StartMenu.StartMenu
-import com.example.idlecorporationclicker.models.audio.MusicManager
+import com.example.idlecorporationclicker.models.audio.MusicPlayer
 
 
 class IdleCorporationClicker : Game() {
@@ -46,6 +46,6 @@ class IdleCorporationClicker : Game() {
 
     override fun dispose() {
         game.screen.dispose()
-        MusicManager.dispose()
+        MusicPlayer.dispose()
     }
 }

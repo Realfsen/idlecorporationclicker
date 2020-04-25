@@ -11,7 +11,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.*
 
-object DatabaseController: IDatabaseController {
+object Database: IDatabase {
     private val realtimeDB = Firebase.database
     private val playersOnline = realtimeDB.getReference("playersOnline")
     private val SYNC_DELAY_SECONDS = 30 * 1000

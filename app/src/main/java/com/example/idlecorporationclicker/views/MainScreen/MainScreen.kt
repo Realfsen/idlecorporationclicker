@@ -12,7 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.TimeUtils
-import com.example.idlecorporationclicker.models.audio.MusicManager
+import com.example.idlecorporationclicker.controllers.commands.player.PlayerController
+import com.example.idlecorporationclicker.models.audio.MusicPlayer
+import com.example.idlecorporationclicker.models.cookie.CookieClicker
 import com.example.idlecorporationclicker.views.BuildingScreen.BuildingScreen
 import com.example.idlecorporationclicker.views.GameStateManager
 import com.example.idlecorporationclicker.views.SCREEN
@@ -37,7 +39,7 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
     private var moneyStr : Label
     private var attack : Label
     private var defense: Label
-    private var cookieManager : CookieClickerManager
+    private var cookieManager : CookieClicker
     private var gui: Texture
     private var topBar : TextureRegion
     private var cashGfx : TextureRegion
@@ -45,6 +47,7 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
     private var shieldSymbol : TextureRegion
     private var starSymbol : TextureRegion
     private var numberBar : TextureRegion
+    private var playerController : PlayerController
 
 
     init {
@@ -56,7 +59,8 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         clickerTable = Table()
         statsTable = Table()
         startTime = TimeUtils.nanoTime()
-        cookieManager = CookieClickerManager()
+        cookieManager =
+            CookieClicker()
         gui = Texture(Gdx.files.internal("freegui/png/Window.png"))
         topBar = TextureRegion(gui, 3540, 2845, 430, 140)
         cashGfx = TextureRegion(gui, 2890, 4100, 285, 115)
@@ -64,6 +68,7 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         shieldSymbol = TextureRegion(gui, 1680, 4810, 110, 145)
         starSymbol = TextureRegion(gui, 1830, 4810, 135, 130)
         numberBar = TextureRegion(gui, 3699, 4294, 210, 58)
+        playerController = PlayerController(gsm.player, this)
 
         var incomeStr: Label = Label("Cash", gsm.fontStyle)
         var attackStr: Label = Label("Attack", gsm.fontStyle)
@@ -96,8 +101,7 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
 
         cookie.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
-                gsm.player.addClickMoney()
-                moneyStr.setText(gsm.player.money.toString())
+                playerController.addMoneyByClick()
                 stage.addActor(cookieManager.getNextActor(x, y, screenHeight))
             }
             override fun touchDown(e : InputEvent, x : Float, y : Float, Point : Int, button : Int): Boolean {
@@ -127,29 +131,14 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         statsTable.setFillParent(true)
         statsTable.top()
 
-
-        stage.addActor(MusicManager.getMusicButtonTable())
+        stage.addActor(MusicPlayer.getMusicButtonTable())
         stage.addActor(buildingTable)
         stage.addActor(clickerTable)
         stage.addActor(statsTable)
     }
 
-    fun updateMoney() {
-        gsm.player.addMoneySinceLastSynched()
-    }
 
     fun drawTopBar() {
-//        batch.draw(topBar, 0f, screenHeight-screenHeight/6, screenWidth, screenHeight/6)
-//        /* CASH */
-//        batch.draw(numberBar, 100f, screenHeight-screenHeight/13.5f, screenWidth/2.5f, screenHeight/20)
-//        batch.draw(numberBar, 100f, screenHeight-screenHeight/7.5f, screenWidth/2.5f, screenHeight/20)
-//        batch.draw(cashSymbol, 20f, screenHeight-cashSymbol.regionHeight*2.5f, screenWidth/6, screenHeight/6.5f)
-//        /* DEFENSE */
-//        batch.draw(numberBar, screenWidth/2f, screenHeight-screenHeight/13.5f, screenWidth/3f, screenHeight/20)
-//        batch.draw(shieldSymbol, screenWidth/2f, screenHeight-shieldSymbol.regionHeight*1.25f, screenWidth/10f, screenHeight/16f)
-//        /* ATTACK */
-//        batch.draw(numberBar, screenWidth/2f, screenHeight-screenHeight/7.5f, screenWidth/3f, screenHeight/20)
-//        batch.draw(starSymbol, screenWidth/2f, screenHeight-starSymbol.regionHeight*2.45f, screenWidth/10f, screenHeight/16f)
         batch.draw(topBar, 0f, screenHeight-screenHeight/6, screenWidth, screenHeight/6)
         /* CASH */
         batch.draw(numberBar, 100f, screenHeight-screenHeight/13.5f, screenWidth/2.5f, screenHeight/20)
@@ -163,17 +152,14 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         batch.draw(starSymbol, screenWidth/2f, screenHeight-starSymbol.regionHeight*2.0f, screenWidth/10f, screenHeight/16f)
     }
 
-
-
     override fun update() {
         moneyStr.setText(gsm.player.money.toString())
     }
 
     override fun render(dt : Float) {
         if (TimeUtils.timeSinceNanos(startTime) > 1000000000) {
-            updateMoney()
+            playerController.addMoneySinceLastSynch()
             startTime = TimeUtils.nanoTime();
-            update()
         }
 
         batch.begin()

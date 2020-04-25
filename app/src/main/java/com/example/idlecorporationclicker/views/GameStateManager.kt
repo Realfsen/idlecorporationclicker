@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.example.idlecorporationclicker.controllers.commands.CommandManager
-import com.example.idlecorporationclicker.models.database.DatabaseController
+import com.example.idlecorporationclicker.models.database.Database
 import com.example.idlecorporationclicker.models.player.Player
 import com.example.idlecorporationclicker.views.MainScreen.MainScreen
 import com.example.idlecorporationclicker.views.AttackScreen.AttackScreen
@@ -28,7 +28,7 @@ class GameStateManager {
         screenTemplates = Stack<ScreenTemplate>()
         screenHistory = Stack<SCREEN>()
         player = Player()
-        DatabaseController.initiateLocalPlayer(player)
+        Database.initiateLocalPlayer(player)
         commandManager = CommandManager()
 
         /* START FONT GENERATOR */

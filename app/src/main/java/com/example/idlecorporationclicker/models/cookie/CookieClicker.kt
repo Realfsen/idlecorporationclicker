@@ -1,4 +1,4 @@
-package com.example.idlecorporationclicker.views.MainScreen
+package com.example.idlecorporationclicker.models.cookie
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.actions.Actions.*
 
 
-class CookieClickerManager {
+class CookieClicker {
     private val images : List<Image>
     private var currentImage : Int
 

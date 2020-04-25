@@ -11,12 +11,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.TimeUtils
 import com.badlogic.gdx.utils.viewport.ScreenViewport
-import com.example.idlecorporationclicker.models.audio.MusicManager
+import com.example.idlecorporationclicker.models.audio.MusicPlayer
 import com.example.idlecorporationclicker.controllers.commands.building.BuyBuildingCommand
 import com.example.idlecorporationclicker.controllers.commands.player.PlayerController
 import com.example.idlecorporationclicker.models.building.BuildingType
 import com.example.idlecorporationclicker.models.building.IBuilding
-import com.example.idlecorporationclicker.models.player.Player
 import com.example.idlecorporationclicker.views.GameStateManager
 import com.example.idlecorporationclicker.views.ScreenTemplate
 
@@ -49,7 +48,7 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
         wholeGroup.setFillParent(true)
         wholeGroup.top()
         stage.addActor(wholeGroup)
-        stage.addActor(MusicManager.getMusicButtonTable())
+        stage.addActor(MusicPlayer.getMusicButtonTable())
     }
 
     fun buildingTemplate(building : IBuilding, type: BuildingType, labelPrefix : String) : HorizontalGroup {

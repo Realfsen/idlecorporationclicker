@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
-import com.example.idlecorporationclicker.models.audio.MusicManager
+import com.example.idlecorporationclicker.models.audio.MusicPlayer
 import com.example.idlecorporationclicker.factory.AttackFactory
 import com.example.idlecorporationclicker.factory.FACTORY_TYPE
 import com.example.idlecorporationclicker.factory.FactoryProvider
@@ -104,7 +104,7 @@ class AttackScreen(
 
 
         buildTablesAndAddActors();
-        stage.addActor(MusicManager.getMusicButtonTable())
+        stage.addActor(MusicPlayer.getMusicButtonTable())
     }
 
     fun createAttack() : IAttack {

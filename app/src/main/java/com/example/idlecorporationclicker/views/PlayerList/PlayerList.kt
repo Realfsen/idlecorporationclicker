@@ -10,9 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.TimeUtils
-import com.example.idlecorporationclicker.models.audio.MusicManager
+import com.example.idlecorporationclicker.models.audio.MusicPlayer
 import com.example.idlecorporationclicker.controllers.commands.attack.AttackPlayerCommand
-import com.example.idlecorporationclicker.models.database.DatabaseController
+import com.example.idlecorporationclicker.models.database.Database
 import com.example.idlecorporationclicker.models.attack.IAttack
 import com.example.idlecorporationclicker.models.player.IPlayer
 import com.example.idlecorporationclicker.models.player.Player
@@ -62,7 +62,7 @@ class PlayerList(var attack: IAttack,
         stage = Stage()
         batch = SpriteBatch()
 
-        players = DatabaseController.createOponentCollection(this)
+        players = Database.createOponentCollection(this)
         attackLabel = Label(createAttackLabelText(), gsm.fontStyle);
 
         topWrapper = Table()
@@ -79,7 +79,7 @@ class PlayerList(var attack: IAttack,
         stage.addActor(playerTable)
         stage.addActor(topWrapper)
         stage.addActor(bottom)
-        stage.addActor(MusicManager.getMusicButtonTable())
+        stage.addActor(MusicPlayer.getMusicButtonTable())
     }
 
     fun createAttackLabelText() : String{
@@ -104,7 +104,8 @@ class PlayerList(var attack: IAttack,
             AttackPlayerCommand(
                 attacker,
                 defender,
-                attack
+                attack,
+                this
             )
 
         playerTable.row().pad(10f)
@@ -119,8 +120,6 @@ class PlayerList(var attack: IAttack,
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
                 println(attack.calculateSuccess(attacker, defender))
                 gsm.commandManager.Invoke(attackCommand)
-                playerTable.clear()
-                generateTable()
             }
             override fun touchDown(e : InputEvent, x : Float, y : Float, Point : Int, button : Int): Boolean {
                 return true
@@ -143,15 +142,17 @@ class PlayerList(var attack: IAttack,
 
 
     override fun update() {
+        playerTable.clear()
+        generateTable()
     }
+
 
     override fun render(dt : Float) {
 
         if (TimeUtils.timeSinceNanos(startTime) > 1000000000) {
             startTime = TimeUtils.nanoTime();
             attackLabel.setText(createAttackLabelText())
-            playerTable.clear()
-            generateTable()
+            update()
         }
             batch.begin()
             batch.draw(

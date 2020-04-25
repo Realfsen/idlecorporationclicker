@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.idlecorporationclicker.models.database.DatabaseController
+import com.example.idlecorporationclicker.models.database.Database
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
 
 		if (user != null) {
 			// The user is already signed in
-			DatabaseController.start()
+			Database.start()
 			launchGame()
 //			signOut()
 		} else {
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
 
 		if (requestCode == RC_SIGN_IN) {
 			val response = IdpResponse.fromResultIntent(data)
-			DatabaseController.start()
+			Database.start()
 
 			if (resultCode == Activity.RESULT_OK) {
 				// Successfully signed in

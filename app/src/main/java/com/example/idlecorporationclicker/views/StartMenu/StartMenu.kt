@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.ui.TextField
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.viewport.ScreenViewport
-import com.example.idlecorporationclicker.models.audio.MusicManager
+import com.example.idlecorporationclicker.models.audio.MusicPlayer
 import com.example.idlecorporationclicker.views.GameStateManager
 import com.example.idlecorporationclicker.views.MainScreen.MainScreen
 import com.example.idlecorporationclicker.views.ScreenTemplate
@@ -42,8 +42,6 @@ class StartMenu(override var game: Game, override var gsm: GameStateManager) : S
         logoHeight = logo.height.toFloat()*logoOffset
 
 
-
-
         var tableWidth : Float = screenWidth/2f
         var tableHeight : Float = 200f
 
@@ -71,7 +69,7 @@ class StartMenu(override var game: Game, override var gsm: GameStateManager) : S
         stage = Stage(ScreenViewport(cam))
         batch = SpriteBatch()
         stage.addActor(loginTable)
-        stage.addActor(MusicManager.getMusicButtonTable())
+        stage.addActor(MusicPlayer.getMusicButtonTable())
     }
 
     override fun update() {

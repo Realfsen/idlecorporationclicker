@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable
 
-object MusicManager {
+object MusicPlayer {
     private var track = Gdx.audio.newMusic(Gdx.files.internal("music/HappyJingle.mp3"))
     private var isPlaying = true
     private var musicButtonTable : Table

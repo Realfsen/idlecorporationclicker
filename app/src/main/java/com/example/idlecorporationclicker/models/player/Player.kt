@@ -6,7 +6,7 @@ import com.example.idlecorporationclicker.models.building.IncomeBuilding
 import com.example.idlecorporationclicker.factory.BuildingFactory
 import com.example.idlecorporationclicker.factory.FACTORY_TYPE
 import com.example.idlecorporationclicker.factory.FactoryProvider
-import com.example.idlecorporationclicker.models.database.DatabaseController
+import com.example.idlecorporationclicker.models.database.Database
 import com.example.idlecorporationclicker.models.attack.IAttack
 import com.example.idlecorporationclicker.models.building.BuildingType
 import com.example.idlecorporationclicker.models.building.IBuilding
@@ -31,7 +31,7 @@ class Player : IPlayer {
     override var money : Long = 0
         set(value) {
             field = value
-            DatabaseController.playerUpdateMoney()
+            Database.playerUpdateMoney()
         }
 
     fun moneyPerSecond() : Double {
@@ -66,7 +66,7 @@ class Player : IPlayer {
         lastSynched = synchedNow
         var difinSec = TimeUnit.MILLISECONDS.toSeconds(timeDifference)
         money += difinSec.times(moneyPerSecond()).toInt()
-        DatabaseController.SyncMoneyWithFirestoreController()
+        Database.SyncMoneyWithFirestoreController()
     }
 
     fun buyBuilding(building: IBuilding) : Boolean {

@@ -14,4 +14,5 @@ class PlayerController(var player : Player, var screen : ScreenTemplate) {
         player.addMoneySinceLastSynched()
         screen.update()
     }
+
 }
