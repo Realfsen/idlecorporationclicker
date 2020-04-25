@@ -10,47 +10,25 @@ import com.example.idlecorporationclicker.database.DatabaseController
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class Player {
-    var name : String
-    var lastSynched : Date
-//    var attackBuildings : MutableList<IBuilding>
-//    var defenseBuildings : MutableList<IBuilding>
-//    var passiveIncomeBuildings: MutableList<IBuilding>
-    var lastAttack : Date
-    var attackBuilding : IBuilding
-    var defenseBuilding :IBuilding
-    var passiveIncomeBuilding: IBuilding
-    var money : Long = 0
-    set(value) {
-        field = value
-        DatabaseController.playerUpdateMoney()
-    }
-    var buildingFactory : BuildingFactory
+class Player : IPlayer {
 
-    init {
-        name = "Kent"
-        lastSynched = Date()
-        lastAttack = Date()
-        var factory = FactoryProvider()
-        buildingFactory =  factory.getFactory(FACTORY_TYPE.BUILDING) as BuildingFactory
-//
-//        passiveIncomeBuildings = mutableListOf(buildingFactory.create<IncomeBuilding, BuildingType>(BuildingType.INCOME))
-//        attackBuildings= mutableListOf(buildingFactory.create<AttackBuilding, BuildingType>(BuildingType.ATTACK))
-//        defenseBuildings = mutableListOf(buildingFactory.create<DefenseBuilding, BuildingType>(BuildingType.DEFENSE))
+    override var name: String = ""
+    override var lastSynched: Date = Date()
+    var lastAttack: Date = Date()
 
-        passiveIncomeBuilding = buildingFactory.create<IncomeBuilding, BuildingType>(BuildingType.INCOME)
-        attackBuilding = buildingFactory.create<AttackBuilding, BuildingType>(BuildingType.ATTACK)
-        defenseBuilding = buildingFactory.create<DefenseBuilding, BuildingType>(BuildingType.DEFENSE)
-        money = 0
-    }
+    val factory = FactoryProvider()
+    val buildingFactory : BuildingFactory =  factory.getFactory(FACTORY_TYPE.BUILDING) as BuildingFactory
+    override var attackBuilding: IBuilding = buildingFactory.create<IncomeBuilding, BuildingType>(BuildingType.INCOME)
+    override var defenseBuilding: IBuilding  = buildingFactory.create<AttackBuilding, BuildingType>(BuildingType.ATTACK)
+    override var passiveIncomeBuilding: IBuilding = buildingFactory.create<DefenseBuilding, BuildingType>(BuildingType.DEFENSE)
+
+    override var money : Long = 0
+        set(value) {
+            field = value
+            DatabaseController.playerUpdateMoney()
+        }
 
     fun moneyPerSecond() : Double {
-//        var monPrSec : Double = 0.0
-//        passiveIncomeBuildings.forEach() {
-//            monPrSec += it.value
-//        }
-
-//        return monPrSec
         return passiveIncomeBuilding.value
     }
 
@@ -68,21 +46,7 @@ class Player {
         return IAttack.SECONDS_BETWEEN_ATTACKS-difinSec.toInt()
     }
 
-    fun defense() : Double {
-//        var defense : Double = 0.0
-//        defenseBuildings.forEach() {
-//            defense += it.value
-//        }
-//        return defense
-        return defenseBuilding.value
-    }
-
     fun attack() : Double {
-//        var attack: Double = 0.0
-//        attackBuildings.forEach() {
-//            attack += it.value
-//        }
-//        return attack
         return attackBuilding.value
     }
 
@@ -114,7 +78,6 @@ class Player {
             building.downgrade()
         }
     }
-
 
     fun hasMoneyForBuilding(building: IBuilding) : Boolean {
        return building.calculateUpgradeCost() < money

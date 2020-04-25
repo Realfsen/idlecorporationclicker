@@ -12,8 +12,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.TimeUtils
 import com.example.idlecorporationclicker.audio.MusicManager
 import com.example.idlecorporationclicker.commands.AttackPlayerCommand
+import com.example.idlecorporationclicker.database.DatabaseController
 import com.example.idlecorporationclicker.model.IAttack
+import com.example.idlecorporationclicker.model.IPlayer
 import com.example.idlecorporationclicker.model.Player
+import com.example.idlecorporationclicker.model.PlayerOpponent
 import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.states.State
 
@@ -36,9 +39,7 @@ class PlayerList(var attack: IAttack,
     private var batch : SpriteBatch
     private var stage: Stage
 
-    private var player1 = Player()
-    private var player2 = Player()
-    private var player3 = Player()
+    var players : MutableCollection<PlayerOpponent>
     private val uiSkin = Skin(Gdx.files.internal("ui/uiskin.json"))
 
     private val nameLabel = Label("Name", uiSkin)
@@ -63,26 +64,7 @@ class PlayerList(var attack: IAttack,
         stage = Stage()
         batch = SpriteBatch()
 
-        player1.money = 300
-        player1.name = "Andreas"
-//        player1.defenseBuildings[0].level = 50.0
-//        player1.defenseBuildings[0].value = player1.defenseBuildings[0].calculateValue()
-        player1.defenseBuilding.level = 50.0
-        player1.defenseBuilding.value = player1.defenseBuilding.calculateValue()
-
-        player2.money = 5030
-        player2.name = "Simon"
-//        player2.defenseBuildings[0].level = 10.0
-//        player2.defenseBuildings[0].value = player1.defenseBuildings[0].calculateValue()
-        player2.defenseBuilding.level = 10.0
-        player2.defenseBuilding.value = player1.defenseBuilding.calculateValue()
-        player3.money = 30
-        player3.name = "Dag"
-//        player3.defenseBuildings[0].level = 5.0
-//        player3.defenseBuildings[0].value = player1.defenseBuildings[0].calculateValue()
-        player3.defenseBuilding.level = 5.0
-        player3.defenseBuilding.value = player1.defenseBuilding.calculateValue()
-
+        players = DatabaseController.createOponentCollection(this)
         attackLabel = Label(createAttackLabelText(), uiSkin);
 
         topWrapper = Table()
@@ -109,7 +91,7 @@ class PlayerList(var attack: IAttack,
         return "You can attack now!"
     }
 
-    fun createNewPlayerRow(attacker: Player, defender: Player) {
+    fun createNewPlayerRow(attacker: Player, defender: IPlayer) {
         val uiSkin = Skin(Gdx.files.internal("ui/uiskin.json"))
         uiSkin.getFont("default-font").getData().setScale(3f)
         val btn = TextButton("Attack!", uiSkin)
@@ -150,9 +132,10 @@ class PlayerList(var attack: IAttack,
         playerTable.add(defenseLabel);
         playerTable.add(moneyLabel);
         playerTable.add(successLabel);
-        createNewPlayerRow(gsm.player, player1)
-        createNewPlayerRow(gsm.player,player2)
-        createNewPlayerRow(gsm.player,player3)
+        players.forEach() {
+            createNewPlayerRow(gsm.player, it)
+        }
+
         playerTable.top().padTop(100f)
         playerTable.setFillParent(true)
     }

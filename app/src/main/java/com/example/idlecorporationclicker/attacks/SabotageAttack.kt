@@ -2,6 +2,7 @@ package com.example.idlecorporationclicker.attacks
 
 import com.example.idlecorporationclicker.model.ATTACK_TYPE
 import com.example.idlecorporationclicker.model.IAttack
+import com.example.idlecorporationclicker.model.IPlayer
 import com.example.idlecorporationclicker.model.Player
 import kotlin.random.Random.Default.nextInt
 
@@ -14,7 +15,7 @@ class SabotageAttack : IAttack{
         return player.attack()
     }
 
-    override fun calculateSuccess(player: Player, defender: Player): Int {
+    override fun calculateSuccess(player: Player, defender: IPlayer): Int {
         val attackValue = player.attack()
         val defenseValue = defender.defense()
         val ratio : Double = attackValue / defenseValue
@@ -23,14 +24,14 @@ class SabotageAttack : IAttack{
         return (ratio*100).toInt()
     }
 
-    override fun doAttack(player: Player, defender: Player): Boolean {
+    override fun doAttack(player: Player, defender: IPlayer): Boolean {
         val successChance = calculateSuccess(player, defender)
         val att = nextInt(0, 100)
         if (att < successChance) doSabotage(player, defender)
         return true
     }
 
-    private fun doSabotage(player: Player, defender: Player) {
+    private fun doSabotage(player: Player, defender: IPlayer) {
 
     }
 
