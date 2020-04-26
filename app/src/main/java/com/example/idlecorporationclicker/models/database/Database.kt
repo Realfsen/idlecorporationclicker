@@ -84,24 +84,24 @@ object Database: IDatabase {
     }
 
     override fun buildingUpdateIncome() {
-//        firestoreUpdateUsersSomething("income", localPlayer!!.passiveIncomeBuilding.level)
-//        updateTimeLastSyncedInDatabase()
-//        firestoreUpdateUsersMoney()
-        buildingUpdate()
+        firestoreUpdateUsersSomething("income", localPlayer!!.passiveIncomeBuilding.level)
+        updateTimeLastSyncedInDatabase()
+        firestoreUpdateUsersMoney()
+//        buildingUpdate()
     }
 
     override fun buildingUpdateAttack() {
-//        firestoreUpdateUsersSomething("attack", localPlayer!!.attackBuilding.level)
-//        updateTimeLastSyncedInDatabase()
-//        firestoreUpdateUsersMoney()
-        buildingUpdate()
+        firestoreUpdateUsersSomething("attack", localPlayer!!.attackBuilding.level)
+        updateTimeLastSyncedInDatabase()
+        firestoreUpdateUsersMoney()
+//        buildingUpdate()
     }
 
     override fun buildingUpdateDefense() {
-//        firestoreUpdateUsersSomething("defense", localPlayer!!.defenseBuilding.level)
-//        updateTimeLastSyncedInDatabase()
-//        firestoreUpdateUsersMoney()
-        buildingUpdate()
+        firestoreUpdateUsersSomething("defense", localPlayer!!.defenseBuilding.level)
+        updateTimeLastSyncedInDatabase()
+        firestoreUpdateUsersMoney()
+//        buildingUpdate()
     }
 
     fun buildingUpdate() {

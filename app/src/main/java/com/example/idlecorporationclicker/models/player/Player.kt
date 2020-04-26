@@ -21,12 +21,12 @@ class Player : IPlayer {
 
     val factory = FactoryProvider()
     val buildingFactory : BuildingFactory =  factory.getFactory(FACTORY_TYPE.BUILDING) as BuildingFactory
-    override var attackBuilding: IBuilding = buildingFactory.create<IncomeBuilding, BuildingType>(
-        BuildingType.INCOME)
-    override var defenseBuilding: IBuilding = buildingFactory.create<AttackBuilding, BuildingType>(
+    override var attackBuilding: IBuilding = buildingFactory.create<AttackBuilding, BuildingType>(
         BuildingType.ATTACK)
-    override var passiveIncomeBuilding: IBuilding = buildingFactory.create<DefenseBuilding, BuildingType>(
+    override var defenseBuilding: IBuilding = buildingFactory.create<DefenseBuilding, BuildingType>(
         BuildingType.DEFENSE)
+    override var passiveIncomeBuilding: IBuilding = buildingFactory.create<IncomeBuilding, BuildingType>(
+        BuildingType.INCOME)
 
     override var money : Long = 0
         set(value) {
