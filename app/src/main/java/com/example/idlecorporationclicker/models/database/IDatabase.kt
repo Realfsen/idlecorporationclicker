@@ -8,4 +8,5 @@ interface IDatabase {
     fun buildingUpdateAttack()
     fun buildingUpdateDefense()
     fun updateTimeLastSyncedInDatabase()
+    fun start() {}
 }

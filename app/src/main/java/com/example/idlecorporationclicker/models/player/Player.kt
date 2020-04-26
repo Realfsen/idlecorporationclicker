@@ -60,18 +60,23 @@ class Player : IPlayer {
        money += moneyPerSecond().toInt()
     }
 
-    fun addMoneySinceLastSynched() {
+    fun addMoneySinceLastSynched(lastSynched: Date = this.lastSynched) {
         var synchedNow = Date()
         var timeDifference = synchedNow.getTime() - lastSynched.getTime()
-        lastSynched = synchedNow
+        this.lastSynched = synchedNow
         var difinSec = TimeUnit.MILLISECONDS.toSeconds(timeDifference)
         money += difinSec.times(moneyPerSecond()).toInt()
         Database.SyncMoneyWithFirestoreController()
     }
 
+    fun addMoneySinceLastSynchedExternally(lastSynched: Date) {
+        addMoneySinceLastSynched(lastSynched)
+        Database.forceMoneySync()
+    }
+
     fun buyBuilding(building: IBuilding) : Boolean {
         if(building.calculateUpgradeCost() < money) {
-            money - building.calculateUpgradeCost()
+            money -= building.calculateUpgradeCost().toLong()
             building.upgrade()
             return true
         }
