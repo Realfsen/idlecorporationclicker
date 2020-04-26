@@ -26,7 +26,7 @@ object Database: IDatabase {
     private var localPlayer: Player? = null
     private var playerList: PlayerList? = null
     private var nextTimeToSync: Long = Date().time + SYNC_DELAY_SECONDS
-    private var timeLastSyncedFromDatabase: Date? = null
+//    private var timeLastSyncedFromDatabase: Date? = null
 
 
     init {
@@ -116,12 +116,23 @@ object Database: IDatabase {
     override fun updateTimeLastSyncedInDatabase() {
         val date = Date()
         firestoreUpdateUsersSomething("timeLastSynced", date)
-        timeLastSyncedFromDatabase = date
+//        timeLastSyncedFromDatabase = date
 
     }
 
-    private fun timeLastSyncedFromDatabase(date: Date) {
+    fun forceMoneySync() {
+        firestoreUpdateUsersMoney()
+    }
 
+//    private fun timeLastSyncedFromDatabase(date: Date) {
+//
+//    }
+
+    fun onResumeSyncMoneySinseLastSynced() {
+        val lastSynced: Date? = getLastSynced()
+        if (lastSynced != null) {
+            localPlayer!!.addMoneySinceLastSynchedExternally(lastSynced)
+        }
     }
 
 
@@ -182,6 +193,7 @@ object Database: IDatabase {
                     val attack : Double? = userDocument.getDouble("attack")
                     val defense : Double? = userDocument.getDouble("defense")
                     val income : Double? = userDocument.getDouble("income")
+                    val lastSynced : Date? = userDocument.getDate("timeLastSynced")
 
                     if (money != null) {
                         localPlayer!!.money = money
@@ -195,13 +207,39 @@ object Database: IDatabase {
                     if (income != null) {
                         localPlayer!!.passiveIncomeBuilding.setBuildingsStartLevel(income)
                     }
+                    if (lastSynced != null) {
+//                        timeLastSyncedFromDatabase = lastSynced
+                        localPlayer!!.addMoneySinceLastSynchedExternally(lastSynced)
+                    } else {
+//                        timeLastSyncedFromDatabase = Date()
+                    }
                     localPlayer!!.name = this.name
-                    timeLastSyncedFromDatabase = Date()
                 }
             }
             .addOnFailureListener { exception ->
                 Log.w("TAG", "Error getting documents.", exception)
             }
+    }
+
+    private fun getLastSynced() : Date? {
+        var _lastSynced : Date? = null
+        db.collection("users")
+            .document(uid)
+            .get()
+            .addOnSuccessListener { userDocument ->
+                if(userDocument.data == null) {
+                    firestoreCreateUser()
+                } else {
+                    val lastSynced : Date? = userDocument.getDate("timeLastSynced")
+                    if (lastSynced != null) {
+                        _lastSynced = lastSynced
+                    }
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.w("TAG", "Error getting documents.", exception)
+            }
+        return _lastSynced
     }
 
     private fun firestoreCreateUser() {

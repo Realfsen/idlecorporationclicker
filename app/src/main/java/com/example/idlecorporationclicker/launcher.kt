@@ -23,6 +23,7 @@ class Launcher : AndroidApplication() {
     override fun onResume() {
         super.onResume()
         Database.goOnline()
+        Database.onResumeSyncMoneySinseLastSynced()
     }
 
     fun signOut() {
