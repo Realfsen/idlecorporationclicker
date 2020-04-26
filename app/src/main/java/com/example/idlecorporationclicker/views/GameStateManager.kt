@@ -1,6 +1,15 @@
 package com.example.idlecorporationclicker.states
 
 import com.badlogic.gdx.Game
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
+import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.example.idlecorporationclicker.controllers.commands.CommandManager
 import com.example.idlecorporationclicker.models.database.Database
 import com.example.idlecorporationclicker.models.player.Player
@@ -16,8 +25,10 @@ class GameStateManager {
     var player : Player
     var commandManager : CommandManager
 
+    public var showTutorial : Boolean
 
     constructor() {
+        showTutorial = true;
         screenTemplates = Stack<ScreenTemplate>()
         screenHistory = Stack<SCREEN>()
         player = Player()

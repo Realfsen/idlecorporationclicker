@@ -5,11 +5,15 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.TimeUtils
+import com.badlogic.gdx.utils.viewport.FillViewport
+import com.badlogic.gdx.utils.viewport.ScreenViewport
+import com.badlogic.gdx.utils.viewport.StretchViewport
 import com.example.idlecorporationclicker.models.audio.MusicPlayer
 import com.example.idlecorporationclicker.controllers.commands.attack.AttackPlayerCommand
 import com.example.idlecorporationclicker.models.database.Database
@@ -27,7 +31,11 @@ class PlayerList(var attack: IAttack,
 
     private val screenHeight = Gdx.graphics.height.toFloat()
     private val screenWidth = Gdx.graphics.width.toFloat()
+    private var shieldSymbol: Image
+    private var cashSymbol: Image
+    private var gui: Texture
     private var topWrapper: Table
+    private var tableContainer: Container<Table>
     private var attackLabel: Label
     private var startTime: Long
     private var bottom: Table
@@ -45,9 +53,7 @@ class PlayerList(var attack: IAttack,
     private val uiSkin = Skin(Gdx.files.internal("ui/uiskin.json"))
 
     private val nameLabel = Label("Name", fontStyle)
-    private val defenseLabel = Label("Defense", fontStyle)
-    private val moneyLabel = Label("Money", fontStyle)
-    private val successLabel = Label("Success", fontStyle)
+    private val successLabel = Label("%", fontStyle)
     private var menuTitle : Label
 
 
@@ -56,32 +62,41 @@ class PlayerList(var attack: IAttack,
         playerTable = Table()
 
         startTime = TimeUtils.nanoTime()
+        tableContainer = Container<Table>()
+
+        var screenHeight = Gdx.graphics.height.toFloat()
 
         //chosenAttack = attackType
         uiSkin.getFont("default-font").getData().setScale(3.5f)
 
+        stage = Stage(ScreenViewport(cam))
         sabotageStr = Label("Sabotage", fontStyle)
         attackStr = Label("Steal", fontStyle)
         findPlayerStr = Label("Find player", fontStyle)
         chosenAttackStr = Label("Chosen attack: "+attack.type, fontStyle)
         stage = Stage()
         batch = SpriteBatch()
+        gui = Texture(Gdx.files.internal("freegui/png/Window.png"))
+        cashSymbol = Image(TextureRegion(gui, 1985, 4810, 95, 145))
+        shieldSymbol = Image(TextureRegion(gui, 1680, 4810, 110, 145))
 
         players = Database.createOponentCollection(this)
         attackLabel = Label(createAttackLabelText(), fontStyle);
 
         topWrapper = Table()
+        topWrapper.setPosition(0f, screenHeight-screenHeight/6-topBar.regionHeight-300f)
         topWrapper.add(attackLabel)
         topWrapper.row().padTop(30f)
-        topWrapper.top()
-        topWrapper.setFillParent(true)
+        //topWrapper.top()
+        //topWrapper.setFillParent(true)
+        topWrapper.setWidth(Gdx.graphics.width.toFloat())
         generateTable()
         topWrapper.add(playerTable)
         bottom = Table()
         bottom.add(chosenAttackStr)
         bottom.bottom().padBottom(30f)
         bottom.setFillParent(true)
-        stage.addActor(playerTable)
+        //tableContainer.setActor(topWrapper)
         stage.addActor(topWrapper)
         stage.addActor(bottom)
         stage.addActor(MusicPlayer.getMusicButtonTable())
@@ -103,10 +118,10 @@ class PlayerList(var attack: IAttack,
         if(!attacker.canAttack()) {
            btn.setColor(Color.RED)
         }
-        val name = Label(defender.name, fontStyle)
-        val defense = Label(defender.defense().toInt().toString(), fontStyle)
-        val successChance = Label(attack.calculateSuccess(attacker, defender).toString()+"%", fontStyle)
-        val money = Label(defender.money.toInt().toString(), fontStyle)
+        val name = Label(defender.name, uiSkin)
+        val defense = Label(defender.defense().toInt().toString(), uiSkin)
+        val successChance = Label(attack.calculateSuccess(attacker, defender).toString()+"%", uiSkin)
+        val money = Label(defender.money.toInt().toString(), uiSkin)
         val attackCommand =
             AttackPlayerCommand(
                 attacker,
@@ -115,12 +130,13 @@ class PlayerList(var attack: IAttack,
                 this
             )
 
+        var width = Gdx.graphics.width.toFloat()/6
         playerTable.row().pad(10f)
-        playerTable.add(name)
-        playerTable.add(defense)
-        playerTable.add(money)
-        playerTable.add(successChance)
-        playerTable.add(btn)
+        playerTable.add(name).fillX().width(width)
+        playerTable.add(defense).fillX().width(width)
+        playerTable.add(money).grow().expandX().width(money.width)
+        playerTable.add(successChance).fillX().width(width)
+        playerTable.add(btn).fillX().width(width)
 
 
         btn.addListener(object : ClickListener() {
@@ -135,16 +151,18 @@ class PlayerList(var attack: IAttack,
     }
 
     fun generateTable() {
-        playerTable.add(nameLabel);
-        playerTable.add(defenseLabel);
-        playerTable.add(moneyLabel);
-        playerTable.add(successLabel);
+        playerTable.setWidth(Gdx.graphics.width.toFloat())
+        playerTable.top()
+        playerTable.add(nameLabel).fillX();
+        playerTable.add(shieldSymbol)
+        playerTable.add(cashSymbol)
+        playerTable.add(successLabel).fillX();
         players.forEach() {
             createNewPlayerRow(gsm.player, it)
         }
 
-        playerTable.top().padTop(100f)
-        playerTable.setFillParent(true)
+        //playerTable.top().padTop(100f)
+        //playerTable.setWidth(Gdx.graphics.width.toFloat())
     }
 
 

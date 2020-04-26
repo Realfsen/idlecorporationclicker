@@ -33,7 +33,7 @@ abstract class ScreenTemplate (gsm: GameStateManager, game : Game) : Screen {
     private val screenHeight = Gdx.graphics.height.toFloat()
     private val screenWidth = Gdx.graphics.width.toFloat()
     private var gui: Texture
-    private var topBar : TextureRegion
+    public var topBar : TextureRegion
     private var cashSymbol : TextureRegion
     private var shieldSymbol : TextureRegion
     private var starSymbol : TextureRegion
