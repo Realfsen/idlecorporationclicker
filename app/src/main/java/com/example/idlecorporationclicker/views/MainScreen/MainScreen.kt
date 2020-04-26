@@ -1,5 +1,6 @@
 package com.example.idlecorporationclicker.states.MainScreen
 
+import android.util.Log
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
@@ -21,6 +22,7 @@ import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.states.SCREEN
 import com.example.idlecorporationclicker.views.ScreenTemplate
 import com.example.idlecorporationclicker.views.AttackScreen.AttackScreen
+import com.example.idlecorporationclicker.views.MenuScreen.MenuScreen
 
 
 class MainScreen(override var game: Game, override var gsm: GameStateManager) : ScreenTemplate(gsm, game) {
@@ -43,7 +45,6 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
     private var cookieManager : CookieClicker
     private var playerController : PlayerController
 
-
     init {
         background = Texture("backgrounds/1x/background-basemdpi.png")
         cookie = Image(Texture("cookie/1x/cookiemdpi.png"))
@@ -55,13 +56,14 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         startTime = TimeUtils.nanoTime()
         cookieManager = CookieClicker()
         playerController = PlayerController(gsm.player, this)
+        menuOpen = false
 
-        var incomeStr: Label = Label("Buildings", gsm.fontStyle)
-        var attackStr: Label = Label("Attack", gsm.fontStyle)
-        var moneyPerSecStr: Label = Label(""+gsm.player.moneyPerSecond()+" /s", gsm.fontStyle)
-        moneyStr = Label(gsm.player.money.toString(), gsm.fontStyle)
-        attack = Label(""+gsm.player.attack(), gsm.fontStyle)
-        defense = Label(""+gsm.player.defense(), gsm.fontStyle)
+        var incomeStr: Label = Label("Buildings", fontStyle)
+        var attackStr: Label = Label("Attack", fontStyle)
+        var moneyPerSecStr: Label = Label(""+gsm.player.moneyPerSecond()+" /s", fontStyle)
+        moneyStr = Label(gsm.player.money.toString(), fontStyle)
+        attack = Label(""+gsm.player.attack(), fontStyle)
+        defense = Label(""+gsm.player.defense(), fontStyle)
 
         stage = Stage()
         batch = SpriteBatch()
@@ -121,6 +123,7 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         stage.addActor(buildingTable)
         stage.addActor(clickerTable)
 //        stage.addActor(statsTable)
+        generateTopBar(stage, SCREEN.MainScreen, batch)
     }
 
     fun updateMoney() {
@@ -140,7 +143,11 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
 
         batch.begin()
         batch.draw(background, 0f, 0f, screenWidth, screenHeight)
-        gsm.drawTopBar(batch, stage)
+        updateTopBar(batch)
+        if (menuOpen) {
+            Log.d("test", "if true")
+            batch.draw(menuBG, 0f, screenHeight/3, screenWidth, screenHeight/2)
+        }
         batch.end()
         stage.act(Gdx.graphics.deltaTime)
         stage.draw()

@@ -18,6 +18,7 @@ import com.example.idlecorporationclicker.models.player.IPlayer
 import com.example.idlecorporationclicker.models.player.Player
 import com.example.idlecorporationclicker.models.player.PlayerOpponent
 import com.example.idlecorporationclicker.states.GameStateManager
+import com.example.idlecorporationclicker.states.SCREEN
 import com.example.idlecorporationclicker.views.ScreenTemplate
 
 class PlayerList(var attack: IAttack,
@@ -40,10 +41,10 @@ class PlayerList(var attack: IAttack,
     var players : MutableCollection<PlayerOpponent>
     private val uiSkin = Skin(Gdx.files.internal("ui/uiskin.json"))
 
-    private val nameLabel = Label("Name", gsm.fontStyle)
-    private val defenseLabel = Label("Defense", gsm.fontStyle)
-    private val moneyLabel = Label("Money", gsm.fontStyle)
-    private val successLabel = Label("Success", gsm.fontStyle)
+    private val nameLabel = Label("Name", fontStyle)
+    private val defenseLabel = Label("Defense", fontStyle)
+    private val moneyLabel = Label("Money", fontStyle)
+    private val successLabel = Label("Success", fontStyle)
 
 
     init {
@@ -55,15 +56,15 @@ class PlayerList(var attack: IAttack,
         //chosenAttack = attackType
         uiSkin.getFont("default-font").getData().setScale(3.5f)
 
-        sabotageStr = Label("Sabotage", gsm.fontStyle)
-        attackStr = Label("Steal", gsm.fontStyle)
-        findPlayerStr = Label("Find player", gsm.fontStyle)
-        chosenAttackStr = Label("Chosen attack: "+attack.type, gsm.fontStyle)
+        sabotageStr = Label("Sabotage", fontStyle)
+        attackStr = Label("Steal", fontStyle)
+        findPlayerStr = Label("Find player", fontStyle)
+        chosenAttackStr = Label("Chosen attack: "+attack.type, fontStyle)
         stage = Stage()
         batch = SpriteBatch()
 
         players = Database.createOponentCollection(this)
-        attackLabel = Label(createAttackLabelText(), gsm.fontStyle);
+        attackLabel = Label(createAttackLabelText(), fontStyle);
 
         topWrapper = Table()
         topWrapper.add(attackLabel)
@@ -80,6 +81,7 @@ class PlayerList(var attack: IAttack,
         stage.addActor(topWrapper)
         stage.addActor(bottom)
         stage.addActor(MusicPlayer.getMusicButtonTable())
+        generateTopBar(stage, SCREEN.PlayerList, batch)
     }
 
     fun createAttackLabelText() : String{
@@ -96,10 +98,10 @@ class PlayerList(var attack: IAttack,
         if(!attacker.canAttack()) {
            btn.setColor(Color.RED)
         }
-        val name = Label(defender.name, gsm.fontStyle)
-        val defense = Label(defender.defense().toInt().toString(), gsm.fontStyle)
-        val successChance = Label(attack.calculateSuccess(attacker, defender).toString()+"%", gsm.fontStyle)
-        val money = Label(defender.money.toInt().toString(), gsm.fontStyle)
+        val name = Label(defender.name, fontStyle)
+        val defense = Label(defender.defense().toInt().toString(), fontStyle)
+        val successChance = Label(attack.calculateSuccess(attacker, defender).toString()+"%", fontStyle)
+        val money = Label(defender.money.toInt().toString(), fontStyle)
         val attackCommand =
             AttackPlayerCommand(
                 attacker,
@@ -162,6 +164,7 @@ class PlayerList(var attack: IAttack,
                 Gdx.graphics.width.toFloat(),
                 Gdx.graphics.height.toFloat()
             )
+            updateTopBar(batch)
             batch.end()
             stage.act(Gdx.graphics.deltaTime)
             stage.draw()

@@ -60,11 +60,11 @@ class AttackScreen(
 
         stage = Stage()
         batch = SpriteBatch()
-        sabotageStr = Label("Sabotage", gsm.fontStyle)
-        attackStr = Label("Steal", gsm.fontStyle)
-        findPlayerStr = Label("Find player", gsm.fontStyle)
-        chosenAttackStr = Label("Chosen attack: "+chosenAttack, gsm.fontStyle)
-        attackFlavourText = Label(ATTACK_DESCRIPTION.getText(chosenAttack), gsm.fontStyle)
+        sabotageStr = Label("Sabotage", fontStyle)
+        attackStr = Label("Steal", fontStyle)
+        findPlayerStr = Label("Find player", fontStyle)
+        chosenAttackStr = Label("Chosen attack: "+chosenAttack, fontStyle)
+        attackFlavourText = Label(ATTACK_DESCRIPTION.getText(chosenAttack), fontStyle)
         attackFlavourText.setWrap(true)
 
         attack.addListener(object : ClickListener() {
@@ -141,6 +141,7 @@ class AttackScreen(
         stage.addActor(attackTable)
         stage.addActor(findPlayerTable)
         stage.addActor(statsTable)
+        generateTopBar(stage, SCREEN.AttackScreen, batch)
     }
 
     override fun update() {
@@ -149,6 +150,7 @@ class AttackScreen(
     override fun render(delta: Float) {
         batch.begin()
         batch.draw(background, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
+        updateTopBar(batch)
         batch.end()
         stage.act(Gdx.graphics.deltaTime)
         stage.draw()

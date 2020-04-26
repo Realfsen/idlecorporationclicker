@@ -17,6 +17,7 @@ import com.example.idlecorporationclicker.controllers.commands.player.PlayerCont
 import com.example.idlecorporationclicker.models.building.BuildingType
 import com.example.idlecorporationclicker.models.building.IBuilding
 import com.example.idlecorporationclicker.states.GameStateManager
+import com.example.idlecorporationclicker.states.SCREEN
 import com.example.idlecorporationclicker.views.ScreenTemplate
 
 class BuildingScreen(override var game: Game, override var gsm: GameStateManager) : ScreenTemplate(gsm, game) {
@@ -38,7 +39,7 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
         batch = SpriteBatch()
         wholeGroup = Table()
         uiSkin = Skin(Gdx.files.internal("ui/uiskin.json"))
-        moneyStr = Label("Cash: "+gsm.player.money, gsm.fontStyle)
+        moneyStr = Label("Cash: "+gsm.player.money, fontStyle)
         startTime = TimeUtils.nanoTime()
         playerController = PlayerController(gsm.player, this)
 
@@ -49,6 +50,7 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
         wholeGroup.top()
         stage.addActor(wholeGroup)
         stage.addActor(MusicPlayer.getMusicButtonTable())
+        generateTopBar(stage, SCREEN.BuildingScreen, batch)
     }
 
     fun buildingTemplate(building : IBuilding, type: BuildingType, labelPrefix : String) : HorizontalGroup {
@@ -59,13 +61,13 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
         if(!buyBuilding.CanExecute()) {
             buyButton.color = Color.RED
         }
-        var LevelLabel = Label(building.level.toInt().toString(), gsm.fontStyle )
+        var LevelLabel = Label(building.level.toInt().toString(), fontStyle )
         var leftTable= VerticalGroup().pad(5f)
         leftTable.addActor(building.image)
         leftTable.addActor(LevelLabel)
 
         var rightTable = VerticalGroup().pad(5f)
-        rightTable.addActor(Label(labelPrefix+building.value.toInt(), gsm.fontStyle))
+        rightTable.addActor(Label(labelPrefix+building.value.toInt(), fontStyle))
         rightTable.addActor(buyButton)
 
         var group = HorizontalGroup().pad(5f)
@@ -95,9 +97,9 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
     }
 
     fun buildStatsTable() {
-        var moneyPerSecStr = Label("Income per second: "+gsm.player.moneyPerSecond(), gsm.fontStyle)
-        var attack = Label("Attack: "+gsm.player.attack(), gsm.fontStyle)
-        var defense = Label("Defense: "+gsm.player.defense(), gsm.fontStyle)
+        var moneyPerSecStr = Label("Income per second: "+gsm.player.moneyPerSecond(), fontStyle)
+        var attack = Label("Attack: "+gsm.player.attack(), fontStyle)
+        var defense = Label("Defense: "+gsm.player.defense(), fontStyle)
         var statsTable = Table()
         statsTable.add(moneyStr)
         statsTable.row()
@@ -129,7 +131,7 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
         updateMoney()
         batch.begin()
         batch.draw(background, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
-        gsm.drawTopBar(batch, stage)
+        updateTopBar(batch)
         batch.end()
         stage.act(Gdx.graphics.deltaTime)
         stage.draw()
