@@ -40,9 +40,11 @@ class GameStateManager {
     private var cashSec: Label
     private var defense: Label
     private var attack: Label
+    public var showTutorial : Boolean
 
 
     constructor() {
+        showTutorial = true;
         screenTemplates = Stack<ScreenTemplate>()
         screenHistory = Stack<SCREEN>()
         player = Player()

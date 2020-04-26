@@ -7,9 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.ui.Image
-import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.TimeUtils
 import com.example.idlecorporationclicker.controllers.commands.player.PlayerController
@@ -19,12 +17,14 @@ import com.example.idlecorporationclicker.models.player.Player
 import com.example.idlecorporationclicker.states.BuildingScreen.BuildingScreen
 import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.states.SCREEN
-import com.example.idlecorporationclicker.views.ScreenTemplate
 import com.example.idlecorporationclicker.views.AttackScreen.AttackScreen
+import com.example.idlecorporationclicker.views.ScreenTemplate
+import com.example.idlecorporationclicker.views.Tutorial
 
 
 class MainScreen(override var game: Game, override var gsm: GameStateManager) : ScreenTemplate(gsm, game) {
 
+    private var uiSkin: Skin
     private val screenHeight = Gdx.graphics.height.toFloat()
     private val screenWidth = Gdx.graphics.width.toFloat()
     private var background : Texture
@@ -42,9 +42,11 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
     private var defense: Label
     private var cookieManager : CookieClicker
     private var playerController : PlayerController
+    private var tutorial : Tutorial
 
 
     init {
+        tutorial = Tutorial(gsm.fontStyle, screenWidth, screenHeight)
         background = Texture("backgrounds/1x/background-basemdpi.png")
         cookie = Image(Texture("cookie/1x/cookiemdpi.png"))
         attackBuilding = Image(Texture("buildings/attack/base/1x/basemdpi.png"))
@@ -55,6 +57,8 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         startTime = TimeUtils.nanoTime()
         cookieManager = CookieClicker()
         playerController = PlayerController(gsm.player, this)
+        uiSkin = Skin(Gdx.files.internal("ui/uiskin.json"))
+        var tutorialBtn = TextButton("Tutorial", uiSkin)
 
         var incomeStr: Label = Label("Buildings", gsm.fontStyle)
         var attackStr: Label = Label("Attack", gsm.fontStyle)
@@ -85,6 +89,24 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
             }
         })
 
+
+        if(gsm.showTutorial) {
+            gsm.showTutorial = false;
+            uiSkin.getFont("default-font").getData().setScale(3f)
+            tutorialBtn.setHeight(100f)
+            tutorialBtn.setWidth(200f)
+            tutorialBtn.setPosition(screenWidth/2-tutorialBtn.width/2, screenHeight/1.5f-tutorialBtn.height/2)
+            stage.addActor(tutorialBtn)
+            tutorialBtn.addListener(object : ClickListener() {
+                override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
+                    tutorial.startTutorial(stage)
+                    tutorialBtn.remove()
+                }
+                override fun touchDown(e : InputEvent, x : Float, y : Float, Point : Int, button : Int): Boolean {
+                    return true
+                }
+            })
+        }
         cookie.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
                 playerController.addMoneyByClick()
@@ -103,6 +125,7 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
 
         buildingTable.add(incomeStr)
         buildingTable.add(attackStr)
+
 
         clickerTable.add(cookie)
         clickerTable.setFillParent(true)
