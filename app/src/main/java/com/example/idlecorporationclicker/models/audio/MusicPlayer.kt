@@ -13,7 +13,7 @@ object MusicPlayer {
     private var track = Gdx.audio.newMusic(Gdx.files.internal("music/HappyJingle.mp3"))
     private var isPlaying = true
     private var musicButtonTable : Table
-    private var musicBtn : Image
+    var musicBtn : Image
 
     init {
         musicButtonTable = Table()
@@ -23,9 +23,11 @@ object MusicPlayer {
                 togglePlayState()
             }
         })
-        musicButtonTable.add(musicBtn).pad(10f).height(120f).width(120f)
-        musicButtonTable.setFillParent(true)
-        musicButtonTable.top().right()
+        musicBtn.setScale(0.09f)
+        musicBtn.setPosition(650f, 1375f)
+//        musicButtonTable.add(musicBtn).pad(10f).height(120f).width(120f)
+//        musicButtonTable.setFillParent(true)
+//        musicButtonTable.top().right()
     }
 
     fun getMusic(): Music {

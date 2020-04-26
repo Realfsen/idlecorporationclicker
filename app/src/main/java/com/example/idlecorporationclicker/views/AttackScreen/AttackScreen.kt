@@ -28,7 +28,8 @@ class AttackScreen(
 ) : ScreenTemplate(gsm, game) {
 
 
-
+    private val screenHeight = Gdx.graphics.height.toFloat()
+    private val screenWidth = Gdx.graphics.width.toFloat()
     private var attackFlavourText: Label
     private var chosenAttackStr: Label
     private var attackStr: Label
@@ -45,6 +46,7 @@ class AttackScreen(
     private var batch : SpriteBatch
     private var stage: Stage
     private var attackFactory : AttackFactory
+    private var menuTitle : Label
 
     init {
         background = Texture(Gdx.files.internal("backgrounds/1x/background-attackmdpi.png"))
@@ -66,6 +68,7 @@ class AttackScreen(
         chosenAttackStr = Label("Chosen attack: "+chosenAttack, fontStyle)
         attackFlavourText = Label(ATTACK_DESCRIPTION.getText(chosenAttack), fontStyle)
         attackFlavourText.setWrap(true)
+        menuTitle = Label("MENU", fontStyle)
 
         attack.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
@@ -151,6 +154,17 @@ class AttackScreen(
         batch.begin()
         batch.draw(background, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
         updateTopBar(batch)
+        if (menuOpen) {
+            batch.draw(menuBG, 0f, screenHeight/3.5f, screenWidth, screenHeight/2)
+            stage.addActor(MusicPlayer.musicBtn)
+            MusicPlayer.musicBtn.isVisible = true
+            stage.addActor(menuTitle)
+            menuTitle.isVisible = true
+            menuTitle.setPosition(425f, 1715f)
+        } else {
+            MusicPlayer.musicBtn.isVisible = false
+            menuTitle.isVisible = false
+        }
         batch.end()
         stage.act(Gdx.graphics.deltaTime)
         stage.draw()

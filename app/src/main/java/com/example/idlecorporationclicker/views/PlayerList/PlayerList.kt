@@ -24,6 +24,9 @@ import com.example.idlecorporationclicker.views.ScreenTemplate
 class PlayerList(var attack: IAttack,
                  override var game: Game, override var gsm: GameStateManager
 ) : ScreenTemplate(gsm, game) {
+
+    private val screenHeight = Gdx.graphics.height.toFloat()
+    private val screenWidth = Gdx.graphics.width.toFloat()
     private var topWrapper: Table
     private var attackLabel: Label
     private var startTime: Long
@@ -45,6 +48,7 @@ class PlayerList(var attack: IAttack,
     private val defenseLabel = Label("Defense", fontStyle)
     private val moneyLabel = Label("Money", fontStyle)
     private val successLabel = Label("Success", fontStyle)
+    private var menuTitle : Label
 
 
     init {
@@ -82,6 +86,7 @@ class PlayerList(var attack: IAttack,
         stage.addActor(bottom)
         stage.addActor(MusicPlayer.getMusicButtonTable())
         generateTopBar(stage, SCREEN.PlayerList, batch)
+        menuTitle = Label("MENU", fontStyle)
     }
 
     fun createAttackLabelText() : String{
@@ -165,6 +170,17 @@ class PlayerList(var attack: IAttack,
                 Gdx.graphics.height.toFloat()
             )
             updateTopBar(batch)
+            if (menuOpen) {
+                batch.draw(menuBG, 0f, screenHeight/3.5f, screenWidth, screenHeight/2)
+                stage.addActor(MusicPlayer.musicBtn)
+                MusicPlayer.musicBtn.isVisible = true
+                stage.addActor(menuTitle)
+                menuTitle.isVisible = true
+                menuTitle.setPosition(425f, 1715f)
+            } else {
+                MusicPlayer.musicBtn.isVisible = false
+                menuTitle.isVisible = false
+            }
             batch.end()
             stage.act(Gdx.graphics.deltaTime)
             stage.draw()

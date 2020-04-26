@@ -19,7 +19,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.states.SCREEN
-import com.example.idlecorporationclicker.views.MenuScreen.MenuScreen
 
 abstract class ScreenTemplate (gsm: GameStateManager, game : Game) : Screen {
     public var cam : OrthographicCamera

@@ -14,16 +14,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.TimeUtils
 import com.example.idlecorporationclicker.controllers.commands.player.PlayerController
-import com.example.idlecorporationclicker.models.audio.MusicPlayer
+import com.example.idlecorporationclicker.models.audio.MusicPlayer.musicBtn
 import com.example.idlecorporationclicker.models.cookie.CookieClicker
-import com.example.idlecorporationclicker.models.player.Player
 import com.example.idlecorporationclicker.states.BuildingScreen.BuildingScreen
 import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.states.SCREEN
 import com.example.idlecorporationclicker.views.ScreenTemplate
 import com.example.idlecorporationclicker.views.AttackScreen.AttackScreen
-import com.example.idlecorporationclicker.views.MenuScreen.MenuScreen
-
 
 class MainScreen(override var game: Game, override var gsm: GameStateManager) : ScreenTemplate(gsm, game) {
 
@@ -44,6 +41,7 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
     private var defense: Label
     private var cookieManager : CookieClicker
     private var playerController : PlayerController
+    private var menuTitle : Label
 
     init {
         background = Texture("backgrounds/1x/background-basemdpi.png")
@@ -57,6 +55,7 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         cookieManager = CookieClicker()
         playerController = PlayerController(gsm.player, this)
         menuOpen = false
+        menuTitle = Label("MENU", fontStyle)
 
         var incomeStr: Label = Label("Buildings", fontStyle)
         var attackStr: Label = Label("Attack", fontStyle)
@@ -119,11 +118,21 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         statsTable.setFillParent(true)
         statsTable.top()
 
-        stage.addActor(MusicPlayer.getMusicButtonTable())
         stage.addActor(buildingTable)
         stage.addActor(clickerTable)
 //        stage.addActor(statsTable)
         generateTopBar(stage, SCREEN.MainScreen, batch)
+        if (menuOpen) {
+            batch.draw(menuBG, 0f, screenHeight/3.5f, screenWidth, screenHeight/2)
+            stage.addActor(musicBtn)
+            musicBtn.isVisible = true
+            stage.addActor(menuTitle)
+            menuTitle.isVisible = true
+            menuTitle.setPosition(425f, 1715f)
+        } else {
+            musicBtn.isVisible = false
+            menuTitle.isVisible = false
+        }
     }
 
     fun updateMoney() {
@@ -145,8 +154,15 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         batch.draw(background, 0f, 0f, screenWidth, screenHeight)
         updateTopBar(batch)
         if (menuOpen) {
-            Log.d("test", "if true")
-            batch.draw(menuBG, 0f, screenHeight/3, screenWidth, screenHeight/2)
+            batch.draw(menuBG, 0f, screenHeight/3.5f, screenWidth, screenHeight/2)
+            stage.addActor(musicBtn)
+            musicBtn.isVisible = true
+            stage.addActor(menuTitle)
+            menuTitle.isVisible = true
+            menuTitle.setPosition(425f, 1715f)
+        } else {
+            musicBtn.isVisible = false
+            menuTitle.isVisible = false
         }
         batch.end()
         stage.act(Gdx.graphics.deltaTime)
