@@ -71,7 +71,7 @@ class Player : IPlayer {
 
     fun buyBuilding(building: IBuilding) : Boolean {
         if(building.calculateUpgradeCost() < money) {
-            money - building.calculateUpgradeCost()
+            money -= building.calculateUpgradeCost().toLong()
             building.upgrade()
             return true
         }
