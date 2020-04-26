@@ -1,5 +1,6 @@
 package com.example.idlecorporationclicker.models.building
 
+import android.util.Log
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.ui.Image
@@ -43,6 +44,7 @@ class DefenseBuilding (override var level : Double) :
         value = calculateValue()
         upgradeCost = calculateUpgradeCost()
         Database.buildingUpdateDefense()
+        Log.d("lvl", level.toString())
     }
 
 }

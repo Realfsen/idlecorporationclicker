@@ -7,6 +7,7 @@ import com.example.idlecorporationclicker.views.PlayerList.PlayerList
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.*
@@ -27,7 +28,13 @@ object Database: IDatabase {
     private var nextTimeToSync: Long = Date().time + SYNC_DELAY_SECONDS
     private var timeLastSyncedFromDatabase: Date? = null
 
+
     init {
+        val settings = FirebaseFirestoreSettings.Builder()
+            .setPersistenceEnabled(true)
+            .build()
+        db.firestoreSettings = settings
+
         val user: FirebaseUser? = auth.currentUser
         if (user != null) {
             name = user.displayName.toString()
@@ -39,9 +46,6 @@ object Database: IDatabase {
         goOnline()
     }
 
-    fun start() {
-
-    }
 
     fun createOponentCollection(playerList: PlayerList) : MutableCollection<PlayerOpponent> {
         this.playerList = playerList
@@ -80,22 +84,44 @@ object Database: IDatabase {
     }
 
     override fun buildingUpdateIncome() {
-        firestoreUpdateUsersSomething("income", localPlayer!!.passiveIncomeBuilding.level)
-        updateTimeLastSyncedInDatabase()
+//        firestoreUpdateUsersSomething("income", localPlayer!!.passiveIncomeBuilding.level)
+//        updateTimeLastSyncedInDatabase()
+//        firestoreUpdateUsersMoney()
+        buildingUpdate()
     }
 
     override fun buildingUpdateAttack() {
-        firestoreUpdateUsersSomething("attack", localPlayer!!.attackBuilding.level)
-        updateTimeLastSyncedInDatabase()
+//        firestoreUpdateUsersSomething("attack", localPlayer!!.attackBuilding.level)
+//        updateTimeLastSyncedInDatabase()
+//        firestoreUpdateUsersMoney()
+        buildingUpdate()
     }
 
     override fun buildingUpdateDefense() {
+//        firestoreUpdateUsersSomething("defense", localPlayer!!.defenseBuilding.level)
+//        updateTimeLastSyncedInDatabase()
+//        firestoreUpdateUsersMoney()
+        buildingUpdate()
+    }
+
+    fun buildingUpdate() {
+        firestoreUpdateUsersSomething("income", localPlayer!!.passiveIncomeBuilding.level)
         firestoreUpdateUsersSomething("defense", localPlayer!!.defenseBuilding.level)
-        updateTimeLastSyncedInDatabase()
+        firestoreUpdateUsersSomething("attack", localPlayer!!.attackBuilding.level)
+
+        firestoreUpdateUsersMoney()
+
     }
 
     override fun updateTimeLastSyncedInDatabase() {
-        firestoreUpdateUsersSomething("timeLastSynced", Date())
+        val date = Date()
+        firestoreUpdateUsersSomething("timeLastSynced", date)
+        timeLastSyncedFromDatabase = date
+
+    }
+
+    private fun timeLastSyncedFromDatabase(date: Date) {
+
     }
 
 
@@ -214,6 +240,9 @@ object Database: IDatabase {
         db.collection("users")
             .document(uid)
             .update("money", localPlayer?.money)
+            .addOnSuccessListener {
+                updateTimeLastSyncedInDatabase()
+            }
     }
 
     private fun firestoreUpdateUsersSomething(something: String, value: Any) {
@@ -221,6 +250,7 @@ object Database: IDatabase {
             .document(uid)
             .update(something, value)
     }
+
 
 
 // ------------------------------------------- Firebase realtime database ------------------------------------------- \\
