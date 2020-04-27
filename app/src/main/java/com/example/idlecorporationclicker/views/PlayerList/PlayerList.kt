@@ -30,6 +30,8 @@ class PlayerList(var attack: IAttack,
 ) : ScreenTemplate(gsm, game) {
 
     private var playerController: PlayerController
+    private val screenHeight = Gdx.graphics.height.toFloat()
+    private val screenWidth = Gdx.graphics.width.toFloat()
     private var shieldSymbol: Image
     private var cashSymbol: Image
     private var topWrapper: Table
