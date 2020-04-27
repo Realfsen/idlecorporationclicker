@@ -43,7 +43,6 @@ object Database: IDatabase {
             uid =  user.uid
         }
         Log.d("User: ", name + email + uid)
-        firestoreGetUser()
         goOnline()
     }
 
@@ -67,7 +66,8 @@ object Database: IDatabase {
     }
 
     override fun initiateLocalPlayer(player: Player) {
-        firestoreGetUser()
+        player.uid = uid
+        DatabaseGetPlayer(player, true)
         localPlayer = player;
     }
     
@@ -137,11 +137,28 @@ object Database: IDatabase {
     }
 
     fun getPlayerMoney(player: IPlayer) {
-        
+        player.lastSynched
+    }
+
+    fun stealFromPlayer(player: IPlayer, amountOfMoneyToSteal: Long) {
+        db.collection("users")
+            .document(player.uid)
+            .get()
+            .addOnSuccessListener { userDocument ->
+                if(userDocument.data == null) {
+                    firestoreCreateUser()
+                } else {
+                    val moneyStolen : Long? = userDocument.getLong("moneyStolen")
+                    if (moneyStolen != null) {
+                        databaseUpdateUsersSomething(player, "moneyStolen", moneyStolen + amountOfMoneyToSteal)
+                    }
+                }
+            }
     }
 
 
     // -------------------------------------------     Firebase Firestire     ------------------------------------------- \\
+
 
     private fun populateOpponentList() {
         db.collection("users")
@@ -156,6 +173,8 @@ object Database: IDatabase {
                     val defense : Double? = userDocument.getDouble("defense")
                     val income : Double? = userDocument.getDouble("income")
                     val timeLastSynced : Date? = userDocument.getDate("timeLastSynced")
+                    val moneyStolen : Long? = userDocument.getLong("moneyStolen")
+
                     if (money != null) {
                         if (name != null) {
                             if (attack != null) {
@@ -169,9 +188,14 @@ object Database: IDatabase {
                                                     money,
                                                     timeLastSynced
                                                 )
+                                            opponent.uid = userDocument.id
                                             opponent.attackBuilding.setBuildingsStartLevel(attack)
                                             opponent.defenseBuilding.setBuildingsStartLevel(defense)
                                             opponent.passiveIncomeBuilding.setBuildingsStartLevel(income)
+                                            opponent.addMoneySinceLastSynchedExternally(timeLastSynced)
+                                            if (moneyStolen != null) {
+                                                opponent.money -= moneyStolen
+                                            }
                                             playerList!!.players.add(opponent)
                                         }
                                     }
@@ -185,44 +209,48 @@ object Database: IDatabase {
             }
     }
 
-    private fun firestoreGetUser() {
+    private fun DatabaseGetPlayer(player: Player, isLocal: Boolean) {
         db.collection("users")
-            .document(uid)
+            .document(player.uid)
             .get()
             .addOnSuccessListener { userDocument ->
-//                Log.d("TAG", "${userDocument.id} => ${userDocument.data}")
                 if(userDocument.data == null) {
                     firestoreCreateUser()
                 } else {
+                    val name : String? = userDocument.getString("name")
                     val money : Long? = userDocument.getLong("money")
                     val attack : Double? = userDocument.getDouble("attack")
                     val defense : Double? = userDocument.getDouble("defense")
                     val income : Double? = userDocument.getDouble("income")
                     val lastSynced : Date? = userDocument.getDate("timeLastSynced")
+                    val moneyStolen : Long? = userDocument.getLong("moneyStolen")
 
+                    if (name != null) {
+                        player.name = name
+                    }
                     if (money != null) {
-                        localPlayer!!.money = money
+                        player.money = money
                     }
                     if (attack != null) {
-                        localPlayer!!.attackBuilding.setBuildingsStartLevel(attack)
+                        player.attackBuilding.setBuildingsStartLevel(attack)
                     }
                     if (defense != null) {
-                        localPlayer!!.defenseBuilding.setBuildingsStartLevel(defense)
+                        player.defenseBuilding.setBuildingsStartLevel(defense)
                     }
                     if (income != null) {
-                        localPlayer!!.passiveIncomeBuilding.setBuildingsStartLevel(income)
+                        player.passiveIncomeBuilding.setBuildingsStartLevel(income)
                     }
                     if (lastSynced != null) {
-//                        timeLastSyncedFromDatabase = lastSynced
-                        localPlayer!!.addMoneySinceLastSynchedExternally(lastSynced)
-                    } else {
-//                        timeLastSyncedFromDatabase = Date()
+                        player.addMoneySinceLastSynchedExternally(lastSynced)
+                        if (moneyStolen != null) {
+                            player.money -= moneyStolen
+                            if (isLocal)
+                                databaseResetMoneyStolen(player)
+                                DatabaseUpdateUsersMoney(player)
+                        }
                     }
-                    localPlayer!!.name = this.name
+
                 }
-            }
-            .addOnFailureListener { exception ->
-                Log.w("TAG", "Error getting documents.", exception)
             }
     }
 
@@ -256,6 +284,7 @@ object Database: IDatabase {
             "income" to 15,
             "attack" to 0,
             "defense" to 0,
+            "moneyStolen" to 0,
             "timeLastSynced" to Date()
 
         )
@@ -270,6 +299,28 @@ object Database: IDatabase {
             .addOnFailureListener { e ->
                 Log.w("TAG", "Error adding document", e)
             }
+    }
+
+    fun databaseResetMoneyStolen(player: IPlayer) {
+//        var stolenMoney: Long = 0
+//        db.collection("users")
+//            .document(player.uid)
+//            .get()
+//            .addOnSuccessListener { userDocument ->
+//                if(userDocument.data == null) {
+//                    firestoreCreateUser()
+//                } else {
+//                    val money : Long? = userDocument.getLong("money")
+//                    val moneyStolen : Long? = userDocument.getLong("moneyStolen")
+//
+//                    if (moneyStolen != null) {
+//
+//                    }
+//                }
+//            }
+        db.collection("users")
+            .document(player.uid)
+            .update("moneyStolen", 0)
     }
 
     private fun firestoreUpdateUser() {
@@ -288,12 +339,26 @@ object Database: IDatabase {
             }
     }
 
+    private fun DatabaseUpdateUsersMoney(player: IPlayer) {
+        db.collection("users")
+            .document(player.uid)
+            .update("money", player.money)
+            .addOnSuccessListener {
+                updateTimeLastSyncedInDatabase()
+            }
+    }
+
     private fun firestoreUpdateUsersSomething(something: String, value: Any) {
         db.collection("users")
             .document(uid)
             .update(something, value)
     }
 
+    private fun databaseUpdateUsersSomething(player: IPlayer, something: String, value: Any) {
+        db.collection("users")
+            .document(player.uid)
+            .update(something, value)
+    }
 
 
 // ------------------------------------------- Firebase realtime database ------------------------------------------- \\

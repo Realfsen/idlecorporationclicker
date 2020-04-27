@@ -45,10 +45,6 @@ class StartMenu(override var game: Game, override var gsm: GameStateManager) : S
         var tableWidth : Float = screenWidth/2f
         var tableHeight : Float = 200f
 
-        /**
-         * Henter navnet fra innloggingen, så trenger ikke sette eget brukernavn
-         * (Fjern denne kommentaren før innlevering)
-         */
         loginBtn = TextButton("Start", uiSkin)
         uiSkin.getFont("default-font").getData().setScale(5f)
 

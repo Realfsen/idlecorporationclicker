@@ -14,7 +14,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 class Player : IPlayer {
-
+    override var uid: String = ""
     override var name: String = ""
     override var lastSynched: Date = Date()
     var lastAttack: Date = Date()
@@ -33,10 +33,6 @@ class Player : IPlayer {
             field = value
             Database.playerUpdateMoney()
         }
-
-    fun moneyPerSecond() : Double {
-        return passiveIncomeBuilding.value
-    }
 
     fun canAttack() : Boolean {
         var synchedNow = Date()
@@ -69,7 +65,7 @@ class Player : IPlayer {
         Database.SyncMoneyWithFirestoreController()
     }
 
-    fun addMoneySinceLastSynchedExternally(lastSynched: Date) {
+    override fun addMoneySinceLastSynchedExternally(lastSynched: Date) {
         addMoneySinceLastSynched(lastSynched)
         Database.forceMoneySync()
     }
