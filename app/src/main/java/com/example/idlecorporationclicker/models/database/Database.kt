@@ -106,7 +106,8 @@ object Database: IDatabase {
                     }
                 }
             }
-        localPlayerList!!.updatePlayers()
+        if (localPlayerList != null)
+            localPlayerList!!.updatePlayers()
     }
 
     fun populateOpponentList(playerList: PlayerList) {
@@ -114,7 +115,7 @@ object Database: IDatabase {
         db.collection("users")
             .get()
             .addOnSuccessListener { userCollection ->
-                playerList.players.clear()
+                playerList.players = playerList.createEmptyOponentCollection()
                 for (userDocument in userCollection) {
                     if (localPlayer!!.uid.equals(userDocument.id)) continue
 
