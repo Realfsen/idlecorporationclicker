@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.TimeUtils
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.example.idlecorporationclicker.controllers.attack.AttackPlayerCommand
@@ -74,7 +75,7 @@ class PlayerList(var attack: IAttack,
         chosenAttackStr = Label("Chosen attack: "+attack.type, fontStyle)
         stage = Stage()
         batch = SpriteBatch()
-        cashSymbol = Image(TextureRegion(gui, 1985, 4810, 145, 245))
+        cashSymbol = Image(TextureRegion(gui, 1985, 4700, 145, 245))
         shieldSymbol = Image(TextureRegion(gui, 1680, 4810, 110, 145))
         cashSymbol.scaleY = 4f
         shieldSymbol.scaleY = 2f
@@ -137,7 +138,7 @@ class PlayerList(var attack: IAttack,
         playerTable.row().pad(10f)
         playerTable.add(name).fillX().width(width)
         playerTable.add(defense).fillX().width(width).height(defense.height)
-        playerTable.add(money).grow().expandX().width(money.width).height(money.height)
+        playerTable.add(money).fillX().width(width).height(money.height)
         playerTable.add(successChance).fillX().width(width)
         playerTable.add(btn).fillX().width(width)
 
@@ -154,10 +155,12 @@ class PlayerList(var attack: IAttack,
     }
 
     fun generateTable() {
+        playerTable.setDebug(true)
         playerTable.setWidth(Gdx.graphics.width.toFloat())
         playerTable.top()
         playerTable.add(nameLabel).fillX();
         playerTable.add(shieldSymbol)
+        cashSymbol.setAlign(Align.bottom)
         playerTable.add(cashSymbol)
         playerTable.add(successLabel).fillX();
         players.forEach() {
