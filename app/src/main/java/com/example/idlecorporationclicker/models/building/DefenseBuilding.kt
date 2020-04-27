@@ -20,6 +20,7 @@ class DefenseBuilding (override var level : Double) :
         type = BuildingType.DEFENSE;
         name = "Defense Building"
         image = Image(Texture(Gdx.files.internal("buildings/income/0.75x/building3ldpi.png")))
+//        image = Image(Texture(Gdx.files.internal("buildings/attack/base/1x/basemdpipol.png")))
     }
 
     override fun calculateValue() : Double{

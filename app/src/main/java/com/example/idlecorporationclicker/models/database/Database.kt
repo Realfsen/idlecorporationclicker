@@ -1,6 +1,7 @@
 package com.example.idlecorporationclicker.models.database
 
 import android.util.Log
+import com.example.idlecorporationclicker.models.player.IPlayer
 import com.example.idlecorporationclicker.models.player.Player
 import com.example.idlecorporationclicker.models.player.PlayerOpponent
 import com.example.idlecorporationclicker.views.PlayerList.PlayerList
@@ -133,6 +134,10 @@ object Database: IDatabase {
         if (lastSynced != null) {
             localPlayer!!.addMoneySinceLastSynchedExternally(lastSynced)
         }
+    }
+
+    fun getPlayerMoney(player: IPlayer) {
+        
     }
 
 

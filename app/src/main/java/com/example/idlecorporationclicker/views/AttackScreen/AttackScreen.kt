@@ -50,6 +50,7 @@ class AttackScreen(
 
     init {
         background = Texture(Gdx.files.internal("backgrounds/1x/background-attackmdpi.png"))
+//        player = Image(Texture(Gdx.files.internal("cookie/1x/cookiemdpi_org.png")))
         player = Image(Texture(Gdx.files.internal("attacks/1x/playermdpi.png")))
         attack = Image(Texture(Gdx.files.internal("attacks/1x/stealmdpi.png")))
         sabotage = Image(Texture(Gdx.files.internal("attacks/1x/politicsmdpi.png")))

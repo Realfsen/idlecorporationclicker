@@ -77,7 +77,7 @@ class PlayerList(var attack: IAttack,
         stage = Stage()
         batch = SpriteBatch()
         gui = Texture(Gdx.files.internal("freegui/png/Window.png"))
-        cashSymbol = Image(TextureRegion(gui, 1985, 4810, 95, 145))
+        cashSymbol = Image(TextureRegion(gui, 1985, 4810, 45, 245))
         shieldSymbol = Image(TextureRegion(gui, 1680, 4810, 110, 145))
 
         players = Database.createOponentCollection(this)
