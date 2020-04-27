@@ -35,7 +35,6 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
     private var playerController : PlayerController
     private var menuActor : MenuActor
 
-
     init {
         background = Texture(Gdx.files.internal("backgrounds/1x/background-basemdpi.png"))
         stage = Stage(ScreenViewport(cam))
@@ -45,7 +44,6 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
         moneyStr = Label("Cash: "+gsm.player.money, fontStyle)
         startTime = TimeUtils.nanoTime()
         playerController = PlayerController(gsm.player, this)
-
 
         buildStatsTable()
         buildAllBuildings()
@@ -58,23 +56,23 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
     }
 
     fun buildingTemplate(building : IBuilding, type: BuildingType, labelPrefix : String) : HorizontalGroup {
-        var buyBuilding = BuyBuildingCommand(gsm.player, building, this)
-        var buyButton = TextButton("Buy: "+building.upgradeCost.toInt(), uiSkin)
+        val buyBuilding = BuyBuildingCommand(gsm.player, building, this)
+        val buyButton = TextButton("Buy: "+building.upgradeCost.toInt(), uiSkin)
         buyButton.isTransform = true
-        buyButton.scaleBy(2f)
+        buyButton.scaleBy(2.5f)
         if(!buyBuilding.CanExecute()) {
             buyButton.color = Color.RED
         }
-        var LevelLabel = Label(building.level.toInt().toString(), fontStyle )
-        var leftTable= VerticalGroup().pad(5f)
+        val LevelLabel = Label(building.level.toInt().toString(), fontStyle)
+        val leftTable= VerticalGroup().pad(20f)
         leftTable.addActor(building.image)
         leftTable.addActor(LevelLabel)
 
-        var rightTable = VerticalGroup().pad(5f)
+        val rightTable = VerticalGroup().pad(20f).space(100f)
         rightTable.addActor(Label(labelPrefix+building.value.toInt(), fontStyle))
         rightTable.addActor(buyButton)
 
-        var group = HorizontalGroup().pad(5f)
+        val group = HorizontalGroup().pad(20f)
         group.addActor(leftTable)
         group.addActor(rightTable)
 
@@ -94,9 +92,9 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
     fun buildAllBuildings() {
             wholeGroup.add(buildingTemplate(gsm.player.passiveIncomeBuilding, BuildingType.INCOME, "$ "))
             wholeGroup.row()
-            wholeGroup.add(buildingTemplate(gsm.player.attackBuilding, BuildingType.ATTACK, "Attack power  "))
+            wholeGroup.add(buildingTemplate(gsm.player.attackBuilding, BuildingType.ATTACK, "Attack  "))
             wholeGroup.row()
-            wholeGroup.add(buildingTemplate(gsm.player.defenseBuilding, BuildingType.DEFENSE, "Defense power "))
+            wholeGroup.add(buildingTemplate(gsm.player.defenseBuilding, BuildingType.DEFENSE, "Defense  "))
             wholeGroup.row()
     }
 

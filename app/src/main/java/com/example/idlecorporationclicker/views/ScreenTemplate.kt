@@ -28,12 +28,14 @@ abstract class ScreenTemplate (gsm: GameStateManager, game : Game) : Screen {
 
     private var generator : FreeTypeFontGenerator
     private var parameter : FreeTypeFontGenerator.FreeTypeFontParameter
+    private var smolParameter : FreeTypeFontGenerator.FreeTypeFontParameter
     var fontStyle : Label.LabelStyle = Label.LabelStyle()
+    var smolFontStyle : Label.LabelStyle = Label.LabelStyle()
 
     private val screenHeight = Gdx.graphics.height.toFloat()
     private val screenWidth = Gdx.graphics.width.toFloat()
     private var gui: Texture
-    public var topBar : TextureRegion
+    var topBar : TextureRegion
     private var cashSymbol : TextureRegion
     private var shieldSymbol : TextureRegion
     private var starSymbol : TextureRegion
@@ -57,6 +59,7 @@ abstract class ScreenTemplate (gsm: GameStateManager, game : Game) : Screen {
         /* START FONT GENERATOR */
         generator = FreeTypeFontGenerator(Gdx.files.internal("fonts/signika/Signika-Bold.ttf"))
         parameter = FreeTypeFontGenerator.FreeTypeFontParameter()
+        smolParameter = FreeTypeFontGenerator.FreeTypeFontParameter()
         /* FONT PARAMETERS */
         parameter.size = 60
         parameter.borderWidth = 7f
@@ -66,8 +69,19 @@ abstract class ScreenTemplate (gsm: GameStateManager, game : Game) : Screen {
         parameter.shadowOffsetY = 1
 
         val signika : BitmapFont = generator.generateFont(parameter)
-        generator.dispose()
+//        generator.dispose()
         fontStyle.font = signika
+
+        smolParameter.size = 30
+        smolParameter.borderWidth = 2f
+        smolParameter.borderColor = Color.ORANGE
+        smolParameter.shadowColor = Color(0f, 0f, 0f, 0.75f)
+        smolParameter.shadowOffsetX = 1
+        smolParameter.shadowOffsetY = 1
+
+        val smol : BitmapFont = generator.generateFont(smolParameter)
+        generator.dispose()
+        smolFontStyle.font = smol
         /* END FONT GENERATOR */
 
         /* BEGIN TOP BAR */
