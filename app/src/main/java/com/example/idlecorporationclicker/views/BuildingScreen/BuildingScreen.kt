@@ -69,6 +69,7 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
         val incCost = Label("$ "+building.upgradeCost.toInt(), fontStyle)
         val downCost = Label("$ "+building.upgradeCost.toInt(), fontStyle)
         val disCost = Label("$ "+building.upgradeCost.toInt(), fontStyle)
+
         val buttonGrp = Group()
         buttonGrp.addActor(newBuyButton)
         buttonGrp.addActor(incCost)

@@ -94,7 +94,7 @@ abstract class ScreenTemplate (gsm: GameStateManager, game : Game) : Screen {
         starSymbol = TextureRegion(gui, 1830, 4810, 135, 130)
         numberBar = TextureRegion(gui, 3699, 4294, 210, 58)
         cash = Label(gsm.player.money.toInt().toString(), fontStyle)
-        cashSec = Label(gsm.player.moneyPerSecond().toInt().toString(), fontStyle)
+        cashSec = Label(gsm.player.moneyPerSecond().toInt().toString()+" /s", fontStyle)
         defense = Label(gsm.player.defense().toInt().toString(), fontStyle)
         attack = Label(gsm.player.attack().toInt().toString(), fontStyle)
         buttons = Texture(Gdx.files.internal("freegui/png/Button.png"))

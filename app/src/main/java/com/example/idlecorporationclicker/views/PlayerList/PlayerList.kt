@@ -87,8 +87,8 @@ class PlayerList(var attack: IAttack,
 
         topWrapper = Table()
         topWrapper.setPosition(0f, screenHeight-screenHeight/6-topBar.regionHeight-300f)
-        topWrapper.add(attackLabel)
-        topWrapper.row().padTop(30f)
+        topWrapper.add(attackLabel).space(50f)
+        topWrapper.row().padTop(50f)
         //topWrapper.top()
         //topWrapper.setFillParent(true)
         topWrapper.setWidth(Gdx.graphics.width.toFloat())
