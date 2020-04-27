@@ -141,7 +141,12 @@ class PlayerList(var attack: IAttack,
         val name = Label(defender.name, smolFontStyle)
         val defense = Label(defender.defense().toInt().toString(), smolFontStyle)
         val successChance = Label(attack.calculateSuccess(attacker, defender).toString()+"%", smolFontStyle)
-        val money = Label(defender.money.toInt().toString(), smolFontStyle)
+        var tempMoney = defender.money.toInt()
+        var moneyString = tempMoney.toString()
+        if(tempMoney > 1000) {
+            moneyString= (defender.money.toInt()/1000).toString()+"k"
+        }
+        val money = Label(moneyString, smolFontStyle)
         val attackCommand =
             AttackPlayerCommand(
                 attacker,
@@ -155,7 +160,7 @@ class PlayerList(var attack: IAttack,
         playerTable.add(name).fillX().width(width)
         playerTable.add(defense).fillX().width(width).height(defense.height)
         playerTable.add(money).fillX().width(width).height(money.height)
-        playerTable.add(successChance).fillX().width(width)
+        playerTable.add(successChance).width(width)
         playerTable.add(btn).fillX().width(width)
 
 
@@ -177,7 +182,7 @@ class PlayerList(var attack: IAttack,
         playerTable.add(shieldSymbol)
         cashSymbol.setAlign(Align.bottom)
         playerTable.add(cashSymbol)
-        playerTable.add(successLabel).fillX();
+        playerTable.add(successLabel).width(screenWidth/6).right()
         players.forEach() {
             createNewPlayerRow(gsm.player, it)
         }
