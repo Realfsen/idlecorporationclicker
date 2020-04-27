@@ -148,7 +148,7 @@ class PlayerList(var attack: IAttack,
         playerTable.add(name).fillX().width(width)
         playerTable.add(defense).fillX().width(width).height(defense.height)
         playerTable.add(money).fillX().width(width).height(money.height)
-        playerTable.add(successChance).expandX().right()
+        playerTable.add(successChance).width(width)
         playerTable.add(btn).fillX().width(width)
 
 
