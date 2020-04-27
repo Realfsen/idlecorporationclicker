@@ -23,20 +23,20 @@ import com.example.idlecorporationclicker.models.player.PlayerOpponent
 import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.views.actors.MenuActor
 import com.example.idlecorporationclicker.views.ScreenTemplate
+import java.util.*
 
 class PlayerList(var attack: IAttack,
                  override var game: Game, override var gsm: GameStateManager
 ) : ScreenTemplate(gsm, game) {
 
     private var playerController: PlayerController
-    private val screenHeight = Gdx.graphics.height.toFloat()
-    private val screenWidth = Gdx.graphics.width.toFloat()
     private var shieldSymbol: Image
     private var cashSymbol: Image
     private var topWrapper: Table
     private var tableContainer: Container<Table>
     private var attackLabel: Label
     private var startTime: Long
+    private var startTimeListUpdate: Long
     private var bottom: Table
     private var chosenAttackStr: Label
     private var attackStr: Label
@@ -44,7 +44,6 @@ class PlayerList(var attack: IAttack,
     private var findPlayerStr: Label
     private var background : Texture
     private var playerTable : Table
-    //private var chosenAttack: AttackScreen.attackType
     private var batch : SpriteBatch
     private var stage: Stage
 
@@ -61,6 +60,7 @@ class PlayerList(var attack: IAttack,
         playerTable = Table()
 
         startTime = TimeUtils.nanoTime()
+        startTimeListUpdate = TimeUtils.nanoTime()
         tableContainer = Container<Table>()
 
         var screenHeight = Gdx.graphics.height.toFloat()
@@ -83,15 +83,14 @@ class PlayerList(var attack: IAttack,
 
         playerController = PlayerController(gsm.player, this)
 
-        players = Database.createOponentCollection(this)
+        players = createEmptyOponentCollection()
+        Database.populateOpponentList(this)
         attackLabel = Label(createAttackLabelText(), smolFontStyle);
 
         topWrapper = Table()
         topWrapper.setPosition(0f, screenHeight-screenHeight/6-topBar.regionHeight-300f)
         topWrapper.add(attackLabel).space(50f)
         topWrapper.row().padTop(50f)
-        //topWrapper.top()
-        //topWrapper.setFillParent(true)
         topWrapper.setWidth(Gdx.graphics.width.toFloat())
         generateTable()
         topWrapper.add(playerTable)
@@ -99,17 +98,17 @@ class PlayerList(var attack: IAttack,
         bottom.add(chosenAttackStr)
         bottom.bottom().padBottom(30f)
         bottom.setFillParent(true)
-        //tableContainer.setActor(topWrapper)
         stage.addActor(topWrapper)
         stage.addActor(bottom)
         generateTopBar(stage)
         menuActor =
             MenuActor(gsm)
         stage.addActor(menuActor.getActor())
+
     }
 
     fun updatePlayers() {
-        players = Database.createOponentCollection(this)
+        Database.populateOpponentList(this)
     }
 
     fun createAttackLabelText() : String{
@@ -117,6 +116,19 @@ class PlayerList(var attack: IAttack,
             return "You can attack in: "+gsm.player.secondsTillAttack()+" seconds"
         }
         return "You can attack now!"
+    }
+
+    fun createEmptyOponentCollection() : MutableCollection<PlayerOpponent> {
+        var dummyPlayer =
+            PlayerOpponent(
+                "-",
+                "-",
+                0,
+                Date()
+            )
+        var players: MutableCollection<PlayerOpponent> = mutableListOf(dummyPlayer)
+        players.clear()
+        return players
     }
 
     fun createNewPlayerRow(attacker: Player, defender: IPlayer) {
@@ -150,7 +162,6 @@ class PlayerList(var attack: IAttack,
         btn.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
                 println(attack.calculateSuccess(attacker, defender))
-                updatePlayers()
                 gsm.commandManager.Invoke(attackCommand)
             }
             override fun touchDown(e : InputEvent, x : Float, y : Float, Point : Int, button : Int): Boolean {
@@ -170,9 +181,6 @@ class PlayerList(var attack: IAttack,
         players.forEach() {
             createNewPlayerRow(gsm.player, it)
         }
-
-        //playerTable.top().padTop(100f)
-        //playerTable.setWidth(Gdx.graphics.width.toFloat())
     }
 
 
@@ -189,6 +197,10 @@ class PlayerList(var attack: IAttack,
         if (TimeUtils.timeSinceNanos(startTime) > 1000000000) {
             startTime = TimeUtils.nanoTime();
             playerController.addMoneySinceLastSynch()
+        }
+        if (TimeUtils.timeSinceNanos(startTimeListUpdate) > 5000000000) {
+            updatePlayers()
+            startTimeListUpdate = TimeUtils.nanoTime();
         }
             batch.begin()
             batch.draw(

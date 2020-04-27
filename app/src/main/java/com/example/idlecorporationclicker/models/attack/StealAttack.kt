@@ -34,6 +34,6 @@ class StealAttack : IAttack {
     }
 
     private fun doSteal(player: Player, defender: IPlayer) {
-        player.getStolenMoney(defender.stealFromThisPlayer(0.7))
+        player.getStolenMoney(defender.stealFromThisPlayer(0.3))
     }
 }

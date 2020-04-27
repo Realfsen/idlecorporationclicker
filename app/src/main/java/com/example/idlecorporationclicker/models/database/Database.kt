@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.idlecorporationclicker.models.player.IPlayer
 import com.example.idlecorporationclicker.models.player.Player
 import com.example.idlecorporationclicker.models.player.PlayerOpponent
+import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.views.PlayerList.PlayerList
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -19,6 +20,7 @@ object Database: IDatabase {
 
     private var uid: String = ""
     private var localPlayer: Player? = null
+    private var localPlayerList: PlayerList? = null
 
 
     init {
@@ -31,22 +33,6 @@ object Database: IDatabase {
         if (user != null) {
             uid =  user.uid
         }
-    }
-
-    fun createOponentCollection(playerList: PlayerList) : MutableCollection<PlayerOpponent> {
-        var dummyPlayer =
-            PlayerOpponent(
-                "-",
-                "-",
-                0,
-                Date()
-            )
-        var players: MutableCollection<PlayerOpponent> = mutableListOf(dummyPlayer)
-        players.clear()
-
-        populateOpponentList(playerList)
-
-        return players
     }
 
     override fun initiateLocalPlayer(player: Player) {
@@ -120,12 +106,15 @@ object Database: IDatabase {
                     }
                 }
             }
+        localPlayerList!!.updatePlayers()
     }
 
-    private fun populateOpponentList(playerList: PlayerList) {
+    fun populateOpponentList(playerList: PlayerList) {
+        localPlayerList = playerList
         db.collection("users")
             .get()
             .addOnSuccessListener { userCollection ->
+                playerList.players.clear()
                 for (userDocument in userCollection) {
                     if (localPlayer!!.uid.equals(userDocument.id)) continue
 
@@ -165,6 +154,14 @@ object Database: IDatabase {
                             }
                         }
                     }
+                }
+                val _sortedPlayerList = playerList.players.sortedByDescending {
+                    it.money
+                }
+                playerList.players.clear()
+
+                _sortedPlayerList.forEach{
+                    playerList.players.add(it)
                 }
             }
     }
