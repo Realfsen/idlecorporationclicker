@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.TimeUtils
 import com.example.idlecorporationclicker.controllers.player.PlayerController
-import com.example.idlecorporationclicker.models.cookie.CookieClicker
+import com.example.idlecorporationclicker.views.actors.CookieClicker
 import com.example.idlecorporationclicker.states.BuildingScreen.BuildingScreen
 import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.states.SCREEN
@@ -61,7 +61,8 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         clickerTable = Table()
         statsTable = Table()
         startTime = TimeUtils.nanoTime()
-        cookieManager = CookieClicker()
+        cookieManager =
+            CookieClicker()
         playerController = PlayerController(gsm.player, this)
         menuOpen = false
         menuTitle = Label("MENU", fontStyle)
