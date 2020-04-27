@@ -75,9 +75,9 @@ class PlayerList(var attack: IAttack,
         chosenAttackStr = Label("Chosen attack: "+attack.type, fontStyle)
         stage = Stage()
         batch = SpriteBatch()
-        cashSymbol = Image(TextureRegion(gui, 1985, 4700, 145, 245))
+        cashSymbol = Image(TextureRegion(gui, 1985, 4810, 145, 145))
         shieldSymbol = Image(TextureRegion(gui, 1680, 4810, 110, 145))
-        cashSymbol.scaleY = 4f
+        cashSymbol.scaleY = 2f
         shieldSymbol.scaleY = 2f
 
 
@@ -193,7 +193,8 @@ class PlayerList(var attack: IAttack,
                 Gdx.graphics.width.toFloat(),
                 Gdx.graphics.height.toFloat()
             )
-            if (menuOpen) {
+        drawTopBar(batch)
+        if (menuOpen) {
                 menuActor.show()
             } else {
                 menuActor.hide()
@@ -201,9 +202,6 @@ class PlayerList(var attack: IAttack,
             batch.end()
             stage.act(Gdx.graphics.deltaTime)
             stage.draw()
-        batch.begin()
-        drawTopBar(batch)
-        batch.end()
     }
 
 
