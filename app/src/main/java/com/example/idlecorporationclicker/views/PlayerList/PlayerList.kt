@@ -12,8 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.TimeUtils
 import com.badlogic.gdx.utils.viewport.ScreenViewport
-import com.example.idlecorporationclicker.controllers.commands.attack.AttackPlayerCommand
-import com.example.idlecorporationclicker.controllers.commands.player.PlayerController
+import com.example.idlecorporationclicker.controllers.attack.AttackPlayerCommand
+import com.example.idlecorporationclicker.controllers.player.PlayerController
 import com.example.idlecorporationclicker.models.database.Database
 import com.example.idlecorporationclicker.models.attack.IAttack
 import com.example.idlecorporationclicker.models.player.IPlayer

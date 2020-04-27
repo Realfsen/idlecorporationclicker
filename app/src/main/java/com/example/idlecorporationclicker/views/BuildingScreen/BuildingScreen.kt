@@ -11,8 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.TimeUtils
 import com.badlogic.gdx.utils.viewport.ScreenViewport
-import com.example.idlecorporationclicker.controllers.commands.building.BuyBuildingCommand
-import com.example.idlecorporationclicker.controllers.commands.player.PlayerController
+import com.example.idlecorporationclicker.controllers.building.BuyBuildingCommand
+import com.example.idlecorporationclicker.controllers.player.PlayerController
 import com.example.idlecorporationclicker.models.building.BuildingType
 import com.example.idlecorporationclicker.models.building.IBuilding
 import com.example.idlecorporationclicker.states.GameStateManager

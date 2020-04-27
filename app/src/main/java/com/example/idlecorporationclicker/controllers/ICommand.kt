@@ -1,4 +1,4 @@
-package com.example.idlecorporationclicker.controllers.commands
+package com.example.idlecorporationclicker.controllers
 
 interface ICommand {
     fun Execute()

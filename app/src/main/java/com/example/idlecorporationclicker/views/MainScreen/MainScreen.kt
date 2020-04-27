@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.TimeUtils
-import com.example.idlecorporationclicker.controllers.commands.player.PlayerController
+import com.example.idlecorporationclicker.controllers.player.PlayerController
 import com.example.idlecorporationclicker.models.cookie.CookieClicker
 import com.example.idlecorporationclicker.states.BuildingScreen.BuildingScreen
 import com.example.idlecorporationclicker.states.GameStateManager

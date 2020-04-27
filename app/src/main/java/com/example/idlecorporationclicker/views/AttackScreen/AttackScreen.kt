@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.TimeUtils
-import com.example.idlecorporationclicker.controllers.commands.player.PlayerController
+import com.example.idlecorporationclicker.controllers.player.PlayerController
 import com.example.idlecorporationclicker.factory.AttackFactory
 import com.example.idlecorporationclicker.factory.FACTORY_TYPE
 import com.example.idlecorporationclicker.factory.FactoryProvider

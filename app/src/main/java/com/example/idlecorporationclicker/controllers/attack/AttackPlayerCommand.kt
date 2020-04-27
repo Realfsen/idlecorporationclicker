@@ -1,6 +1,6 @@
-package com.example.idlecorporationclicker.controllers.commands.attack
+package com.example.idlecorporationclicker.controllers.attack
 
-import com.example.idlecorporationclicker.controllers.commands.ICommand
+import com.example.idlecorporationclicker.controllers.ICommand
 import com.example.idlecorporationclicker.models.attack.IAttack
 import com.example.idlecorporationclicker.models.player.IPlayer
 import com.example.idlecorporationclicker.models.player.Player
