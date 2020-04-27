@@ -1,6 +1,8 @@
 package com.example.idlecorporationclicker.states
 
 import com.badlogic.gdx.Game
+import com.badlogic.gdx.backends.android.AndroidApplication
+import com.example.idlecorporationclicker.Launcher
 import com.example.idlecorporationclicker.controllers.CommandManager
 import com.example.idlecorporationclicker.models.database.Database
 import com.example.idlecorporationclicker.models.player.Player
@@ -15,10 +17,12 @@ class GameStateManager {
     private var screenHistory : Stack<SCREEN>
     var player : Player
     var commandManager : CommandManager
+    var androidApplication : Launcher
+
 
     public var showTutorial : Boolean
 
-    constructor() {
+    constructor(app : Launcher) {
         showTutorial = true;
         screenTemplates = Stack<ScreenTemplate>()
         screenHistory = Stack<SCREEN>()
@@ -26,6 +30,7 @@ class GameStateManager {
         Database.initiateLocalPlayer(player)
         commandManager =
             CommandManager()
+        androidApplication = app;
     }
 
     fun pushHistory(hist : SCREEN) {

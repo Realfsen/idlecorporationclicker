@@ -16,10 +16,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
+import com.example.idlecorporationclicker.Launcher
+import com.example.idlecorporationclicker.MainActivity
 import com.example.idlecorporationclicker.models.audio.MusicPlayer
 import com.example.idlecorporationclicker.models.audio.MusicPlayer.getMusicButtonTable
 import com.example.idlecorporationclicker.states.GameStateManager
-import com.example.idlecorporationclicker.models.audio.MusicPlayer.musicBtn
+import com.example.idlecorporationclicker.models.database.Database
 
 class MenuActor(gsm : GameStateManager) {
 
@@ -68,7 +70,8 @@ class MenuActor(gsm : GameStateManager) {
 
         logOutBtn.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
-                // TODO
+                Database.forceMoneySync()
+                gsm.androidApplication.signOut()
             }
 
             override fun touchDown(e : InputEvent, x : Float, y : Float, Point : Int, button : Int): Boolean {
