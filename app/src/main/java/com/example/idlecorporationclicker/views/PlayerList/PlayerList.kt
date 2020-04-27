@@ -33,7 +33,6 @@ class PlayerList(var attack: IAttack,
     private val screenWidth = Gdx.graphics.width.toFloat()
     private var shieldSymbol: Image
     private var cashSymbol: Image
-    private var gui: Texture
     private var topWrapper: Table
     private var tableContainer: Container<Table>
     private var attackLabel: Label
@@ -76,7 +75,6 @@ class PlayerList(var attack: IAttack,
         chosenAttackStr = Label("Chosen attack: "+attack.type, fontStyle)
         stage = Stage()
         batch = SpriteBatch()
-        gui = Texture(Gdx.files.internal("freegui/png/Window.png"))
         cashSymbol = Image(TextureRegion(gui, 1985, 4810, 145, 245))
         shieldSymbol = Image(TextureRegion(gui, 1680, 4810, 110, 145))
 

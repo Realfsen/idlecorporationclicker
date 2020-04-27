@@ -34,7 +34,7 @@ abstract class ScreenTemplate (gsm: GameStateManager, game : Game) : Screen {
 
     private val screenHeight = Gdx.graphics.height.toFloat()
     private val screenWidth = Gdx.graphics.width.toFloat()
-    private var gui: Texture
+    var gui: Texture
     var topBar : TextureRegion
     private var cashSymbol : TextureRegion
     private var shieldSymbol : TextureRegion
@@ -44,7 +44,7 @@ abstract class ScreenTemplate (gsm: GameStateManager, game : Game) : Screen {
     private var cashSec: Label
     private var defense: Label
     private var attack: Label
-    private var buttons: Texture
+    var buttons: Texture
     private var menuButton: Image
     var menuBG : TextureRegion
     var menuOpen : Boolean
@@ -72,7 +72,7 @@ abstract class ScreenTemplate (gsm: GameStateManager, game : Game) : Screen {
 //        generator.dispose()
         fontStyle.font = signika
 
-        smolParameter.size = 30
+        smolParameter.size = 40
         smolParameter.borderWidth = 2f
         smolParameter.borderColor = Color.ORANGE
         smolParameter.shadowColor = Color(0f, 0f, 0f, 0.75f)

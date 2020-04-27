@@ -5,10 +5,13 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.TimeUtils
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.example.idlecorporationclicker.models.audio.MusicPlayer
@@ -55,32 +58,67 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
     }
 
     fun buildingTemplate(building : IBuilding, type: BuildingType, labelPrefix : String) : HorizontalGroup {
+        val buttonGfx = TextureRegion(buttons, 170, 430, 430, 195)
+        val buttonDown = TextureRegion(buttons, 625, 430, 430, 195)
+        val buttonDisabled = TextureRegion(buttons, 1540, 430, 430, 195)
+        val newBuyButton = Image(buttonGfx)
+        val newBuyButtonDown = Image(buttonDown)
+        val newBuyButtonDisabled = Image(buttonDisabled)
+//        newBuyButton.setPosition(500f, 500f)
+        val incCost = Label("$ "+building.upgradeCost.toInt(), fontStyle)
+        val downCost = Label("$ "+building.upgradeCost.toInt(), fontStyle)
+        val disCost = Label("$ "+building.upgradeCost.toInt(), fontStyle)
+        val buttonGrp = Group()
+        buttonGrp.addActor(newBuyButton)
+        buttonGrp.addActor(incCost)
+        incCost.setPosition(75f, 75f)
+
+        val buttonGrpDown = Group()
+        buttonGrpDown.addActor(newBuyButtonDown)
+        buttonGrpDown.addActor(downCost)
+        downCost.setPosition(75f, 75f)
+
+        val buttonGrpDisabled = Group()
+        buttonGrpDisabled.addActor(newBuyButtonDisabled)
+        buttonGrpDisabled.addActor(disCost)
+        disCost.setPosition(75f, 75f)
+
+
         val buyBuilding = BuyBuildingCommand(gsm.player, building, this)
-        val buyButton = TextButton("Buy: "+building.upgradeCost.toInt(), uiSkin)
+        /*val buyButton = TextButton("Buy: "+building.upgradeCost.toInt(), uiSkin)
         buyButton.isTransform = true
-        buyButton.scaleBy(2.5f)
-        if(!buyBuilding.CanExecute()) {
-            buyButton.color = Color.RED
-        }
-        val LevelLabel = Label(building.level.toInt().toString(), fontStyle)
+        buyButton.scaleBy(2.5f)*/
+        val levelLabel = Label(building.level.toInt().toString(), fontStyle)
         val leftTable= VerticalGroup().pad(20f)
         leftTable.addActor(building.image)
-        leftTable.addActor(LevelLabel)
+        leftTable.addActor(levelLabel)
 
-        val rightTable = VerticalGroup().pad(20f).space(100f)
+        val rightTable = VerticalGroup().pad(20f).space(230f)
         rightTable.addActor(Label(labelPrefix+building.value.toInt(), fontStyle))
-        rightTable.addActor(buyButton)
+        rightTable.addActor(buttonGrp)
+        if(!buyBuilding.CanExecute()) {
+//            buyButton.color = Color.RED
+            rightTable.removeActor(buttonGrp)
+            rightTable.removeActor(buttonGrpDown)
+            rightTable.addActor(buttonGrpDisabled)
+        } else {
+            rightTable.removeActor(buttonGrpDisabled)
+        }
 
         val group = HorizontalGroup().pad(20f)
         group.addActor(leftTable)
         group.addActor(rightTable)
 
-        buyButton.addListener(object : ClickListener() {
+        buttonGrp.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
+                rightTable.removeActor(buttonGrpDown)
+                rightTable.addActor(buttonGrp)
                 gsm.commandManager.Invoke(buyBuilding)
             }
 
             override fun touchDown(e : InputEvent, x : Float, y : Float, Point : Int, button : Int): Boolean {
+                rightTable.removeActor(buttonGrp)
+                rightTable.addActor(buttonGrpDown)
                 return true
             }
         })
@@ -89,11 +127,11 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
     }
 
     fun buildAllBuildings() {
-            wholeGroup.add(buildingTemplate(gsm.player.passiveIncomeBuilding, BuildingType.INCOME, "$ "))
+            wholeGroup.add(buildingTemplate(gsm.player.passiveIncomeBuilding, BuildingType.INCOME, "$/sec: ")).space(20f)
             wholeGroup.row()
-            wholeGroup.add(buildingTemplate(gsm.player.attackBuilding, BuildingType.ATTACK, "Attack  "))
+            wholeGroup.add(buildingTemplate(gsm.player.attackBuilding, BuildingType.ATTACK, "Attack:  ")).space(20f)
             wholeGroup.row()
-            wholeGroup.add(buildingTemplate(gsm.player.defenseBuilding, BuildingType.DEFENSE, "Defense  "))
+            wholeGroup.add(buildingTemplate(gsm.player.defenseBuilding, BuildingType.DEFENSE, "Defense:  ")).space(20f)
             wholeGroup.row()
     }
 
