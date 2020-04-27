@@ -87,7 +87,7 @@ object Database: IDatabase {
 
     }
 
-    fun forceMoneySync(player: IPlayer) {
+    fun forceMoneySync(player: IPlayer = localPlayer!!) {
         databaseUpdateUsersMoney(player)
     }
 
