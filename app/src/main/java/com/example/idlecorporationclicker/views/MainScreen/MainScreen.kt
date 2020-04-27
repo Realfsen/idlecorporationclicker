@@ -1,11 +1,9 @@
 package com.example.idlecorporationclicker.states.MainScreen
 
-import android.util.Log
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.*
@@ -17,9 +15,9 @@ import com.example.idlecorporationclicker.states.BuildingScreen.BuildingScreen
 import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.states.SCREEN
 import com.example.idlecorporationclicker.views.AttackScreen.AttackScreen
-import com.example.idlecorporationclicker.views.MenuActor
+import com.example.idlecorporationclicker.views.actors.MenuActor
 import com.example.idlecorporationclicker.views.ScreenTemplate
-import com.example.idlecorporationclicker.views.Tutorial
+import com.example.idlecorporationclicker.views.actors.Tutorial
 
 
 class MainScreen(override var game: Game, override var gsm: GameStateManager) : ScreenTemplate(gsm, game) {
@@ -49,7 +47,11 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
     private var menu : MenuActor
 
     init {
-        tutorial = Tutorial(fontStyle, screenWidth, screenHeight)
+        tutorial = Tutorial(
+            fontStyle,
+            screenWidth,
+            screenHeight
+        )
         background = Texture("backgrounds/1x/background-basemdpi.png")
         cookie = Image(Texture("cookie/1x/cookiemdpi.png"))
         attackBuilding = Image(Texture("attacks/1x/dualstealmdpi.png"))
@@ -148,7 +150,7 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
 
         stage.addActor(buildingTable)
         stage.addActor(clickerTable)
-        generateTopBar(stage, SCREEN.MainScreen, batch)
+        generateTopBar(stage)
         stage.addActor(menu.getActor())
     }
 
@@ -158,18 +160,17 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
 
     override fun update() {
         moneyStr.setText(gsm.player.money.toString())
+        updateTopBar()
     }
 
     override fun render(dt : Float) {
         if (TimeUtils.timeSinceNanos(startTime) > 1000000000) {
-            playerController.addMoneySinceLastSynch()
             startTime = TimeUtils.nanoTime();
-            moneyStr.setText(gsm.player.money.toString())
+            playerController.addMoneySinceLastSynch()
         }
 
         batch.begin()
         batch.draw(background, 0f, 0f, screenWidth, screenHeight)
-        updateTopBar(batch)
         if (menuOpen) {
             cookie.isVisible = false
             menu.show()
@@ -177,6 +178,7 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
             menu.hide()
             cookie.isVisible = true
         }
+        drawTopBar(batch)
         batch.end()
         stage.draw()
         stage.act(Gdx.graphics.deltaTime)

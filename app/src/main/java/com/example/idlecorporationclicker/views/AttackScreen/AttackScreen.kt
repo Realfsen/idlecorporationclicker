@@ -10,7 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
-import com.example.idlecorporationclicker.models.audio.MusicPlayer
+import com.badlogic.gdx.utils.TimeUtils
+import com.example.idlecorporationclicker.controllers.commands.player.PlayerController
 import com.example.idlecorporationclicker.factory.AttackFactory
 import com.example.idlecorporationclicker.factory.FACTORY_TYPE
 import com.example.idlecorporationclicker.factory.FactoryProvider
@@ -19,7 +20,7 @@ import com.example.idlecorporationclicker.models.attack.ATTACK_TYPE
 import com.example.idlecorporationclicker.models.attack.IAttack
 import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.states.SCREEN
-import com.example.idlecorporationclicker.views.MenuActor
+import com.example.idlecorporationclicker.views.actors.MenuActor
 import com.example.idlecorporationclicker.views.ScreenTemplate
 import com.example.idlecorporationclicker.views.PlayerList.PlayerList
 
@@ -29,8 +30,8 @@ class AttackScreen(
 ) : ScreenTemplate(gsm, game) {
 
 
-    private val screenHeight = Gdx.graphics.height.toFloat()
-    private val screenWidth = Gdx.graphics.width.toFloat()
+    private var playerController: PlayerController
+    private var startTime: Long
     private var attackFlavourText: Label
     private var chosenAttackStr: Label
     private var attackStr: Label
@@ -57,9 +58,11 @@ class AttackScreen(
         attackTable = Table()
         findPlayerTable = Table()
         statsTable = Table()
+        startTime = TimeUtils.nanoTime()
         var provider = FactoryProvider()
         attackFactory = provider.getFactory(FACTORY_TYPE.ATTACK) as AttackFactory
         chosenAttack = ATTACK_TYPE.NONE
+        playerController = PlayerController(gsm.player, this)
 
         stage = Stage()
         batch = SpriteBatch()
@@ -69,7 +72,8 @@ class AttackScreen(
         chosenAttackStr = Label("Chosen attack: "+chosenAttack, fontStyle)
         attackFlavourText = Label(ATTACK_DESCRIPTION.getText(chosenAttack), fontStyle)
         attackFlavourText.setWrap(true)
-        menuActor = MenuActor(gsm)
+        menuActor =
+            MenuActor(gsm)
 
         attack.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
@@ -146,21 +150,27 @@ class AttackScreen(
         stage.addActor(attackTable)
         stage.addActor(findPlayerTable)
         stage.addActor(statsTable)
-        generateTopBar(stage, SCREEN.AttackScreen, batch)
+        generateTopBar(stage)
     }
 
     override fun update() {
+            updateTopBar()
     }
 
     override fun render(delta: Float) {
+        if (TimeUtils.timeSinceNanos(startTime) > 1000000000) {
+            startTime = TimeUtils.nanoTime();
+            playerController.addMoneySinceLastSynch()
+        }
         batch.begin()
+        //
         batch.draw(background, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
-        updateTopBar(batch)
         if (menuOpen) {
             menuActor.show()
         } else {
             menuActor.hide()
         }
+        drawTopBar(batch)
         batch.end()
         stage.act(Gdx.graphics.deltaTime)
         stage.draw()

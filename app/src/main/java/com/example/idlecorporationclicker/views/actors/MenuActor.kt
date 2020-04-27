@@ -1,4 +1,4 @@
-package com.example.idlecorporationclicker.views
+package com.example.idlecorporationclicker.views.actors
 
 import android.graphics.fonts.FontStyle
 import com.badlogic.gdx.Gdx

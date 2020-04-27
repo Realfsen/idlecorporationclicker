@@ -11,14 +11,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.TimeUtils
 import com.badlogic.gdx.utils.viewport.ScreenViewport
-import com.example.idlecorporationclicker.models.audio.MusicPlayer
 import com.example.idlecorporationclicker.controllers.commands.building.BuyBuildingCommand
 import com.example.idlecorporationclicker.controllers.commands.player.PlayerController
 import com.example.idlecorporationclicker.models.building.BuildingType
 import com.example.idlecorporationclicker.models.building.IBuilding
 import com.example.idlecorporationclicker.states.GameStateManager
-import com.example.idlecorporationclicker.states.SCREEN
-import com.example.idlecorporationclicker.views.MenuActor
+import com.example.idlecorporationclicker.views.actors.MenuActor
 import com.example.idlecorporationclicker.views.ScreenTemplate
 
 class BuildingScreen(override var game: Game, override var gsm: GameStateManager) : ScreenTemplate(gsm, game) {
@@ -50,9 +48,10 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
         wholeGroup.setFillParent(true)
         wholeGroup.top()
         stage.addActor(wholeGroup)
-        menuActor = MenuActor(gsm)
+        menuActor =
+            MenuActor(gsm)
         stage.addActor(menuActor.getActor())
-        generateTopBar(stage, SCREEN.BuildingScreen, batch)
+        generateTopBar(stage)
     }
 
     fun buildingTemplate(building : IBuilding, type: BuildingType, labelPrefix : String) : HorizontalGroup {
@@ -120,25 +119,22 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
         wholeGroup.clear()
         buildStatsTable()
         buildAllBuildings()
-    }
-
-    fun updateMoney() {
-        if (TimeUtils.timeSinceNanos(startTime) > 1000000000) {
-            playerController.addMoneySinceLastSynch()
-            startTime = TimeUtils.nanoTime();
-        }
+        updateTopBar()
     }
 
     override fun render(dt : Float) {
-        updateMoney()
+        if (TimeUtils.timeSinceNanos(startTime) > 1000000000) {
+            startTime = TimeUtils.nanoTime();
+            playerController.addMoneySinceLastSynch()
+        }
         batch.begin()
         batch.draw(background, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
-        updateTopBar(batch)
         if (menuOpen) {
            menuActor.show()
         } else {
             menuActor.hide()
         }
+        drawTopBar(batch)
         batch.end()
         stage.act(Gdx.graphics.deltaTime)
         stage.draw()

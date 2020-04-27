@@ -1,4 +1,4 @@
-package com.example.idlecorporationclicker.views
+package com.example.idlecorporationclicker.views.actors
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
