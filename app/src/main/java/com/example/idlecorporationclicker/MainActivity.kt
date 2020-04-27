@@ -25,9 +25,9 @@ class MainActivity : AppCompatActivity() {
 
 		if (user != null) {
 			// The user is already signed in
+//			signOut()
 			Database.start()
 			launchGame()
-//			signOut()
 		} else {
 			// No user is signed in
 			showSignInOptions();

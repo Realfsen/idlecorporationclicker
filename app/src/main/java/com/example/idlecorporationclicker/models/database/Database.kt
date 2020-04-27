@@ -25,7 +25,7 @@ object Database: IDatabase {
     private var uid: String = ""
     private var isOnline: Boolean = false
     private var localPlayer: Player? = null
-    private var playerList: PlayerList? = null
+//    private var playerList: PlayerList? = null
     private var nextTimeToSync: Long = Date().time + SYNC_DELAY_SECONDS
 //    private var timeLastSyncedFromDatabase: Date? = null
 
@@ -48,8 +48,6 @@ object Database: IDatabase {
 
 
     fun createOponentCollection(playerList: PlayerList) : MutableCollection<PlayerOpponent> {
-        this.playerList = playerList
-
         var dummyPlayer =
             PlayerOpponent(
                 "-",
@@ -60,7 +58,7 @@ object Database: IDatabase {
         var players: MutableCollection<PlayerOpponent> = mutableListOf(dummyPlayer)
         players.clear()
 
-        populateOpponentList()
+        populateOpponentList(playerList)
 
         return players
     }
@@ -72,7 +70,6 @@ object Database: IDatabase {
     }
     
     fun SyncMoneyWithFirestoreController() {
-//        money = localPlayer?.money
         if (Date().time > nextTimeToSync) {
             nextTimeToSync = Date().time + SYNC_DELAY_SECONDS
             firestoreUpdateUsersMoney()
@@ -80,40 +77,24 @@ object Database: IDatabase {
         }
     }
 
-    fun playerUpdateMoney(player: IPlayer) {
-//        databaseUpdateUsersMoney(player)
-//        firestoreUpdateUsersMoney()
-    }
-
     override fun buildingUpdateIncome() {
         firestoreUpdateUsersSomething("income", localPlayer!!.passiveIncomeBuilding.level)
         updateTimeLastSyncedInDatabase()
         firestoreUpdateUsersMoney()
-//        buildingUpdate()
     }
 
     override fun buildingUpdateAttack() {
         firestoreUpdateUsersSomething("attack", localPlayer!!.attackBuilding.level)
         updateTimeLastSyncedInDatabase()
         firestoreUpdateUsersMoney()
-//        buildingUpdate()
     }
 
     override fun buildingUpdateDefense() {
         firestoreUpdateUsersSomething("defense", localPlayer!!.defenseBuilding.level)
         updateTimeLastSyncedInDatabase()
         firestoreUpdateUsersMoney()
-//        buildingUpdate()
     }
 
-    fun buildingUpdate() {
-        firestoreUpdateUsersSomething("income", localPlayer!!.passiveIncomeBuilding.level)
-        firestoreUpdateUsersSomething("defense", localPlayer!!.defenseBuilding.level)
-        firestoreUpdateUsersSomething("attack", localPlayer!!.attackBuilding.level)
-
-        firestoreUpdateUsersMoney()
-
-    }
 
     override fun updateTimeLastSyncedInDatabase() {
         val date = Date()
@@ -165,7 +146,7 @@ object Database: IDatabase {
     // -------------------------------------------     Firebase Firestire     ------------------------------------------- \\
 
 
-    private fun populateOpponentList() {
+    private fun populateOpponentList(playerList: PlayerList) {
         db.collection("users")
             .get()
             .addOnSuccessListener { userCollection ->
@@ -201,7 +182,7 @@ object Database: IDatabase {
                                             if (moneyStolen != null) {
                                                 opponent.money -= moneyStolen
                                             }
-                                            playerList!!.players.add(opponent)
+                                            playerList.players.add(opponent)
                                         }
                                     }
                                 }
@@ -286,9 +267,9 @@ object Database: IDatabase {
             "name" to name,
             "email" to email,
             "money" to 0,
-            "income" to 15,
-            "attack" to 0,
-            "defense" to 0,
+            "income" to 1,
+            "attack" to 1,
+            "defense" to 1,
             "moneyStolen" to 0,
             "timeLastSynced" to Date()
 
@@ -404,9 +385,6 @@ object Database: IDatabase {
         SyncMoneyWithFirestoreController()
 //        TODO: "Move firestoreUpdater() to a better place"
     }
-
-// -------------------------------------------  Firebase  Authentication  ------------------------------------------- \\
-
 }
 
 

@@ -32,7 +32,7 @@ class SabotageAttack : IAttack {
     }
 
     private fun doSabotage(player: Player, defender: IPlayer) {
-
+        defender.stealFromThisPlayer(0.5)
     }
 
 }
