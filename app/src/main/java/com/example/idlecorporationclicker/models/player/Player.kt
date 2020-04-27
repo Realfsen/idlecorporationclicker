@@ -31,7 +31,7 @@ class Player : IPlayer {
     override var money : Long = 0
         set(value) {
             field = value
-            Database.playerUpdateMoney()
+            Database.SyncMoneyWithFirestoreController()
         }
 
     fun canAttack() : Boolean {
@@ -62,7 +62,6 @@ class Player : IPlayer {
         this.lastSynched = synchedNow
         var difinSec = TimeUnit.MILLISECONDS.toSeconds(timeDifference)
         money += difinSec.times(moneyPerSecond()).toInt()
-        Database.SyncMoneyWithFirestoreController()
     }
 
     override fun addMoneySinceLastSynchedExternally(lastSynched: Date) {

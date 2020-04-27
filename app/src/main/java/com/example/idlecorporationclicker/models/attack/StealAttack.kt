@@ -34,9 +34,7 @@ class StealAttack : IAttack {
     }
 
     private fun doSteal(player: Player, defender: IPlayer) {
-        val amount = (defender.money * 0.7).toInt()
-        player.money += amount
-        defender.money = (defender.money * 0.7).toLong()
+        player.getStolenMoney(defender.stealFromThisPlayer(0.7))
     }
 
 }

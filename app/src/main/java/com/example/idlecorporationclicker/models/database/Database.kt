@@ -80,8 +80,9 @@ object Database: IDatabase {
         }
     }
 
-    fun playerUpdateMoney() {
-//        firestoreUpdateUser()
+    fun playerUpdateMoney(player: IPlayer) {
+//        databaseUpdateUsersMoney(player)
+//        firestoreUpdateUsersMoney()
     }
 
     override fun buildingUpdateIncome() {
@@ -141,6 +142,8 @@ object Database: IDatabase {
     }
 
     fun stealFromPlayer(player: IPlayer, amountOfMoneyToSteal: Long) {
+        Log.d("STEAL", "StealFromPlayer DATABASE")
+        Log.d("STEAL", "${player} ID: ${player.uid}")
         db.collection("users")
             .document(player.uid)
             .get()
@@ -151,6 +154,8 @@ object Database: IDatabase {
                     val moneyStolen : Long? = userDocument.getLong("moneyStolen")
                     if (moneyStolen != null) {
                         databaseUpdateUsersSomething(player, "moneyStolen", moneyStolen + amountOfMoneyToSteal)
+                    } else {
+                        databaseUpdateUsersSomething(player, "moneyStolen", amountOfMoneyToSteal)
                     }
                 }
             }
@@ -181,7 +186,7 @@ object Database: IDatabase {
                                 if (defense != null) {
                                     if (income != null) {
                                         if (timeLastSynced != null) {
-                                            var opponent : PlayerOpponent =
+                                            var opponent =
                                                 PlayerOpponent(
                                                     userDocument.id,
                                                     name,
@@ -333,6 +338,15 @@ object Database: IDatabase {
     private fun firestoreUpdateUsersMoney() {
         db.collection("users")
             .document(uid)
+            .update("money", localPlayer?.money)
+            .addOnSuccessListener {
+                updateTimeLastSyncedInDatabase()
+            }
+    }
+
+    private fun databaseUpdateUsersMoney(player: IPlayer) {
+        db.collection("users")
+            .document(player.uid)
             .update("money", localPlayer?.money)
             .addOnSuccessListener {
                 updateTimeLastSyncedInDatabase()

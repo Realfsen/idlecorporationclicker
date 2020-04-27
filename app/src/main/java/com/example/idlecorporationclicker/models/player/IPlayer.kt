@@ -1,6 +1,7 @@
 package com.example.idlecorporationclicker.models.player
 
 import com.example.idlecorporationclicker.models.building.IBuilding
+import com.example.idlecorporationclicker.models.database.Database
 import java.util.*
 
 interface IPlayer {
@@ -20,5 +21,17 @@ interface IPlayer {
 
     fun moneyPerSecond() : Double {
         return passiveIncomeBuilding.value
+    }
+
+    fun stealFromThisPlayer(stealPercentage: Double) : Long {
+        if (stealPercentage > 1 || stealPercentage < 0) return -1
+        val amount :Long = (money * stealPercentage).toLong()
+        Database.stealFromPlayer(this, amount)
+        return amount
+    }
+
+    fun getStolenMoney(money: Long) {
+        this.money += money
+        Database.forceMoneySync()
     }
 }
