@@ -19,6 +19,7 @@ import com.example.idlecorporationclicker.models.attack.ATTACK_TYPE
 import com.example.idlecorporationclicker.models.attack.IAttack
 import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.states.SCREEN
+import com.example.idlecorporationclicker.views.MenuActor
 import com.example.idlecorporationclicker.views.ScreenTemplate
 import com.example.idlecorporationclicker.views.PlayerList.PlayerList
 
@@ -46,11 +47,10 @@ class AttackScreen(
     private var batch : SpriteBatch
     private var stage: Stage
     private var attackFactory : AttackFactory
-    private var menuTitle : Label
+    private var menuActor: MenuActor
 
     init {
         background = Texture(Gdx.files.internal("backgrounds/1x/background-attackmdpi.png"))
-//        player = Image(Texture(Gdx.files.internal("cookie/1x/cookiemdpi_org.png")))
         player = Image(Texture(Gdx.files.internal("attacks/1x/playermdpi.png")))
         attack = Image(Texture(Gdx.files.internal("attacks/1x/stealmdpi.png")))
         sabotage = Image(Texture(Gdx.files.internal("attacks/1x/politicsmdpi.png")))
@@ -69,7 +69,7 @@ class AttackScreen(
         chosenAttackStr = Label("Chosen attack: "+chosenAttack, fontStyle)
         attackFlavourText = Label(ATTACK_DESCRIPTION.getText(chosenAttack), fontStyle)
         attackFlavourText.setWrap(true)
-        menuTitle = Label("MENU", fontStyle)
+        menuActor = MenuActor(gsm)
 
         attack.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
@@ -108,7 +108,7 @@ class AttackScreen(
 
 
         buildTablesAndAddActors();
-        stage.addActor(MusicPlayer.getMusicButtonTable())
+        stage.addActor(menuActor.getActor())
     }
 
     fun createAttack() : IAttack {
@@ -157,15 +157,9 @@ class AttackScreen(
         batch.draw(background, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
         updateTopBar(batch)
         if (menuOpen) {
-            batch.draw(menuBG, 0f, screenHeight/3.5f, screenWidth, screenHeight/2)
-            stage.addActor(MusicPlayer.musicBtn)
-            MusicPlayer.musicBtn.isVisible = true
-            stage.addActor(menuTitle)
-            menuTitle.isVisible = true
-            menuTitle.setPosition(425f, 1715f)
+            menuActor.show()
         } else {
-            MusicPlayer.musicBtn.isVisible = false
-            menuTitle.isVisible = false
+            menuActor.hide()
         }
         batch.end()
         stage.act(Gdx.graphics.deltaTime)

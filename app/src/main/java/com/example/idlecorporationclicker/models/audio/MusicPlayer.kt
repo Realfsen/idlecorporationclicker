@@ -23,11 +23,11 @@ object MusicPlayer {
                 togglePlayState()
             }
         })
-        musicBtn.setScale(0.09f)
-        musicBtn.setPosition(650f, 1375f)
-//        musicButtonTable.add(musicBtn).pad(10f).height(120f).width(120f)
-//        musicButtonTable.setFillParent(true)
-//        musicButtonTable.top().right()
+        //musicBtn.setScale(0.09f)
+        musicButtonTable.add(musicBtn).pad(10f).height(120f).width(120f)
+        //musicButtonTable.setFillParent(true)
+        musicButtonTable.top()
+        track.play()
     }
 
     fun getMusic(): Music {

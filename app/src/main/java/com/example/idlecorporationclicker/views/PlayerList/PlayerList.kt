@@ -23,6 +23,7 @@ import com.example.idlecorporationclicker.models.player.Player
 import com.example.idlecorporationclicker.models.player.PlayerOpponent
 import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.states.SCREEN
+import com.example.idlecorporationclicker.views.MenuActor
 import com.example.idlecorporationclicker.views.ScreenTemplate
 
 class PlayerList(var attack: IAttack,
@@ -54,7 +55,7 @@ class PlayerList(var attack: IAttack,
 
     private val nameLabel = Label("Name", fontStyle)
     private val successLabel = Label("%", fontStyle)
-    private var menuTitle : Label
+    private var menuActor : MenuActor
 
 
     init {
@@ -99,9 +100,9 @@ class PlayerList(var attack: IAttack,
         //tableContainer.setActor(topWrapper)
         stage.addActor(topWrapper)
         stage.addActor(bottom)
-        stage.addActor(MusicPlayer.getMusicButtonTable())
         generateTopBar(stage, SCREEN.PlayerList, batch)
-        menuTitle = Label("MENU", fontStyle)
+        menuActor = MenuActor(gsm)
+        stage.addActor(menuActor.getActor())
     }
 
     fun createAttackLabelText() : String{
@@ -189,15 +190,9 @@ class PlayerList(var attack: IAttack,
             )
             updateTopBar(batch)
             if (menuOpen) {
-                batch.draw(menuBG, 0f, screenHeight/3.5f, screenWidth, screenHeight/2)
-                stage.addActor(MusicPlayer.musicBtn)
-                MusicPlayer.musicBtn.isVisible = true
-                stage.addActor(menuTitle)
-                menuTitle.isVisible = true
-                menuTitle.setPosition(425f, 1715f)
+                menuActor.show()
             } else {
-                MusicPlayer.musicBtn.isVisible = false
-                menuTitle.isVisible = false
+                menuActor.hide()
             }
             batch.end()
             stage.act(Gdx.graphics.deltaTime)
