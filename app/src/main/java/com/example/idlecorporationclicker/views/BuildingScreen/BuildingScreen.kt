@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
+import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.TimeUtils
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.example.idlecorporationclicker.controllers.building.BuyBuildingCommand
@@ -72,6 +73,7 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
         buttonGrp.addActor(newBuyButton)
         buttonGrp.addActor(incCost)
         incCost.setPosition(75f, 75f)
+        buttonGrp.setX(20f)
 
         val buttonGrpDown = Group()
         buttonGrpDown.addActor(newBuyButtonDown)
@@ -93,7 +95,7 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
         leftTable.addActor(building.image)
         leftTable.addActor(levelLabel)
 
-        val rightTable = VerticalGroup().pad(20f).space(230f)
+        val rightTable = VerticalGroup().pad(20f).space(230f).columnLeft()
         rightTable.addActor(Label(labelPrefix+building.value.toInt(), fontStyle))
         rightTable.addActor(buttonGrp)
         if(!buyBuilding.CanExecute()) {
