@@ -17,7 +17,7 @@ object MusicPlayer {
 
     init {
         musicButtonTable = Table()
-        musicBtn = Image(Texture("buttons/toggleMusicButtonOn.png"))
+        musicBtn = Image(Texture(Gdx.files.internal("buttons/toggleMusicButtonOn.png")))
         musicBtn.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 togglePlayState()
@@ -36,19 +36,19 @@ object MusicPlayer {
 
     fun play() {
         track.play()
-        musicBtn.setDrawable(SpriteDrawable(Sprite(Texture("buttons/toggleMusicButtonOn.png"))))
+        musicBtn.setDrawable(SpriteDrawable(Sprite(Texture(Gdx.files.internal("buttons/toggleMusicButtonOn.png")))))
         isPlaying = true
     }
 
     fun pause() {
         track.pause()
-        musicBtn.setDrawable(SpriteDrawable(Sprite(Texture("buttons/toggleMusicButtonOff.png"))))
+        musicBtn.setDrawable(SpriteDrawable(Sprite(Texture(Gdx.files.internal("buttons/toggleMusicButtonOff.png")))))
         isPlaying = false
     }
 
     fun stop() {
         track.stop()
-        musicBtn.setDrawable(SpriteDrawable(Sprite(Texture("buttons/toggleMusicButtonOff.png"))))
+        musicBtn.setDrawable(SpriteDrawable(Sprite(Texture(Gdx.files.internal("buttons/toggleMusicButtonOff.png")))))
         isPlaying = false
     }
 
