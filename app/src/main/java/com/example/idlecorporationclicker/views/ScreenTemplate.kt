@@ -48,6 +48,7 @@ abstract class ScreenTemplate (gsm: GameStateManager, game : Game) : Screen {
     private var menuButton: Image
     var menuBG : TextureRegion
     var menuOpen : Boolean
+    private var attackSymbol : Texture
 
     init {
         this.gsm = gsm
@@ -72,7 +73,7 @@ abstract class ScreenTemplate (gsm: GameStateManager, game : Game) : Screen {
 //        generator.dispose()
         fontStyle.font = signika
 
-        smolParameter.size = 40
+        smolParameter.size = 45
         smolParameter.borderWidth = 2f
         smolParameter.borderColor = Color.ORANGE
         smolParameter.shadowColor = Color(0f, 0f, 0f, 0.75f)
@@ -86,6 +87,7 @@ abstract class ScreenTemplate (gsm: GameStateManager, game : Game) : Screen {
 
         /* BEGIN TOP BAR */
         gui = Texture(Gdx.files.internal("freegui/png/Window.png"))
+        attackSymbol = Texture("attacks/1x/dualstealmdpi.png")
         topBar = TextureRegion(gui, 3540, 2845, 430, 140)
         cashSymbol = TextureRegion(gui, 1985, 4810, 95, 145)
         shieldSymbol = TextureRegion(gui, 1680, 4810, 110, 145)
@@ -154,7 +156,7 @@ abstract class ScreenTemplate (gsm: GameStateManager, game : Game) : Screen {
         batch.draw(shieldSymbol, screenWidth/2f, screenHeight-190f, screenWidth/10f, screenHeight/16f)
         /* ATTACK */
         batch.draw(numberBar, screenWidth/2f, screenHeight-screenHeight/7.5f, screenWidth/3f, screenHeight/20)
-        batch.draw(starSymbol, screenWidth/2f, screenHeight-315f, screenWidth/10f, screenHeight/18f)
+        batch.draw(attackSymbol, screenWidth/2f, screenHeight-315f, screenWidth/10f, screenHeight/18f)
     }
 
 

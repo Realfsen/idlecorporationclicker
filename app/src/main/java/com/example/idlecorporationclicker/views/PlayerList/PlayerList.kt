@@ -76,11 +76,14 @@ class PlayerList(var attack: IAttack,
         batch = SpriteBatch()
         cashSymbol = Image(TextureRegion(gui, 1985, 4810, 145, 245))
         shieldSymbol = Image(TextureRegion(gui, 1680, 4810, 110, 145))
+        cashSymbol.scaleY = 4f
+        shieldSymbol.scaleY = 2f
+
 
         playerController = PlayerController(gsm.player, this)
 
         players = Database.createOponentCollection(this)
-        attackLabel = Label(createAttackLabelText(), fontStyle);
+        attackLabel = Label(createAttackLabelText(), smolFontStyle);
 
         topWrapper = Table()
         topWrapper.setPosition(0f, screenHeight-screenHeight/6-topBar.regionHeight-300f)
@@ -118,10 +121,10 @@ class PlayerList(var attack: IAttack,
         if(!attacker.canAttack()) {
            btn.setColor(Color.RED)
         }
-        val name = Label(defender.name, uiSkin)
-        val defense = Label(defender.defense().toInt().toString(), uiSkin)
-        val successChance = Label(attack.calculateSuccess(attacker, defender).toString()+"%", uiSkin)
-        val money = Label(defender.money.toInt().toString(), uiSkin)
+        val name = Label(defender.name, smolFontStyle)
+        val defense = Label(defender.defense().toInt().toString(), smolFontStyle)
+        val successChance = Label(attack.calculateSuccess(attacker, defender).toString()+"%", smolFontStyle)
+        val money = Label(defender.money.toInt().toString(), smolFontStyle)
         val attackCommand =
             AttackPlayerCommand(
                 attacker,
