@@ -1,29 +1,28 @@
 package com.example.idlecorporationclicker.states.MainScreen
 
-import android.util.Log
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.TimeUtils
-import com.example.idlecorporationclicker.controllers.commands.player.PlayerController
-import com.example.idlecorporationclicker.models.audio.MusicPlayer.musicBtn
-import com.example.idlecorporationclicker.models.cookie.CookieClicker
+import com.example.idlecorporationclicker.controllers.player.PlayerController
+import com.example.idlecorporationclicker.views.actors.CookieClicker
 import com.example.idlecorporationclicker.states.BuildingScreen.BuildingScreen
 import com.example.idlecorporationclicker.states.GameStateManager
 import com.example.idlecorporationclicker.states.SCREEN
 import com.example.idlecorporationclicker.views.AttackScreen.AttackScreen
+import com.example.idlecorporationclicker.views.actors.MenuActor
 import com.example.idlecorporationclicker.views.ScreenTemplate
-import com.example.idlecorporationclicker.views.Tutorial
+import com.example.idlecorporationclicker.views.actors.Tutorial
 
 
 class MainScreen(override var game: Game, override var gsm: GameStateManager) : ScreenTemplate(gsm, game) {
 
+    private var tutorialBtn: TextButton
     private var uiSkin: Skin
     private val screenHeight = Gdx.graphics.height.toFloat()
     private val screenWidth = Gdx.graphics.width.toFloat()
@@ -45,9 +44,14 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
     private var tutorial : Tutorial
 
     private var menuTitle : Label
+    private var menu : MenuActor
 
     init {
-        tutorial = Tutorial(fontStyle, screenWidth, screenHeight)
+        tutorial = Tutorial(
+            fontStyle,
+            screenWidth,
+            screenHeight
+        )
         background = Texture("backgrounds/1x/background-basemdpi.png")
         cookie = Image(Texture("cookie/1x/cookiemdpi.png"))
         attackBuilding = Image(Texture("attacks/1x/dualstealmdpi.png"))
@@ -57,12 +61,15 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         clickerTable = Table()
         statsTable = Table()
         startTime = TimeUtils.nanoTime()
-        cookieManager = CookieClicker()
+        cookieManager =
+            CookieClicker()
         playerController = PlayerController(gsm.player, this)
         menuOpen = false
         menuTitle = Label("MENU", fontStyle)
         uiSkin = Skin(Gdx.files.internal("ui/uiskin.json"))
-        var tutorialBtn = TextButton("Tutorial", uiSkin)
+        tutorialBtn = TextButton("Tutorial", uiSkin)
+
+        menu = MenuActor(gsm)
 
         val incomeStr: Label = Label("Buildings", fontStyle)
         val attackStr: Label = Label("Attack", fontStyle)
@@ -138,26 +145,14 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
         statsTable.row()
         statsTable.add(moneyPerSecStr).width(screenWidth/2.5f).padTop(40f)
         statsTable.add(attack).padTop(40f)
-//        statsTable.row()
-//        statsTable.row()
         statsTable.setFillParent(true)
         statsTable.top()
 
+
         stage.addActor(buildingTable)
         stage.addActor(clickerTable)
-//        stage.addActor(statsTable)
-        generateTopBar(stage, SCREEN.MainScreen, batch)
-        if (menuOpen) {
-            batch.draw(menuBG, 0f, screenHeight/3.5f, screenWidth, screenHeight/2)
-            stage.addActor(musicBtn)
-            musicBtn.isVisible = true
-            stage.addActor(menuTitle)
-            menuTitle.isVisible = true
-            menuTitle.setPosition(425f, 1715f)
-        } else {
-            musicBtn.isVisible = false
-            menuTitle.isVisible = false
-        }
+        generateTopBar(stage)
+        stage.addActor(menu.getActor())
     }
 
     fun updateMoney() {
@@ -166,32 +161,28 @@ class MainScreen(override var game: Game, override var gsm: GameStateManager) : 
 
     override fun update() {
         moneyStr.setText(gsm.player.money.toString())
+        updateTopBar()
     }
 
     override fun render(dt : Float) {
         if (TimeUtils.timeSinceNanos(startTime) > 1000000000) {
-            playerController.addMoneySinceLastSynch()
             startTime = TimeUtils.nanoTime();
-            moneyStr.setText(gsm.player.money.toString())
+            playerController.addMoneySinceLastSynch()
         }
 
         batch.begin()
         batch.draw(background, 0f, 0f, screenWidth, screenHeight)
-        updateTopBar(batch)
         if (menuOpen) {
-            batch.draw(menuBG, 0f, screenHeight/3.5f, screenWidth, screenHeight/2)
-            stage.addActor(musicBtn)
-            musicBtn.isVisible = true
-            stage.addActor(menuTitle)
-            menuTitle.isVisible = true
-            menuTitle.setPosition(425f, 1715f)
+            cookie.isVisible = false
+            menu.show()
         } else {
-            musicBtn.isVisible = false
-            menuTitle.isVisible = false
+            menu.hide()
+            cookie.isVisible = true
         }
+        drawTopBar(batch)
         batch.end()
-        stage.act(Gdx.graphics.deltaTime)
         stage.draw()
+        stage.act(Gdx.graphics.deltaTime)
     }
 
     override fun hide() {

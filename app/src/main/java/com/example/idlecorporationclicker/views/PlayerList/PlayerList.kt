@@ -11,24 +11,23 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.TimeUtils
-import com.badlogic.gdx.utils.viewport.FillViewport
 import com.badlogic.gdx.utils.viewport.ScreenViewport
-import com.badlogic.gdx.utils.viewport.StretchViewport
-import com.example.idlecorporationclicker.models.audio.MusicPlayer
-import com.example.idlecorporationclicker.controllers.commands.attack.AttackPlayerCommand
+import com.example.idlecorporationclicker.controllers.attack.AttackPlayerCommand
+import com.example.idlecorporationclicker.controllers.player.PlayerController
 import com.example.idlecorporationclicker.models.database.Database
 import com.example.idlecorporationclicker.models.attack.IAttack
 import com.example.idlecorporationclicker.models.player.IPlayer
 import com.example.idlecorporationclicker.models.player.Player
 import com.example.idlecorporationclicker.models.player.PlayerOpponent
 import com.example.idlecorporationclicker.states.GameStateManager
-import com.example.idlecorporationclicker.states.SCREEN
+import com.example.idlecorporationclicker.views.actors.MenuActor
 import com.example.idlecorporationclicker.views.ScreenTemplate
 
 class PlayerList(var attack: IAttack,
                  override var game: Game, override var gsm: GameStateManager
 ) : ScreenTemplate(gsm, game) {
 
+    private var playerController: PlayerController
     private val screenHeight = Gdx.graphics.height.toFloat()
     private val screenWidth = Gdx.graphics.width.toFloat()
     private var shieldSymbol: Image
@@ -53,7 +52,7 @@ class PlayerList(var attack: IAttack,
 
     private val nameLabel = Label("Name", fontStyle)
     private val successLabel = Label("%", fontStyle)
-    private var menuTitle : Label
+    private var menuActor : MenuActor
 
 
     init {
@@ -78,6 +77,8 @@ class PlayerList(var attack: IAttack,
         cashSymbol = Image(TextureRegion(gui, 1985, 4810, 145, 245))
         shieldSymbol = Image(TextureRegion(gui, 1680, 4810, 110, 145))
 
+        playerController = PlayerController(gsm.player, this)
+
         players = Database.createOponentCollection(this)
         attackLabel = Label(createAttackLabelText(), fontStyle);
 
@@ -97,9 +98,10 @@ class PlayerList(var attack: IAttack,
         //tableContainer.setActor(topWrapper)
         stage.addActor(topWrapper)
         stage.addActor(bottom)
-        stage.addActor(MusicPlayer.getMusicButtonTable())
-        generateTopBar(stage, SCREEN.PlayerList, batch)
-        menuTitle = Label("MENU", fontStyle)
+        generateTopBar(stage)
+        menuActor =
+            MenuActor(gsm)
+        stage.addActor(menuActor.getActor())
     }
 
     fun createAttackLabelText() : String{
@@ -131,8 +133,8 @@ class PlayerList(var attack: IAttack,
         var width = Gdx.graphics.width.toFloat()/6
         playerTable.row().pad(10f)
         playerTable.add(name).fillX().width(width)
-        playerTable.add(defense).fillX().width(width)
-        playerTable.add(money).grow().expandX().width(money.width)
+        playerTable.add(defense).fillX().width(width).height(defense.height)
+        playerTable.add(money).grow().expandX().width(money.width).height(money.height)
         playerTable.add(successChance).fillX().width(width)
         playerTable.add(btn).fillX().width(width)
 
@@ -167,6 +169,8 @@ class PlayerList(var attack: IAttack,
     override fun update() {
         playerTable.clear()
         generateTable()
+        updateTopBar()
+        attackLabel.setText(createAttackLabelText())
     }
 
 
@@ -174,8 +178,7 @@ class PlayerList(var attack: IAttack,
 
         if (TimeUtils.timeSinceNanos(startTime) > 1000000000) {
             startTime = TimeUtils.nanoTime();
-            attackLabel.setText(createAttackLabelText())
-            update()
+            playerController.addMoneySinceLastSynch()
         }
             batch.begin()
             batch.draw(
@@ -185,18 +188,12 @@ class PlayerList(var attack: IAttack,
                 Gdx.graphics.width.toFloat(),
                 Gdx.graphics.height.toFloat()
             )
-            updateTopBar(batch)
             if (menuOpen) {
-                batch.draw(menuBG, 0f, screenHeight/3.5f, screenWidth, screenHeight/2)
-                stage.addActor(MusicPlayer.musicBtn)
-                MusicPlayer.musicBtn.isVisible = true
-                stage.addActor(menuTitle)
-                menuTitle.isVisible = true
-                menuTitle.setPosition(425f, 1715f)
+                menuActor.show()
             } else {
-                MusicPlayer.musicBtn.isVisible = false
-                menuTitle.isVisible = false
+                menuActor.hide()
             }
+            drawTopBar(batch)
             batch.end()
             stage.act(Gdx.graphics.deltaTime)
             stage.draw()

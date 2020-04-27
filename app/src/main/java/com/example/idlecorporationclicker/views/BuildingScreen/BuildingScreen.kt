@@ -14,13 +14,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.TimeUtils
 import com.badlogic.gdx.utils.viewport.ScreenViewport
-import com.example.idlecorporationclicker.models.audio.MusicPlayer
-import com.example.idlecorporationclicker.controllers.commands.building.BuyBuildingCommand
-import com.example.idlecorporationclicker.controllers.commands.player.PlayerController
+import com.example.idlecorporationclicker.controllers.building.BuyBuildingCommand
+import com.example.idlecorporationclicker.controllers.player.PlayerController
 import com.example.idlecorporationclicker.models.building.BuildingType
 import com.example.idlecorporationclicker.models.building.IBuilding
 import com.example.idlecorporationclicker.states.GameStateManager
-import com.example.idlecorporationclicker.states.SCREEN
+import com.example.idlecorporationclicker.views.actors.MenuActor
 import com.example.idlecorporationclicker.views.ScreenTemplate
 
 class BuildingScreen(override var game: Game, override var gsm: GameStateManager) : ScreenTemplate(gsm, game) {
@@ -35,7 +34,7 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
     private var stage: Stage
     private var uiSkin : Skin
     private var playerController : PlayerController
-    private var menuTitle : Label
+    private var menuActor : MenuActor
 
     init {
         background = Texture(Gdx.files.internal("backgrounds/1x/background-basemdpi.png"))
@@ -46,15 +45,16 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
         moneyStr = Label("Cash: "+gsm.player.money, fontStyle)
         startTime = TimeUtils.nanoTime()
         playerController = PlayerController(gsm.player, this)
-        menuTitle = Label("MENU", fontStyle)
 
         buildStatsTable()
         buildAllBuildings()
         wholeGroup.setFillParent(true)
         wholeGroup.top()
         stage.addActor(wholeGroup)
-        stage.addActor(MusicPlayer.getMusicButtonTable())
-        generateTopBar(stage, SCREEN.BuildingScreen, batch)
+        menuActor =
+            MenuActor(gsm)
+        stage.addActor(menuActor.getActor())
+        generateTopBar(stage)
     }
 
     fun buildingTemplate(building : IBuilding, type: BuildingType, labelPrefix : String) : HorizontalGroup {
@@ -157,31 +157,22 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
         wholeGroup.clear()
         buildStatsTable()
         buildAllBuildings()
-    }
-
-    fun updateMoney() {
-        if (TimeUtils.timeSinceNanos(startTime) > 1000000000) {
-            playerController.addMoneySinceLastSynch()
-            startTime = TimeUtils.nanoTime();
-        }
+        updateTopBar()
     }
 
     override fun render(dt : Float) {
-        updateMoney()
+        if (TimeUtils.timeSinceNanos(startTime) > 1000000000) {
+            startTime = TimeUtils.nanoTime();
+            playerController.addMoneySinceLastSynch()
+        }
         batch.begin()
         batch.draw(background, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
-        updateTopBar(batch)
         if (menuOpen) {
-            batch.draw(menuBG, 0f, screenHeight/3.5f, screenWidth, screenHeight/2)
-            stage.addActor(MusicPlayer.musicBtn)
-            MusicPlayer.musicBtn.isVisible = true
-            stage.addActor(menuTitle)
-            menuTitle.isVisible = true
-            menuTitle.setPosition(425f, 1715f)
+           menuActor.show()
         } else {
-            MusicPlayer.musicBtn.isVisible = false
-            menuTitle.isVisible = false
+            menuActor.hide()
         }
+        drawTopBar(batch)
         batch.end()
         stage.act(Gdx.graphics.deltaTime)
         stage.draw()

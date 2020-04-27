@@ -1,4 +1,4 @@
-package com.example.idlecorporationclicker.controllers.commands.player
+package com.example.idlecorporationclicker.controllers.player
 
 import com.example.idlecorporationclicker.models.player.Player
 import com.example.idlecorporationclicker.views.ScreenTemplate

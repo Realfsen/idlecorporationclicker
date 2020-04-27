@@ -1,4 +1,4 @@
-package com.example.idlecorporationclicker.models.cookie
+package com.example.idlecorporationclicker.views.actors
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture

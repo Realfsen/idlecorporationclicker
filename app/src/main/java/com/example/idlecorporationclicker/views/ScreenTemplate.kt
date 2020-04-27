@@ -107,7 +107,7 @@ abstract class ScreenTemplate (gsm: GameStateManager, game : Game) : Screen {
 
     abstract fun update()
 
-    fun generateTopBar(stage: Stage, screen: SCREEN, batch: SpriteBatch) {
+    fun generateTopBar(stage: Stage) {
         /* MENU BUTTON */
         menuButton.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
@@ -133,23 +133,31 @@ abstract class ScreenTemplate (gsm: GameStateManager, game : Game) : Screen {
         stage.addActor(attack)
     }
 
-    fun updateTopBar(batch: SpriteBatch) {
+    fun updateTopBar() {
+        /* CASH */
+        cash.setText(gsm.player.money.toString())
+        cashSec.setText(gsm.player.moneyPerSecond().toInt().toString()+" /s")
+        /* DEFENSE */
+        defense.setText(gsm.player.defense().toInt().toString())
+        /* ATTACK */
+        attack.setText(gsm.player.attack().toInt().toString())
+    }
+
+    fun drawTopBar(batch: SpriteBatch) {
         batch.draw(topBar, 0f, screenHeight-screenHeight/6, screenWidth, screenHeight/6)
         /* CASH */
         batch.draw(numberBar, 100f, screenHeight-screenHeight/13.5f, screenWidth/2.5f, screenHeight/20)
         batch.draw(numberBar, 100f, screenHeight-screenHeight/7.5f, screenWidth/2.5f, screenHeight/20)
         batch.draw(cashSymbol, 20f, screenHeight-350f, screenWidth/6, screenHeight/6.5f)
-        cash.setText(gsm.player.money.toString())
-        cashSec.setText(gsm.player.moneyPerSecond().toInt().toString()+" /s")
         /* DEFENSE */
         batch.draw(numberBar, screenWidth/2f, screenHeight-screenHeight/13.5f, screenWidth/3f, screenHeight/20)
         batch.draw(shieldSymbol, screenWidth/2f, screenHeight-190f, screenWidth/10f, screenHeight/16f)
-        defense.setText(gsm.player.defense().toInt().toString())
         /* ATTACK */
         batch.draw(numberBar, screenWidth/2f, screenHeight-screenHeight/7.5f, screenWidth/3f, screenHeight/20)
         batch.draw(starSymbol, screenWidth/2f, screenHeight-315f, screenWidth/10f, screenHeight/18f)
-        attack.setText(gsm.player.attack().toInt().toString())
     }
+
+
 
     fun openMenu() {
         Log.d("test", "openMenu")
