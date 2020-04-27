@@ -8,9 +8,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.Group
+import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import com.example.idlecorporationclicker.models.audio.MusicPlayer
@@ -32,6 +35,8 @@ class MenuActor(gsm : GameStateManager) {
     private var texture : TextureRegion
     private val screenHeight = Gdx.graphics.height.toFloat()
     private val screenWidth = Gdx.graphics.width.toFloat()
+    private val buttonGfx : Image
+    private val logOutBtn : Group
 
     init {
 
@@ -52,6 +57,25 @@ class MenuActor(gsm : GameStateManager) {
         fontStyle.font = signika
 
         gui = Texture(Gdx.files.internal("freegui/png/Window.png"))
+        val buttons = Texture(Gdx.files.internal("freegui/png/Button.png"))
+        val logOutTxt = Label("Log Out", fontStyle)
+        buttonGfx = Image(TextureRegion(buttons, 625, 430, 430, 195))
+        logOutBtn = Group()
+        logOutBtn.addActor(buttonGfx)
+        logOutBtn.addActor(logOutTxt)
+        logOutTxt.setPosition(90f,75f)
+        logOutBtn.setX(75f)
+
+        logOutBtn.addListener(object : ClickListener() {
+            override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
+                // TODO
+            }
+
+            override fun touchDown(e : InputEvent, x : Float, y : Float, Point : Int, button : Int): Boolean {
+                return true
+            }
+        })
+
         texture = TextureRegion(gui, 600, 1120, 455, 640)
         menuBG = TextureRegionDrawable(texture)
         menuTitle = Label("MENU", fontStyle)
@@ -65,12 +89,14 @@ class MenuActor(gsm : GameStateManager) {
         table.width = screenWidth
         table.height = screenHeight/2
         table.setPosition(0f, screenHeight/3.5f)
-        table.add(menuTitle).top().padTop(50f).align(Align.top)
+        table.add(menuTitle).top().align(Align.top)
         table.row()
         //insideTable.top()
         //insideTable.row().padTop(10f)
         table.add(getMusicButtonTable()).top()
         //table.add(insideTable)
+        table.row()
+        table.add(logOutBtn).space(100f)
         hide()
     }
 

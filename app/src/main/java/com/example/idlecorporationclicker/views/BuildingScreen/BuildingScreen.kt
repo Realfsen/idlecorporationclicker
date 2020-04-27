@@ -59,8 +59,8 @@ class BuildingScreen(override var game: Game, override var gsm: GameStateManager
     }
 
     fun buildingTemplate(building : IBuilding, type: BuildingType, labelPrefix : String) : HorizontalGroup {
-        val buttonGfx = TextureRegion(buttons, 170, 430, 430, 195)
-        val buttonDown = TextureRegion(buttons, 625, 430, 430, 195)
+        val buttonGfx = TextureRegion(buttons, 625, 430, 430, 195)
+        val buttonDown = TextureRegion(buttons, 170, 430, 430, 195)
         val buttonDisabled = TextureRegion(buttons, 1540, 430, 430, 195)
         val newBuyButton = Image(buttonGfx)
         val newBuyButtonDown = Image(buttonDown)
