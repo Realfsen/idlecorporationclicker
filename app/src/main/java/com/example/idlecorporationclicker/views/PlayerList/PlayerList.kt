@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.TimeUtils
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.example.idlecorporationclicker.controllers.attack.AttackPlayerCommand
@@ -74,9 +75,9 @@ class PlayerList(var attack: IAttack,
         chosenAttackStr = Label("Chosen attack: "+attack.type, fontStyle)
         stage = Stage()
         batch = SpriteBatch()
-        cashSymbol = Image(TextureRegion(gui, 1985, 4810, 145, 245))
+        cashSymbol = Image(TextureRegion(gui, 1985, 4810, 145, 145))
         shieldSymbol = Image(TextureRegion(gui, 1680, 4810, 110, 145))
-        cashSymbol.scaleY = 4f
+        cashSymbol.scaleY = 2f
         shieldSymbol.scaleY = 2f
 
 
@@ -105,6 +106,10 @@ class PlayerList(var attack: IAttack,
         menuActor =
             MenuActor(gsm)
         stage.addActor(menuActor.getActor())
+    }
+
+    fun updatePlayers() {
+        players = Database.createOponentCollection(this)
     }
 
     fun createAttackLabelText() : String{
@@ -137,7 +142,7 @@ class PlayerList(var attack: IAttack,
         playerTable.row().pad(10f)
         playerTable.add(name).fillX().width(width)
         playerTable.add(defense).fillX().width(width).height(defense.height)
-        playerTable.add(money).grow().expandX().width(money.width).height(money.height)
+        playerTable.add(money).fillX().width(width).height(money.height)
         playerTable.add(successChance).fillX().width(width)
         playerTable.add(btn).fillX().width(width)
 
@@ -145,6 +150,7 @@ class PlayerList(var attack: IAttack,
         btn.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
                 println(attack.calculateSuccess(attacker, defender))
+                updatePlayers()
                 gsm.commandManager.Invoke(attackCommand)
             }
             override fun touchDown(e : InputEvent, x : Float, y : Float, Point : Int, button : Int): Boolean {
@@ -158,6 +164,7 @@ class PlayerList(var attack: IAttack,
         playerTable.top()
         playerTable.add(nameLabel).fillX();
         playerTable.add(shieldSymbol)
+        cashSymbol.setAlign(Align.bottom)
         playerTable.add(cashSymbol)
         playerTable.add(successLabel).fillX();
         players.forEach() {
@@ -191,12 +198,12 @@ class PlayerList(var attack: IAttack,
                 Gdx.graphics.width.toFloat(),
                 Gdx.graphics.height.toFloat()
             )
-            if (menuOpen) {
+        drawTopBar(batch)
+        if (menuOpen) {
                 menuActor.show()
             } else {
                 menuActor.hide()
             }
-            drawTopBar(batch)
             batch.end()
             stage.act(Gdx.graphics.deltaTime)
             stage.draw()

@@ -12,7 +12,7 @@ class Launcher : AndroidApplication() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val config = AndroidApplicationConfiguration()
-        initialize(IdleCorporationClicker(), config)
+        initialize(IdleCorporationClicker(this), config)
     }
 
     override fun onPause() {

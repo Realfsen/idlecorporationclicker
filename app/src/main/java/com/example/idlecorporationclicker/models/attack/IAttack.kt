@@ -10,7 +10,7 @@ interface IAttack {
     fun doAttack(player: Player, defender: IPlayer) : Boolean
     fun calculateSuccess(player: Player, defender: IPlayer) : Int
     companion object{
-        var SECONDS_BETWEEN_ATTACKS : Int = 120
+        var SECONDS_BETWEEN_ATTACKS : Int = 45
     }
 }
 

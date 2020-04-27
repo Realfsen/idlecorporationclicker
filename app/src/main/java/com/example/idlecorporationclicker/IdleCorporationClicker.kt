@@ -2,6 +2,7 @@ package com.example.idlecorporationclicker
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
+import com.badlogic.gdx.backends.android.AndroidApplication
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -10,7 +11,7 @@ import com.example.idlecorporationclicker.models.audio.MusicPlayer
 import com.example.idlecorporationclicker.states.GameStateManager
 
 
-class IdleCorporationClicker : Game() {
+class IdleCorporationClicker (var androidApp : Launcher) : Game() {
     private lateinit var batch: SpriteBatch
     private lateinit var font: BitmapFont
     private lateinit var gsm : GameStateManager
@@ -26,7 +27,7 @@ class IdleCorporationClicker : Game() {
     override fun create() {
         batch = SpriteBatch()
         font = BitmapFont()
-        gsm = GameStateManager()
+        gsm = GameStateManager(androidApp)
         game = this;
         game.setScreen(StartMenu(game,gsm))
 //        MusicManager.play()

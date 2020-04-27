@@ -33,7 +33,7 @@ enum class BuildingType {
 public class IBuildingUtils {
     companion object {
         public fun calculateUpgradeCost(baseCost : Double, level : Double) : Double {
-            return baseCost * (1.15).pow(level)
+            return baseCost * (1.15).pow(level/2)
         }
 
         public fun calculateValue(baseValue : Double, level : Double) : Double  {
