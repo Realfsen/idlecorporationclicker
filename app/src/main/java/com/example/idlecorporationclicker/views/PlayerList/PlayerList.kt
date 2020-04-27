@@ -108,6 +108,10 @@ class PlayerList(var attack: IAttack,
         stage.addActor(menuActor.getActor())
     }
 
+    fun updatePlayers() {
+        players = Database.createOponentCollection(this)
+    }
+
     fun createAttackLabelText() : String{
         if(!gsm.player.canAttack()) {
             return "You can attack in: "+gsm.player.secondsTillAttack()+" seconds"
@@ -146,6 +150,7 @@ class PlayerList(var attack: IAttack,
         btn.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
                 println(attack.calculateSuccess(attacker, defender))
+                updatePlayers()
                 gsm.commandManager.Invoke(attackCommand)
             }
             override fun touchDown(e : InputEvent, x : Float, y : Float, Point : Int, button : Int): Boolean {
