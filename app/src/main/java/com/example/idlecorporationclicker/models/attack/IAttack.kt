@@ -23,7 +23,7 @@ class ATTACK_DESCRIPTION  {
     companion object {
        val NONE = "You have to choose an attack to either steal or sabotage your enemy"
        val STEAL = "Steal from an enemy! Launch an successful attack and you will be richer while your enemy will be poorer"
-       val SABOTAGE = "Sabotage your enemy! If successful your enemy will weep and his bank destroyed"
+       val SABOTAGE = "Sabotage your enemy! If successful, your enemy's bank will be destroyed and you leave him crying in a gutter"
 
         fun getText(type : ATTACK_TYPE) : String {
             when(type) {

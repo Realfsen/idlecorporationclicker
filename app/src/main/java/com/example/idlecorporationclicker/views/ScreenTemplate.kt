@@ -48,6 +48,7 @@ abstract class ScreenTemplate (gsm: GameStateManager, game : Game) : Screen {
     private var menuButton: Image
     var menuBG : TextureRegion
     var menuOpen : Boolean
+    private var attackSymbol : Texture
 
     init {
         this.gsm = gsm
@@ -72,7 +73,7 @@ abstract class ScreenTemplate (gsm: GameStateManager, game : Game) : Screen {
 //        generator.dispose()
         fontStyle.font = signika
 
-        smolParameter.size = 40
+        smolParameter.size = 45
         smolParameter.borderWidth = 2f
         smolParameter.borderColor = Color.ORANGE
         smolParameter.shadowColor = Color(0f, 0f, 0f, 0.75f)
@@ -86,15 +87,16 @@ abstract class ScreenTemplate (gsm: GameStateManager, game : Game) : Screen {
 
         /* BEGIN TOP BAR */
         gui = Texture(Gdx.files.internal("freegui/png/Window.png"))
+        attackSymbol = Texture("attacks/1x/dualstealmdpi.png")
         topBar = TextureRegion(gui, 3540, 2845, 430, 140)
         cashSymbol = TextureRegion(gui, 1985, 4810, 95, 145)
         shieldSymbol = TextureRegion(gui, 1680, 4810, 110, 145)
         starSymbol = TextureRegion(gui, 1830, 4810, 135, 130)
         numberBar = TextureRegion(gui, 3699, 4294, 210, 58)
-        cash = Label(gsm.player.money.toString(), fontStyle)
-        cashSec = Label(gsm.player.moneyPerSecond().toString(), fontStyle)
-        defense = Label(gsm.player.defense().toString(), fontStyle)
-        attack = Label(gsm.player.attack().toString(), fontStyle)
+        cash = Label(gsm.player.money.toInt().toString(), fontStyle)
+        cashSec = Label(gsm.player.moneyPerSecond().toInt().toString()+" /s", fontStyle)
+        defense = Label(gsm.player.defense().toInt().toString(), fontStyle)
+        attack = Label(gsm.player.attack().toInt().toString(), fontStyle)
         buttons = Texture(Gdx.files.internal("freegui/png/Button.png"))
         menuButton = Image(TextureRegion(buttons, 405, 1845, 180, 190))
         /* END TOP BAR */
@@ -154,7 +156,7 @@ abstract class ScreenTemplate (gsm: GameStateManager, game : Game) : Screen {
         batch.draw(shieldSymbol, screenWidth/2f, screenHeight-190f, screenWidth/10f, screenHeight/16f)
         /* ATTACK */
         batch.draw(numberBar, screenWidth/2f, screenHeight-screenHeight/7.5f, screenWidth/3f, screenHeight/20)
-        batch.draw(starSymbol, screenWidth/2f, screenHeight-315f, screenWidth/10f, screenHeight/18f)
+        batch.draw(attackSymbol, screenWidth/2f, screenHeight-315f, screenWidth/10f, screenHeight/18f)
     }
 
 
