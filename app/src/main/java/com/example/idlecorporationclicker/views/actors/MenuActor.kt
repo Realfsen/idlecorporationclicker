@@ -64,7 +64,7 @@ class MenuActor(gsm : GameStateManager) {
         logOutBtn.addActor(buttonGfx)
         logOutBtn.addActor(logOutTxt)
         logOutTxt.setPosition(90f,75f)
-        logOutBtn.setX(75f)
+        //logOutBtn.setX(75f)
 
         logOutBtn.addListener(object : ClickListener() {
             override fun touchUp(e : InputEvent, x : Float, y : Float, Point : Int, button : Int) {
@@ -96,7 +96,7 @@ class MenuActor(gsm : GameStateManager) {
         table.add(getMusicButtonTable()).top()
         //table.add(insideTable)
         table.row()
-        table.add(logOutBtn).space(100f)
+        table.add(logOutBtn).width(buttonGfx.width).height(buttonGfx.height).top()
         hide()
     }
 
