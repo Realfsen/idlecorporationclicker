@@ -18,6 +18,8 @@ class PlayerOpponent(
     override var money: Long,
     override var lastSynched: Date
 ) : IPlayer {
+    override var email: String = ""
+    override var nextTimeToSync: Long = Date().time + Database.SYNC_DELAY_SECONDS
     val factory = FactoryProvider()
     val buildingFactory : BuildingFactory =  factory.getFactory(FACTORY_TYPE.BUILDING) as BuildingFactory
     override var attackBuilding: IBuilding = buildingFactory.create<AttackBuilding, BuildingType>(

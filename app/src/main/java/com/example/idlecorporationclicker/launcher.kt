@@ -17,12 +17,12 @@ class Launcher : AndroidApplication() {
 
     override fun onPause() {
         super.onPause()
-        Database.goOfline()
+//        Database.goOfline()
     }
 
     override fun onResume() {
         super.onResume()
-        Database.goOnline()
+//        Database.goOnline()
         Database.onResumeSyncMoneySinseLastSynced()
     }
 

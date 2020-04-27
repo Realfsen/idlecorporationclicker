@@ -10,13 +10,16 @@ import com.example.idlecorporationclicker.models.database.Database
 import com.example.idlecorporationclicker.models.attack.IAttack
 import com.example.idlecorporationclicker.models.building.BuildingType
 import com.example.idlecorporationclicker.models.building.IBuilding
+import com.google.firebase.auth.FirebaseUser
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 class Player : IPlayer {
     override var uid: String = ""
     override var name: String = ""
+    override var email: String = ""
     override var lastSynched: Date = Date()
+    override var nextTimeToSync: Long = Date().time + Database.SYNC_DELAY_SECONDS
     var lastAttack: Date = Date()
 
     val factory = FactoryProvider()
@@ -31,8 +34,17 @@ class Player : IPlayer {
     override var money : Long = 0
         set(value) {
             field = value
-            Database.SyncMoneyWithFirestoreController()
+            Database.SyncMoneyWithDatabaseController(this)
         }
+
+    init {
+        val user: FirebaseUser? = Database.auth.currentUser
+        if (user != null) {
+            name = user.displayName.toString()
+            email = user.email.toString()
+            uid =  user.uid
+        }
+    }
 
     fun canAttack() : Boolean {
         var synchedNow = Date()
@@ -66,7 +78,7 @@ class Player : IPlayer {
 
     override fun addMoneySinceLastSynchedExternally(lastSynched: Date) {
         addMoneySinceLastSynched(lastSynched)
-        Database.forceMoneySync()
+        Database.forceMoneySync(this)
     }
 
     fun buyBuilding(building: IBuilding) : Boolean {

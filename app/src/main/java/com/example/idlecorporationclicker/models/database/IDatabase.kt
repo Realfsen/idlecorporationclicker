@@ -1,5 +1,6 @@
 package com.example.idlecorporationclicker.models.database
 
+import com.example.idlecorporationclicker.models.player.IPlayer
 import com.example.idlecorporationclicker.models.player.Player
 
 interface IDatabase {
@@ -7,6 +8,6 @@ interface IDatabase {
     fun buildingUpdateIncome()
     fun buildingUpdateAttack()
     fun buildingUpdateDefense()
-    fun updateTimeLastSyncedInDatabase()
+    fun updateTimeLastSyncedInDatabase(player: IPlayer)
     fun start() {}
 }
