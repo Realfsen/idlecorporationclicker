@@ -155,7 +155,6 @@ class PlayerList(var attack: IAttack,
     }
 
     fun generateTable() {
-        playerTable.setDebug(true)
         playerTable.setWidth(Gdx.graphics.width.toFloat())
         playerTable.top()
         playerTable.add(nameLabel).fillX();
@@ -199,10 +198,12 @@ class PlayerList(var attack: IAttack,
             } else {
                 menuActor.hide()
             }
-            drawTopBar(batch)
             batch.end()
             stage.act(Gdx.graphics.deltaTime)
             stage.draw()
+        batch.begin()
+        drawTopBar(batch)
+        batch.end()
     }
 
 
