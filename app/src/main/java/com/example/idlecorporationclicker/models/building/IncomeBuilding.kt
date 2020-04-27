@@ -18,7 +18,9 @@ class IncomeBuilding(override var level : Double) :
     init {
         type = BuildingType.INCOME;
         name = "Income Building"
-        image = Image(Texture(Gdx.files.internal("buildings/income/base/0.75x/baseldpi.png")))
+//        image = Image(Texture(Gdx.files.internal("buildings/income/base/0.75x/baseldpi.png")))
+//        image = Image(Texture(Gdx.files.internal("attacks/1x/money1mdpi.png")))
+        image = Image(Texture(Gdx.files.internal("attacks/1x/defend1mdpi.png")))
     }
 
     override fun calculateValue() : Double{

@@ -19,7 +19,8 @@ class AttackBuilding(override var level: Double)
     init {
         type = BuildingType.ATTACK;
         name = "Attack Building"
-        image = Image(Texture(Gdx.files.internal("buildings/attack/base/0.75x/baseldpi.png")))
+//        image = Image(Texture(Gdx.files.internal("buildings/attack/base/0.75x/baseldpi.png")))
+        image = Image(Texture(Gdx.files.internal("attacks/1x/dualstealmdpi.png")))
     }
 
     override fun calculateValue() : Double{
